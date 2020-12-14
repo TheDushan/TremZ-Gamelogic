@@ -5069,7 +5069,7 @@ void idUserInterfaceManagerLocal::DrawConnectScreen( bool overlay )
     
     if( !Q_stricmp( cstate.servername, "localhost" ) )
     {
-        Text_PaintCenter( centerPoint, yStart + 48, scale, colorWhite, va( "%s - Version: %s", PRODUCT_NAME, Q3_VERSION ), ITEM_TEXTSTYLE_SHADOWEDMORE );
+        Text_PaintCenter( centerPoint, yStart + 48, scale, colorWhite, va( "%s - Version: %s", PRODUCT_NAME, PRODUCT_VERSION ), ITEM_TEXTSTYLE_SHADOWEDMORE );
     }
     else
     {
