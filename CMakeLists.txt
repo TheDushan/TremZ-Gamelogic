@@ -175,7 +175,6 @@ set( SGAMELIST_HEADERS
 	${TREMGAME_DIR}/sgame/tremulous.hpp
 	${TREMGAME_DIR}/sgame/sgame_active.hpp
 	${TREMGAME_DIR}/sgame/sgame_buildable.hpp
-	${TREMGAME_DIR}/sgame/sgame_bulletphysics.hpp
 	${TREMGAME_DIR}/sgame/sgame_client.hpp
 	${TREMGAME_DIR}/sgame/sgame_cmds.hpp
 	${TREMGAME_DIR}/sgame/sgame_combat.hpp
@@ -207,7 +206,6 @@ set( SGAMELIST_SOURCES
 	${TREMGAME_DIR}/sgame/sgame_admin.cpp
 	${TREMGAME_DIR}/sgame/sgame_api.cpp
 	${TREMGAME_DIR}/sgame/sgame_buildable.cpp
-	${TREMGAME_DIR}/sgame/sgame_bulletphysics.cpp
 	${TREMGAME_DIR}/sgame/sgame_client.cpp
 	${TREMGAME_DIR}/sgame/sgame_cmds.cpp
 	${TREMGAME_DIR}/sgame/sgame_combat.cpp
@@ -353,9 +351,7 @@ endif( MSVC )
 
 	target_precompile_headers( sgame PRIVATE "${TREMGAME_DIR}/sgame/sgame_precompiled.hpp" )
 
-find_package( Bullet REQUIRED )
-
-TARGET_INCLUDE_DIRECTORIES( sgame PRIVATE ${MOUNT_DIR} ${TREMGAME_DIR} ${BULLET_INCLUDE_DIRS} ${BULLET_INCLUDE_DIR} ${BULLET_INCLUDE_COLLISION_DIR} ${BULLET_INCLUDE_DYNAMICS_DIR} ${BULLET_INCLUDE_SOFTBODY_DIR} ${BULLET_INCLUDE_LINEARMATH_DIR} ${BULLET_INCLUDE_FILELOADER_DIR} ${BULLET_INCLUDE_WORLDIMPORTER_DIR} )
+TARGET_INCLUDE_DIRECTORIES( sgame PRIVATE ${MOUNT_DIR} ${TREMGAME_DIR} )
 
 if(MSVC)
 	target_compile_options(sgame PRIVATE "/MP")
@@ -369,12 +365,6 @@ set_target_properties( sgame PROPERTIES
 	PREFIX ""
 	LIBRARY_OUTPUT_DIRECTORY "main"
 )
-
-if( MSVC )
-target_link_libraries( sgame ${BULLET_LIBRARIES} )
-else()
-target_link_libraries( sgame ${BULLET_LIBRARIES} ${BULLET_COLLISION_LIBRARY} ${BULLET_DYNAMICS_LIBRARY} ${BULLET_LINEARMATH_LIBRARY} )
-endif()
 
 add_library( cgame SHARED ${SHAREDLIST_HEADERS} ${SHAREDLIST_SOURCES} ${CGAMELIST_HEADERS} ${CGAMELIST_SOURCES})
 if( MSVC )

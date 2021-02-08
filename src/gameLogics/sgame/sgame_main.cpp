@@ -629,8 +629,6 @@ void idSGameLocal::Init( sint levelTime, sint randomSeed, sint restart )
     
     //Init bullet physics
     trap_Cvar_VariableStringBuffer( "mapname", mapName, sizeof( mapName ) );
-    idSGameBulletPhysics::InitBullet();
-    idSGameBulletPhysics::LoadMap( mapName );
     
     // general initialization
     idSGameMain::FindTeams();
@@ -708,9 +706,6 @@ void idSGameLocal::Shutdown( sint restart )
     
     // write all the client session data so we can get it back
     idSGameSession::WriteSessionData( );
-    
-    //Shutdown bullet physics
-    idSGameBulletPhysics::ShudownBullet();
     
     adminLocal.AdminCleanup( );
     adminLocal.AdminNamelogCleanup( );
@@ -2700,9 +2695,6 @@ void idSGameLocal::RunFrame( sint levelTime )
     level.time = levelTime;
     msec = level.time - level.previousTime;
     
-    //Run bullet physics
-    idSGameBulletPhysics::RunPhysics();
-    
     // seed the rng
     srand( level.framenum );
     
@@ -2790,11 +2782,6 @@ void idSGameLocal::RunFrame( sint levelTime )
         {
             idSGameActive::RunClient( ent );
             continue;
-        }
-        
-        if( ent->body )
-        {
-            idSGameBulletPhysics::UpdatePhysicsObject( ent );
         }
         
         idSGameMain::RunThink( ent );

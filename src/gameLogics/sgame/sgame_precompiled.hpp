@@ -49,11 +49,6 @@
 #include <errno.h>
 #include <math.h>
 
-#include <btBulletDynamicsCommon.h>
-#include <LinearMath/btGeometryUtil.h>
-#include <BulletDynamics/Character/btKinematicCharacterController.h>
-#include <BulletCollision/CollisionDispatch/btGhostObject.h>
-
 #include <framework/appConfig.hpp>
 #include <framework/types.hpp>
 #include <qcommon/q_platform.hpp>
@@ -105,7 +100,6 @@
 #include <sgame/sgame_cmds.hpp>
 #include <sgame/sgame_client.hpp>
 #include <sgame/sgame_buildable.hpp>
-#include <sgame/sgame_bulletphysics.hpp>
 #include <sgame/sgame_active.hpp>
 
 #endif // !__SGAME_PRECOMPILED_H__
