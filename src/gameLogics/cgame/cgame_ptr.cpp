@@ -95,7 +95,7 @@ void idCGamePtr::WritePTRCode( sint code )
     valueType text[ 16 ];
     fileHandle_t  f;
     
-    Com_sprintf( text, 16, "%d", code );
+    Q_vsprintf_s( text, 16, 16, "%d", code );
     
     // open file
     if( trap_FS_FOpenFile( PTRC_FILE, &f, FS_WRITE ) < 0 )

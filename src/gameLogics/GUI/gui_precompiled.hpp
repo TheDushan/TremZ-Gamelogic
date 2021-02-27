@@ -27,6 +27,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #ifndef __GUI_PRECOMPILED_H__
+#define __GUI_PRECOMPILED_H__
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -70,7 +71,6 @@
 #include <API/FileSystem_api.hpp>
 #include <API/system_api.hpp>
 #include <API/cgame_api.hpp>
-#include <API/bgame_api.hpp>
 #include <API/gui_api.hpp>
 #include <bgame/bgame_local.hpp>
 #include <GUI/keycodes.hpp>

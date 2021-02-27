@@ -63,7 +63,7 @@ void idSGameTeam::PrintMsg( gentity_t* ent, pointer fmt, ... )
     
     va_start( argptr, fmt );
     
-    if( Q_vsnprintf( msg, sizeof( msg ), fmt, argptr ) > sizeof( msg ) )
+    if( Q_vsprintf_s( msg, sizeof( msg ), sizeof( msg ), fmt, argptr ) > sizeof( msg ) )
     {
         idSGameMain::Error( "PrintMsg overrun" );
     }
@@ -327,11 +327,11 @@ bool idSGameTeam::Team_GetLocationMsg( gentity_t* ent, valueType* loc, sint locl
             best->count = 7;
         }
         
-        Com_sprintf( loc, loclen, "%c%c%s" S_COLOR_WHITE, Q_COLOR_ESCAPE, best->count + '0', best->message );
+        Q_vsprintf_s( loc, loclen, loclen, "%c%c%s" S_COLOR_WHITE, Q_COLOR_ESCAPE, best->count + '0', best->message );
     }
     else
     {
-        Com_sprintf( loc, loclen, "%s", best->message );
+        Q_vsprintf_s( loc, loclen, loclen, "%s", best->message );
     }
     
     return true;
@@ -401,7 +401,7 @@ void idSGameTeam::TeamplayInfoMessage( gentity_t* ent )
                 h = 0;
             }
             
-            Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i", i, player->client->pers.location, h, a, player->client->ps.weapon );
+            Q_vsprintf_s( entry, sizeof( entry ), sizeof( entry ), " %i %i %i %i %i", i, player->client->pers.location, h, a, player->client->ps.weapon );
             
             j = strlen( entry );
             

@@ -331,7 +331,7 @@ void idSGameMain::Printf( pointer fmt, ... )
     valueType    text[ 1024 ];
     
     va_start( argptr, fmt );
-    Q_vsnprintf( text, sizeof( text ), fmt, argptr );
+    Q_vsprintf_s( text, sizeof( text ), fmt, argptr );
     va_end( argptr );
     
     trap_Print( text );
@@ -343,7 +343,7 @@ void idSGameMain::Error( pointer fmt, ... )
     valueType    text[ 1024 ];
     
     va_start( argptr, fmt );
-    Q_vsnprintf( text, sizeof( text ), fmt, argptr );
+    Q_vsprintf_s( text, sizeof( text ), fmt, argptr );
     va_end( argptr );
     
     trap_Error( text );
@@ -729,7 +729,7 @@ void Com_Error( sint level, pointer error, ... )
     valueType    text[ 1024 ];
     
     va_start( argptr, error );
-    Q_vsnprintf( text, sizeof( text ), error, argptr );
+    Q_vsprintf_s( text, sizeof( text ), error, argptr );
     va_end( argptr );
     
     idSGameMain::Error( "%s", text );
@@ -741,7 +741,7 @@ void Com_Printf( pointer msg, ... )
     valueType    text[ 1024 ];
     
     va_start( argptr, msg );
-    Q_vsnprintf( text, sizeof( text ), msg, argptr );
+    Q_vsprintf_s( text, sizeof( text ), msg, argptr );
     va_end( argptr );
     
     idSGameMain::Printf( "%s", text );
@@ -1867,7 +1867,7 @@ void idSGameMain::AdminMessage( pointer prefix, pointer fmt, ... )
     
     // Format the text
     va_start( argptr, fmt );
-    Q_vsnprintf( string, sizeof( string ), fmt, argptr );
+    Q_vsprintf_s( string, sizeof( string ), sizeof( string ), fmt, argptr );
     va_end( argptr );
     
     // If there is no prefix, assume that this function was called directly
@@ -1878,9 +1878,9 @@ void idSGameMain::AdminMessage( pointer prefix, pointer fmt, ... )
     }
     
     // Create the final string
-    Com_sprintf( outstring, sizeof( outstring ), "%s " S_COLOR_MAGENTA "%s",
-                 prefix, string );
-                 
+    Q_vsprintf_s( outstring, sizeof( outstring ), sizeof( outstring ), "%s " S_COLOR_MAGENTA "%s",
+                  prefix, string );
+                  
     // Send to all appropriate clients
     for( i = 0; i < level.maxclients; i++ )
         if( adminLocal.AdminPermission( &g_entities[ i ], ADMF_ADMINCHAT ) )
@@ -1912,12 +1912,12 @@ void idSGameMain::LogPrintf( pointer fmt, ... )
     tens = sec / 10;
     sec -= tens * 10;
     
-    Com_sprintf( string, sizeof( string ), "%3i:%i%i ", min, tens, sec );
+    Q_vsprintf_s( string, sizeof( string ), sizeof( string ), "%3i:%i%i ", min, tens, sec );
     
     tslen = strlen( string );
     
     va_start( argptr, fmt );
-    Q_vsnprintf( string + tslen, sizeof( string ) - tslen, fmt, argptr );
+    Q_vsprintf_s( string + tslen, sizeof( string ) - tslen, fmt, argptr );
     va_end( argptr );
     
     if( !level.logFile )
@@ -1960,24 +1960,24 @@ void idSGameMain::SendGameStat( team_t team )
             return;
     }
     
-    Com_sprintf( data, BIG_INFO_STRING,
-                 "%s %s T:%c A:%f H:%f M:%s D:%d SD:%d AS:%d AS2T:%d AS3T:%d HS:%d HS2T:%d HS3T:%d CL:%d",
-                 Q3_VERSION,
-                 g_tag.string,
-                 teamChar,
-                 level.averageNumAlienClients,
-                 level.averageNumHumanClients,
-                 map,
-                 level.time - level.startTime,
-                 TimeTilSuddenDeath( ),
-                 g_alienStage.integer,
-                 level.alienStage2Time - level.startTime,
-                 level.alienStage3Time - level.startTime,
-                 g_humanStage.integer,
-                 level.humanStage2Time - level.startTime,
-                 level.humanStage3Time - level.startTime,
-                 level.numConnectedClients );
-                 
+    Q_vsprintf_s( data, BIG_INFO_STRING, BIG_INFO_STRING,
+                  "%s %s T:%c A:%f H:%f M:%s D:%d SD:%d AS:%d AS2T:%d AS3T:%d HS:%d HS2T:%d HS3T:%d CL:%d",
+                  Q3_VERSION,
+                  g_tag.string,
+                  teamChar,
+                  level.averageNumAlienClients,
+                  level.averageNumHumanClients,
+                  map,
+                  level.time - level.startTime,
+                  TimeTilSuddenDeath( ),
+                  g_alienStage.integer,
+                  level.alienStage2Time - level.startTime,
+                  level.alienStage3Time - level.startTime,
+                  g_humanStage.integer,
+                  level.humanStage2Time - level.startTime,
+                  level.humanStage3Time - level.startTime,
+                  level.numConnectedClients );
+                  
     dataLength = strlen( data );
     
     for( i = 0; i < level.numConnectedClients; i++ )
@@ -2006,14 +2006,14 @@ void idSGameMain::SendGameStat( team_t team )
                 return;
         }
         
-        Com_sprintf( entry, MAX_STRING_CHARS,
-                     " \"%s\" %c %d %d %d",
-                     cl->pers.netname,
-                     teamChar,
-                     cl->ps.persistant[ PERS_SCORE ],
-                     ping,
-                     ( level.time - cl->pers.enterTime ) / 60000 );
-                     
+        Q_vsprintf_s( entry, MAX_STRING_CHARS, MAX_STRING_CHARS,
+                      " \"%s\" %c %d %d %d",
+                      cl->pers.netname,
+                      teamChar,
+                      cl->ps.persistant[ PERS_SCORE ],
+                      ping,
+                      ( level.time - cl->pers.enterTime ) / 60000 );
+                      
         entryLength = strlen( entry );
         
         if( dataLength + entryLength >= BIG_INFO_STRING )
@@ -2141,9 +2141,9 @@ void idSGameMain::CheckIntermissionExit( void )
     // whereas a decimal string would have to all be written at once
     // (and we can't fit a number that large in an sint)
     for( i = 0; i < ( g_maxclients.integer + 7 ) / 8; i++ )
-        Com_sprintf( &readyString[ i * 2 ], sizeof( readyString ) - i * 2,
-                     "%2.2x", readyMasks[ i ] );
-                     
+        Q_vsprintf_s( &readyString[ i * 2 ], sizeof( readyString ) - i * 2, sizeof( readyString ) - i * 2,
+                      "%2.2x", readyMasks[ i ] );
+                      
     trap_SetConfigstring( CS_CLIENTS_READY, readyString );
     
     // never exit in less than five seconds
@@ -2262,6 +2262,7 @@ void idSGameMain::CheckExitRules( void )
         }
     }
     
+#if 0
     if( level.uncondHumanWin || ( ( level.time > level.startTime + 1000 ) && ( level.numAlienSpawns == 0 ) && ( level.numLiveAlienClients == 0 ) ) )
     {
         //humans win
@@ -2282,6 +2283,7 @@ void idSGameMain::CheckExitRules( void )
         
         idSGameMain::LogExit( "Aliens win." );
     }
+#endif
 }
 
 /*

@@ -806,7 +806,7 @@ void idSGameCombat::InitDamageLocations( void )
     for( i = PCL_NONE + 1; i < PCL_NUM_CLASSES; i++ )
     {
         modelName = bggame->ClassConfig( ( class_t )i )->modelName;
-        Com_sprintf( filename, sizeof( filename ), "models/players/%s/locdamage.cfg", modelName );
+        Q_vsprintf_s( filename, sizeof( filename ), sizeof( filename ), "models/players/%s/locdamage.cfg", modelName );
         
         len = trap_FS_FOpenFile( filename, &fileHandle, FS_READ );
         if( !fileHandle )
@@ -832,7 +832,7 @@ void idSGameCombat::InitDamageLocations( void )
     for( i = UP_NONE + 1; i < UP_NUM_UPGRADES; i++ )
     {
         modelName = bggame->Upgrade( ( upgrade_t )i )->name;
-        Com_sprintf( filename, sizeof( filename ), "armour/%s.armour", modelName );
+        Q_vsprintf_s( filename, sizeof( filename ), sizeof( filename ), "armour/%s.armour", modelName );
         
         len = trap_FS_FOpenFile( filename, &fileHandle, FS_READ );
         

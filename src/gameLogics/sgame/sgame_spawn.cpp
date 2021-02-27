@@ -657,7 +657,7 @@ bool idSGameSpawn::ParseSpawnVarsFromFile( char** data )
     level.numSpawnVars = 0;
     level.numSpawnVarChars = 0;
     
-    Com_sprintf( com_token, sizeof( com_token ), "%s", COM_Parse( data ) );
+    Q_vsprintf_s( com_token, sizeof( com_token ), sizeof( com_token ), "%s", COM_Parse( data ) );
     if( com_token[0] == 0 )
     {
         return false;
@@ -671,7 +671,7 @@ bool idSGameSpawn::ParseSpawnVarsFromFile( char** data )
     
     while( 1 )
     {
-        Com_sprintf( keyname, sizeof( keyname ), "%s", COM_Parse( data ) );
+        Q_vsprintf_s( keyname, sizeof( keyname ), sizeof( keyname ), "%s", COM_Parse( data ) );
         if( !keyname[0] )
         {
             COM_ParseWarning( "EOF without closing brace" );
@@ -682,7 +682,7 @@ bool idSGameSpawn::ParseSpawnVarsFromFile( char** data )
             break;
         }
         
-        Com_sprintf( com_token, sizeof( com_token ), "%s", COM_Parse( data ) );
+        Q_vsprintf_s( com_token, sizeof( com_token ), sizeof( com_token ), "%s", COM_Parse( data ) );
         if( !com_token[0] )
         {
             COM_ParseWarning( "EOF without closing brace" );

@@ -900,7 +900,7 @@ void idCGameWeapons::RegisterWeapon( sint weaponNum )
         Error( "Couldn't find weapon %i", weaponNum );
     }
     
-    Com_sprintf( path, MAX_QPATH, "models/weapons/%s/weapon.cfg", bggame->Weapon( ( weapon_t )weaponNum )->name );
+    Q_vsprintf_s( path, MAX_QPATH, MAX_QPATH, "models/weapons/%s/weapon.cfg", bggame->Weapon( ( weapon_t )weaponNum )->name );
     
     weaponInfo->humanName = bggame->Weapon( ( weapon_t )weaponNum )->humanName;
     
@@ -909,7 +909,7 @@ void idCGameWeapons::RegisterWeapon( sint weaponNum )
         Com_Printf( S_COLOR_RED "ERROR: failed to parse %s\n", path );
     }
     
-    Com_sprintf( path, MAX_QPATH, "models/weapons/%s/animation.cfg", bggame->Weapon( ( weapon_t )weaponNum )->name );
+    Q_vsprintf_s( path, MAX_QPATH, MAX_QPATH, "models/weapons/%s/animation.cfg", bggame->Weapon( ( weapon_t )weaponNum )->name );
     
     if( !cg_suppressWAnimWarnings.integer && !ParseWeaponAnimationFile( path, weaponInfo ) )
     {

@@ -151,7 +151,7 @@ void idCGameServerCmds::ParseServerinfo( void )
     cgs.maxclients = atoi( Info_ValueForKey( info, "sv_maxclients" ) );
     cgs.markDeconstruct = atoi( Info_ValueForKey( info, "g_markDeconstruct" ) );
     mapname = Info_ValueForKey( info, "mapname" );
-    Com_sprintf( cgs.mapname, sizeof( cgs.mapname ), "maps/%s.bsp", mapname );
+    Q_vsprintf_s( cgs.mapname, sizeof( cgs.mapname ), sizeof( cgs.mapname ), "maps/%s.bsp", mapname );
 }
 
 /*
@@ -998,7 +998,7 @@ void idCGameServerCmds::Say( sint clientNum, valueType* text )
     }
     
     ci = &cgs.clientinfo[ clientNum ];
-    Com_sprintf( sayText, sizeof( sayText ), "%s: " S_COLOR_WHITE S_COLOR_GREEN "%s" S_COLOR_WHITE "\n", ci->name, text );
+    Q_vsprintf_s( sayText, sizeof( sayText ), sizeof( sayText ), "%s: " S_COLOR_WHITE S_COLOR_GREEN "%s" S_COLOR_WHITE "\n", ci->name, text );
     
     if( bggame->ClientListTest( &cgs.ignoreList, clientNum ) )
     {
@@ -1026,7 +1026,7 @@ void idCGameServerCmds::SayTeam( sint clientNum, valueType* text )
     }
     
     ci = &cgs.clientinfo[ clientNum ];
-    Com_sprintf( sayText, sizeof( sayText ), "%s: " S_COLOR_CYAN "%s" S_COLOR_WHITE "\n", ci->name, text );
+    Q_vsprintf_s( sayText, sizeof( sayText ), sizeof( sayText ), "%s: " S_COLOR_CYAN "%s" S_COLOR_WHITE "\n", ci->name, text );
     
     if( bggame->ClientListTest( &cgs.ignoreList, clientNum ) )
     {

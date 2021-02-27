@@ -206,7 +206,7 @@ void idCGameConsoleCmds::TellTarget_f( void )
     }
     
     trap_Args( message, 128 );
-    Com_sprintf( command, 128, "tell %i %s", clientNum, message );
+    Q_vsprintf_s( command, 128, 128, "tell %i %s", clientNum, message );
     trap_SendClientCommand( command );
 }
 
@@ -228,7 +228,7 @@ void idCGameConsoleCmds::TellAttacker_f( void )
     }
     
     trap_Args( message, 128 );
-    Com_sprintf( command, 128, "tell %i %s", clientNum, message );
+    Q_vsprintf_s( command, 128, 128, "tell %i %s", clientNum, message );
     trap_SendClientCommand( command );
 }
 

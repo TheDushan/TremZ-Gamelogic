@@ -75,7 +75,7 @@ template <typename T> __inline T max( T a, T b )
   VM Considerations
 
   The VM can not use the standard system headers because we aren't really
-  using the compiler they were meant for.  We use bg_lib.h which contains
+  using the compiler they were meant for. We use bg_lib.hpp which contains
   prototypes for the functions we define for our own use in bg_lib.c.
 
   When writing mods, please add needed headers HERE, do not start including
@@ -545,11 +545,11 @@ static ID_INLINE sint VectorCompareEpsilon(
     vec3_t d;
     
     VectorSubtract( v1, v2, d );
-    d[ 0 ] = fabs( d[ 0 ] );
-    d[ 1 ] = fabs( d[ 1 ] );
-    d[ 2 ] = fabs( d[ 2 ] );
+    d[0] = fabs( d[0] );
+    d[1] = fabs( d[1] );
+    d[2] = fabs( d[2] );
     
-    if( d[ 0 ] > epsilon || d[ 1 ] > epsilon || d[ 2 ] > epsilon )
+    if( d[0] > epsilon || d[1] > epsilon || d[2] > epsilon )
         return 0;
         
     return 1;
@@ -560,8 +560,8 @@ vec_t VectorLengthSquared( const vec3_t v );
 vec_t Distance( const vec3_t p1, const vec3_t p2 );
 vec_t DistanceSquared( const vec3_t p1, const vec3_t p2 );
 void CrossProduct( const vec3_t v1, const vec3_t v2, vec3_t cross );
-vec_t VectorNormalize( vec3_t v );       // returns vector length
-void VectorNormalizeFast( vec3_t v );     // does NOT return vector length, uses rsqrt approximation
+vec_t VectorNormalize( vec3_t v );     // returns vector length
+void VectorNormalizeFast( vec3_t v );   // does NOT return vector length, uses rsqrt approximation
 vec_t VectorNormalize2( const vec3_t v, vec3_t out );
 void VectorInverse( vec3_t v );
 void Vector4Scale( const vec4_t in, vec_t scale, vec4_t out );
@@ -639,7 +639,7 @@ void			MakeNormalVectors( const vec3_t forward, vec3_t right, vec3_t up );
 
 //sint				PlaneTypeForNormal( vec3_t normal );
 
-void			VectorMatrixMultiply( const vec3_t p, vec3_t m[ 3 ], vec3_t out );
+void			VectorMatrixMultiply( const vec3_t p, vec3_t m[3], vec3_t out );
 
 // RB: NOTE renamed MatrixMultiply to AxisMultiply because it conflicts with most new matrix functions
 // It is important for mod developers to do this change as well or they risk a memory corruption by using
@@ -680,8 +680,8 @@ void            MatrixTransformPoint( const matrix_t m, const vec3_t in, vec3_t 
 
 float32 Com_Clamp( float32 min, float32 max, float32 value );
 
-valueType*	 Com_SkipTokens( valueType* s, sint numTokens, valueType* sep );
-valueType*	 Com_SkipCharset( valueType* s, valueType* sep );
+valueType* Com_SkipTokens( valueType* s, sint numTokens, valueType* sep );
+valueType* Com_SkipCharset( valueType* s, valueType* sep );
 pointer COM_GetExtension( pointer name );
 void    COM_StripExtension( pointer in, valueType* out );
 void    COM_StripExtension2( pointer in, valueType* out, sint destsize );
@@ -692,13 +692,13 @@ void    COM_BeginParseSession( pointer name );
 void    COM_RestoreParseSession( valueType** data_p );
 void    COM_SetCurrentParseLine( sint line );
 sint     COM_GetCurrentParseLine( void );
-valueType*    COM_Parse( valueType** data_p );
+valueType* COM_Parse( valueType** data_p );
 
 // RB: added COM_Parse2 for having a Doom 3 style tokenizer.
 valueType* COM_Parse2( valueType** data_p );
 valueType* COM_ParseExt2( valueType** data_p, bool allowLineBreak );
 
-valueType*    COM_ParseExt( valueType** data_p, bool allowLineBreak );
+valueType* COM_ParseExt( valueType** data_p, bool allowLineBreak );
 sint     COM_Compress( valueType* data_p );
 void    COM_ParseError( valueType* format, ... ) _attribute( ( format( printf, 1, 2 ) ) );
 void    COM_ParseWarning( valueType* format, ... ) _attribute( ( format( printf, 1, 2 ) ) );
@@ -746,15 +746,14 @@ bool SkipBracedSection( valueType** program );
 bool SkipBracedSection_Depth( valueType** program, sint depth ); // start at given depth if already
 void SkipRestOfLine( valueType** data );
 
-#if defined (_MSC_VER)
-// vsnprintf is ISO/IEC 9899:1999
-// abstracting this to make it portable
-sint Q_vsnprintf( valueType* str, size_t size, pointer format, va_list args );
-#else // not using MSVC
-#define Q_vsnprintf vsnprintf
-#endif
+sint Q_vsprintf_s( valueType* strDest, size_t destMax, size_t count, pointer format, ... );
+void Q_vsprintf_s( valueType* pDest, uint32 nDestSize, pointer pFmt, va_list args );
 
-bool Com_sprintf( valueType* dest, size_t size, pointer fmt, ... );
+template< uint32 nDestSize >
+ID_INLINE void Q_vsprintf_s( valueType( &pDest )[nDestSize], pointer pFmt, va_list args )
+{
+    Q_vsprintf_s( pDest, nDestSize, pFmt, args );
+}
 
 // mode parm for FS_FOpenFile
 typedef enum
@@ -795,13 +794,36 @@ bool Q_isintegral( float32 f );
 bool        Q_strtol( pointer s, sint32* out );
 bool        Q_strtoi( pointer s, sint* out );
 
-// portable case insensitive compare
+[[nodiscard]]
+ID_INLINE uint32 Q_strlen( pointer str )
+{
+    return static_cast<uint32>( strlen( str ) );
+}
+
+// Safe strcpy that ensures null termination
+// Returns bytes written
+void Q_strcpy_s( valueType* pDest, uint32 nDestSize, pointer pSrc );
+
+template< uint32 nDestSize >
+ID_INLINE void Q_strcpy_s( valueType( &pDest )[nDestSize], pointer pSrc )
+{
+    Q_strcpy_s( pDest, nDestSize, pSrc );
+}
+
+sint Q_vsprintf_s( valueType* strDest, size_t destMax, size_t count, pointer format, ... );
+
+template< uint32 nDestSize >
+ID_INLINE void Q_vsprintf_s( valueType( &strDest )[nDestSize], size_t destMax, size_t count, pointer format, ... )
+{
+    Q_vsprintf_s( strDest, destMax, count, format );
+}
+
 sint     Q_stricmp( pointer s1, pointer s2 );
 sint     Q_strncmp( pointer s1, pointer s2, sint n );
 sint     Q_stricmpn( pointer s1, pointer s2, sint n );
-valueType*    Q_strlwr( valueType* s1 );
-valueType*    Q_strupr( valueType* s1 );
-valueType*    Q_strrchr( pointer string, sint c );
+valueType* Q_strlwr( valueType* s1 );
+valueType* Q_strupr( valueType* s1 );
+valueType* Q_strrchr( pointer string, sint c );
 pointer Q_stristr( pointer s, pointer find );
 
 #ifdef _WIN32
@@ -1156,7 +1178,7 @@ typedef struct playerState_s
     // before we read in the new values for the predictedPlayerState, then restore them
     // after copying the structure recieved from the server.
     
-    // Arnout: use the pmoveExt_t structure in bg_public.h to store this kind of data now (presistant on client, not network transmitted)
+    // Arnout: use the pmoveExt_t structure in bg_public.hpp to store this kind of data now (presistant on client, not network transmitted)
     
     sint ping;                   // server to game info for scoreboard
     sint pmove_framecount;
@@ -1557,7 +1579,7 @@ typedef enum
 
 typedef struct
 {
-    valueType      name[ MAX_EMOTICON_NAME_LEN ];
+    valueType      name[MAX_EMOTICON_NAME_LEN];
 #ifndef GAMEDLL
     sint       width;
     qhandle_t shader;

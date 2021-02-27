@@ -460,21 +460,21 @@ bool idCGamePlayers::RegisterClientSkin( clientInfo_t* ci, pointer modelName, po
     
     if( !ci->nonsegmented )
     {
-        Com_sprintf( filename, sizeof( filename ), "models/players/%s/lower_%s.skin", modelName, skinName );
+        Q_vsprintf_s( filename, sizeof( filename ), sizeof( filename ), "models/players/%s/lower_%s.skin", modelName, skinName );
         ci->legsSkin = trap_R_RegisterSkin( filename );
         if( !ci->legsSkin )
         {
             Com_Printf( "Leg skin load failure: %s\n", filename );
         }
         
-        Com_sprintf( filename, sizeof( filename ), "models/players/%s/upper_%s.skin", modelName, skinName );
+        Q_vsprintf_s( filename, sizeof( filename ), sizeof( filename ), "models/players/%s/upper_%s.skin", modelName, skinName );
         ci->torsoSkin = trap_R_RegisterSkin( filename );
         if( !ci->torsoSkin )
         {
             Com_Printf( "Torso skin load failure: %s\n", filename );
         }
         
-        Com_sprintf( filename, sizeof( filename ), "models/players/%s/head_%s.skin", modelName, skinName );
+        Q_vsprintf_s( filename, sizeof( filename ), sizeof( filename ), "models/players/%s/head_%s.skin", modelName, skinName );
         ci->headSkin = trap_R_RegisterSkin( filename );
         if( !ci->headSkin )
         {
@@ -488,7 +488,7 @@ bool idCGamePlayers::RegisterClientSkin( clientInfo_t* ci, pointer modelName, po
     }
     else
     {
-        Com_sprintf( filename, sizeof( filename ), "models/players/%s/nonseg_%s.skin", modelName, skinName );
+        Q_vsprintf_s( filename, sizeof( filename ), sizeof( filename ), "models/players/%s/nonseg_%s.skin", modelName, skinName );
         ci->nonSegSkin = trap_R_RegisterSkin( filename );
         if( !ci->nonSegSkin )
         {
@@ -515,7 +515,7 @@ bool idCGamePlayers::RegisterClientModelname( clientInfo_t* ci, pointer modelNam
     
     // do this first so the nonsegmented property is set
     // load the animations
-    Com_sprintf( filename, sizeof( filename ), "models/players/%s/animation.cfg", modelName );
+    Q_vsprintf_s( filename, sizeof( filename ), sizeof( filename ), "models/players/%s/animation.cfg", modelName );
     if( !ParseAnimationFile( filename, ci ) )
     {
         Com_Printf( "Failed to load animation file %s\n", filename );
@@ -526,7 +526,7 @@ bool idCGamePlayers::RegisterClientModelname( clientInfo_t* ci, pointer modelNam
     
     if( !ci->nonsegmented )
     {
-        Com_sprintf( filename, sizeof( filename ), "models/players/%s/lower.md3", modelName );
+        Q_vsprintf_s( filename, sizeof( filename ), sizeof( filename ), "models/players/%s/lower.md3", modelName );
         ci->legsModel = trap_R_RegisterModel( filename );
         if( !ci->legsModel )
         {
@@ -534,7 +534,7 @@ bool idCGamePlayers::RegisterClientModelname( clientInfo_t* ci, pointer modelNam
             return false;
         }
         
-        Com_sprintf( filename, sizeof( filename ), "models/players/%s/upper.md3", modelName );
+        Q_vsprintf_s( filename, sizeof( filename ), sizeof( filename ), "models/players/%s/upper.md3", modelName );
         ci->torsoModel = trap_R_RegisterModel( filename );
         if( !ci->torsoModel )
         {
@@ -542,7 +542,7 @@ bool idCGamePlayers::RegisterClientModelname( clientInfo_t* ci, pointer modelNam
             return false;
         }
         
-        Com_sprintf( filename, sizeof( filename ), "models/players/%s/head.md3", modelName );
+        Q_vsprintf_s( filename, sizeof( filename ), sizeof( filename ), "models/players/%s/head.md3", modelName );
         ci->headModel = trap_R_RegisterModel( filename );
         if( !ci->headModel )
         {
@@ -552,7 +552,7 @@ bool idCGamePlayers::RegisterClientModelname( clientInfo_t* ci, pointer modelNam
     }
     else
     {
-        Com_sprintf( filename, sizeof( filename ), "models/players/%s/nonseg.md3", modelName );
+        Q_vsprintf_s( filename, sizeof( filename ), sizeof( filename ), "models/players/%s/nonseg.md3", modelName );
         ci->nonSegModel = trap_R_RegisterModel( filename );
         if( !ci->nonSegModel )
         {

@@ -371,10 +371,10 @@ void idCGameBuildable::InitBuildables( void )
     {
         strcpy( soundfile, cg_buildableSoundNames[ j - 1 ] );
         
-        Com_sprintf( filename, sizeof( filename ), "sound/buildables/alien/%s", soundfile );
+        Q_vsprintf_s( filename, sizeof( filename ), sizeof( filename ), "sound/buildables/alien/%s", soundfile );
         defaultAlienSounds[ j ] = trap_S_RegisterSound( filename );
         
-        Com_sprintf( filename, sizeof( filename ), "sound/buildables/human/%s", soundfile );
+        Q_vsprintf_s( filename, sizeof( filename ), sizeof( filename ), "sound/buildables/human/%s", soundfile );
         defaultHumanSounds[ j ] = trap_S_RegisterSound( filename );
     }
     
@@ -385,14 +385,14 @@ void idCGameBuildable::InitBuildables( void )
         buildableName = bggame->Buildable( ( buildable_t )i )->name;
         
         //animation.cfg
-        Com_sprintf( filename, sizeof( filename ), "models/buildables/%s/animation.cfg", buildableName );
+        Q_vsprintf_s( filename, sizeof( filename ), sizeof( filename ), "models/buildables/%s/animation.cfg", buildableName );
         if( !ParseBuildableAnimationFile( filename, ( buildable_t )i ) )
         {
             Com_Printf( S_COLOR_YELLOW "WARNING: failed to load animation file %s\n", filename );
         }
         
         //sound.cfg
-        Com_sprintf( filename, sizeof( filename ), "sound/buildables/%s/sound.cfg", buildableName );
+        Q_vsprintf_s( filename, sizeof( filename ), sizeof( filename ), "sound/buildables/%s/sound.cfg", buildableName );
         if( !ParseBuildableSoundFile( filename, ( buildable_t )i ) )
         {
             Com_Printf( S_COLOR_YELLOW "WARNING: failed to load sound file %s\n", filename );
@@ -412,7 +412,7 @@ void idCGameBuildable::InitBuildables( void )
         for( j = BANIM_NONE + 1; j < MAX_BUILDABLE_ANIMATIONS; j++ )
         {
             strcpy( soundfile, cg_buildableSoundNames[ j - 1 ] );
-            Com_sprintf( filename, sizeof( filename ), "sound/buildables/%s/%s", buildableName, soundfile );
+            Q_vsprintf_s( filename, sizeof( filename ), sizeof( filename ), "sound/buildables/%s/%s", buildableName, soundfile );
             
             if( cg_buildables[ i ].sounds[ j ].enabled )
             {

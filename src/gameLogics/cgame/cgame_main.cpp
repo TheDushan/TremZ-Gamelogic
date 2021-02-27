@@ -597,7 +597,7 @@ void idCGameLocal::Printf( pointer msg, ... )
     valueType text[ 1024 ];
     
     va_start( argptr, msg );
-    Q_vsnprintf( text, sizeof( text ), msg, argptr );
+    Q_vsprintf_s( text, sizeof( text ), msg, argptr );
     va_end( argptr );
     
     trap_Print( text );
@@ -614,7 +614,7 @@ void idCGameLocal::Error( pointer msg, ... )
     valueType text[ 1024 ];
     
     va_start( argptr, msg );
-    Q_vsnprintf( text, sizeof( text ), msg, argptr );
+    Q_vsprintf_s( text, sizeof( text ), msg, argptr );
     va_end( argptr );
     
     trap_Error( text );
@@ -631,7 +631,7 @@ void Com_Error( sint level, pointer error, ... )
     valueType text[1024];
     
     va_start( argptr, error );
-    Q_vsnprintf( text, sizeof( text ), error, argptr );
+    Q_vsprintf_s( text, sizeof( text ), error, argptr );
     va_end( argptr );
     
     cgameLocal.Error( "%s", text );
@@ -648,7 +648,7 @@ void Com_Printf( pointer msg, ... )
     valueType text[1024];
     
     va_start( argptr, msg );
-    Q_vsnprintf( text, sizeof( text ), msg, argptr );
+    Q_vsprintf_s( text, sizeof( text ), msg, argptr );
     va_end( argptr );
     
     cgameLocal.Printf( "%s", text );
@@ -734,16 +734,16 @@ void idCGameMain::RegisterSounds( void )
     
     for( i = 0; i < 4; i++ )
     {
-        Com_sprintf( name, sizeof( name ), "sound/player/footsteps/step%i.ogg", i + 1 );
+        Q_vsprintf_s( name, sizeof( name ), sizeof( name ), "sound/player/footsteps/step%i.ogg", i + 1 );
         cgs.media.footsteps[ FOOTSTEP_NORMAL ][ i ] = trap_S_RegisterSound( name );
         
-        Com_sprintf( name, sizeof( name ), "sound/player/footsteps/flesh%i.ogg", i + 1 );
+        Q_vsprintf_s( name, sizeof( name ), sizeof( name ), "sound/player/footsteps/flesh%i.ogg", i + 1 );
         cgs.media.footsteps[ FOOTSTEP_FLESH ][ i ] = trap_S_RegisterSound( name );
         
-        Com_sprintf( name, sizeof( name ), "sound/player/footsteps/splash%i.ogg", i + 1 );
+        Q_vsprintf_s( name, sizeof( name ), sizeof( name ), "sound/player/footsteps/splash%i.ogg", i + 1 );
         cgs.media.footsteps[ FOOTSTEP_SPLASH ][ i ] = trap_S_RegisterSound( name );
         
-        Com_sprintf( name, sizeof( name ), "sound/player/footsteps/clank%i.ogg", i + 1 );
+        Q_vsprintf_s( name, sizeof( name ), sizeof( name ), "sound/player/footsteps/clank%i.ogg", i + 1 );
         cgs.media.footsteps[ FOOTSTEP_METAL ][ i ] = trap_S_RegisterSound( name );
     }
     
@@ -975,7 +975,7 @@ void idCGameMain::RegisterGraphics( void )
         vec3_t  mins, maxs;
         sint j;
         
-        Com_sprintf( name, sizeof( name ), "*%i", i );
+        Q_vsprintf_s( name, sizeof( name ), sizeof( name ), "*%i", i );
         
         cgs.inlineDrawModel[ i ] = trap_R_RegisterModel( name );
         trap_R_ModelBounds( cgs.inlineDrawModel[ i ], mins, maxs );

@@ -4099,7 +4099,8 @@ valueType* idBothGamesLocal::ClientListString( clientList_t* list )
         return s;
     }
     
-    Com_sprintf( s, sizeof( s ), "%08x%08x", list->hi, list->lo );
+    Q_vsprintf_s( s, sizeof( s ), sizeof( s ), "%08x%08x", list->hi, list->lo );
+    
     return s;
 }
 

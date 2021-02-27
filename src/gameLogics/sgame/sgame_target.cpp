@@ -211,7 +211,7 @@ void idSGameTarget::SP_target_speaker( gentity_t* ent )
     
     if( !strstr( s, ".wav" ) )
     {
-        Com_sprintf( buffer, sizeof( buffer ), "%s.wav", s );
+        Q_vsprintf_s( buffer, sizeof( buffer ), sizeof( buffer ), "%s.wav", s );
     }
     else
     {

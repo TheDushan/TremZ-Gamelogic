@@ -174,7 +174,7 @@ pointer idCGameTutorial::KeyNameForCommand( pointer command )
             }
             else
             {
-                Com_sprintf( buffer, MAX_STRING_CHARS, "\"%s\" (unbound)", bindings[ i ].humanName );
+                Q_vsprintf_s( buffer, MAX_STRING_CHARS, MAX_STRING_CHARS, "\"%s\" (unbound)", bindings[ i ].humanName );
             }
             
             return buffer;

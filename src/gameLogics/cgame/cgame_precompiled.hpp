@@ -27,7 +27,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #ifndef __CG_PRECOMPILED_H__
+#define __CG_PRECOMPILED_H__
 
+#include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -36,7 +38,6 @@
 #include <mutex>
 #include <queue>
 #include <assert.h>
-#include <stdint.h>
 #include <cstddef>
 #include <stdio.h>
 #include <signal.h>
