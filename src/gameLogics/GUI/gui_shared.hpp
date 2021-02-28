@@ -401,7 +401,7 @@ typedef struct
     float32( *getValue )( sint ownerDraw );
     bool ( *ownerDrawVisible )( sint flags );
     void ( *runScript )( valueType** p );
-    void ( *getCVarString )( pointer cvar, valueType* buffer, sint bufsize );
+    void ( *getCVarString )( pointer cvar, valueType* buffer, uint64 bufsize );
     float32( *getCVarValue )( pointer cvar );
     void ( *setCVar )( pointer cvar, pointer value );
     void ( *drawTextWithCursor )( float32 x, float32 y, float32 scale, vec4_t color, pointer text, sint cursorPos, valueType cursor, sint limit, sint style );

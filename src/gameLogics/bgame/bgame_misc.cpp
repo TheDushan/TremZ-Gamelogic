@@ -3000,7 +3000,7 @@ Handles the sequence numbers
 ===============
 */
 
-void  trap_Cvar_VariableStringBuffer( pointer var_name, valueType* buffer, sint bufsize );
+void  trap_Cvar_VariableStringBuffer( pointer var_name, valueType* buffer, uint64 bufsize );
 
 void idBothGamesLocal::AddPredictableEventToPlayerstate( sint newEvent, sint eventParm, playerState_t* ps )
 {

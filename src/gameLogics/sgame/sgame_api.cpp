@@ -110,12 +110,12 @@ sint trap_Cvar_VariableIntegerValue( pointer var_name )
     return imports->cvarSystem->VariableIntegerValue( var_name );
 }
 
-void trap_Cvar_VariableStringBuffer( pointer var_name, valueType* buffer, sint bufsize )
+void trap_Cvar_VariableStringBuffer( pointer var_name, valueType* buffer, uint64 bufsize )
 {
     imports->cvarSystem->VariableStringBuffer( var_name, buffer, bufsize );
 }
 
-void trap_Cvar_LatchedVariableStringBuffer( pointer var_name, valueType* buffer, sint bufsize )
+void trap_Cvar_LatchedVariableStringBuffer( pointer var_name, valueType* buffer, uint64 bufsize )
 {
     imports->cvarSystem->VariableStringBuffer( var_name, buffer, bufsize );
 }
@@ -166,7 +166,7 @@ sint trap_FS_GetFileList( pointer path, pointer extension, valueType* listbuf, s
     return imports->fileSystem->GetFileList( path, extension, listbuf, bufsize );
 }
 
-void trap_LocateGameData( gentity_t* gEnts, sint numGEntities, sint sizeofGEntity_t, playerState_t* clients, sint sizeofGClient )
+void trap_LocateGameData( gentity_t* gEnts, uint64 numGEntities, sint sizeofGEntity_t, playerState_t* clients, uint64 sizeofGClient )
 {
     imports->serverGameSystem->LocateGameData( gEnts, numGEntities, sizeofGEntity_t, clients, sizeofGClient );
 }
@@ -258,7 +258,7 @@ void trap_SetConfigstring( sint num, pointer string )
     imports->serverInitSystem->SetConfigstring( num, string );
 }
 
-void trap_GetConfigstring( sint num, valueType* buffer, sint bufferSize )
+void trap_GetConfigstring( sint num, valueType* buffer, uint64 bufferSize )
 {
     imports->serverInitSystem->GetConfigstring( num, buffer, bufferSize );
 }
@@ -273,12 +273,12 @@ void trap_SetUserinfo( sint num, pointer buffer )
     imports->serverInitSystem->SetUserinfo( num, buffer );
 }
 
-void trap_GetUserinfo( sint num, valueType* buffer, sint bufferSize )
+void trap_GetUserinfo( sint num, valueType* buffer, uint64 bufferSize )
 {
     imports->serverInitSystem->GetUserinfo( num, buffer, bufferSize );
 }
 
-void trap_GetServerinfo( valueType* buffer, sint bufferSize )
+void trap_GetServerinfo( valueType* buffer, uint64 bufferSize )
 {
     imports->serverGameSystem->GetServerinfo( buffer, bufferSize );
 }
@@ -318,7 +318,7 @@ void trap_GetUsercmd( sint clientNum, usercmd_t* cmd )
     imports->serverGameSystem->GetUsercmd( clientNum, cmd );
 }
 
-bool trap_GetEntityToken( valueType* buffer, sint bufferSize )
+bool trap_GetEntityToken( valueType* buffer, uint64 bufferSize )
 {
     return imports->serverGameSystem->GetEntityToken( buffer, bufferSize );
 }

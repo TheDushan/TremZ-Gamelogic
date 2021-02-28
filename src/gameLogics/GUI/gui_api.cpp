@@ -101,12 +101,12 @@ float32 trap_Cvar_VariableValue( pointer var_name )
     return cvarSystem->VariableValue( var_name );;
 }
 
-void trap_Cvar_VariableStringBuffer( pointer var_name, valueType* buffer, sint bufsize )
+void trap_Cvar_VariableStringBuffer( pointer var_name, valueType* buffer, uint64 bufsize )
 {
     cvarSystem->VariableStringBuffer( var_name, buffer, bufsize );
 }
 
-void trap_Cvar_LatchedVariableStringBuffer( pointer var_name, valueType* buffer, sint bufsize )
+void trap_Cvar_LatchedVariableStringBuffer( pointer var_name, valueType* buffer, uint64 bufsize )
 {
     cvarSystem->VariableStringBuffer( var_name, buffer, bufsize );
 }
@@ -358,7 +358,7 @@ void trap_GetGlconfig( vidconfig_t* glconfig )
     imports->idGUISystem->GetGlconfig( glconfig );
 }
 
-sint trap_GetConfigString( sint index, valueType* buff, sint buffsize )
+sint trap_GetConfigString( sint index, valueType* buff, uint64 buffsize )
 {
     return imports->idGUISystem->GetConfigString( index, buff, buffsize );
 }

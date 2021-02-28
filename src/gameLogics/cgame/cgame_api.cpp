@@ -98,12 +98,12 @@ void trap_Cvar_Set( pointer var_name, pointer value )
     imports->cvarSystem->Set( var_name, value );
 }
 
-void trap_Cvar_VariableStringBuffer( pointer var_name, valueType* buffer, sint bufsize )
+void trap_Cvar_VariableStringBuffer( pointer var_name, valueType* buffer, uint64 bufsize )
 {
     imports->cvarSystem->VariableStringBuffer( var_name, buffer, bufsize );
 }
 
-void trap_Cvar_LatchedVariableStringBuffer( pointer var_name, valueType* buffer, sint bufsize )
+void trap_Cvar_LatchedVariableStringBuffer( pointer var_name, valueType* buffer, uint64 bufsize )
 {
     imports->cvarSystem->LatchedVariableStringBuffer( var_name, buffer, bufsize );
 }
@@ -656,7 +656,7 @@ bool trap_getCameraInfo( sint camNum, sint time, vec3_t* origin, vec3_t* angles,
     return imports->getCameraInfo( camNum, time, origin, angles, fov );
 }
 
-bool trap_GetEntityToken( valueType* buffer, sint bufferSize )
+bool trap_GetEntityToken( valueType* buffer, uint64 bufferSize )
 {
     return imports->renderSystem->GetEntityToken( buffer, bufferSize );
 }
