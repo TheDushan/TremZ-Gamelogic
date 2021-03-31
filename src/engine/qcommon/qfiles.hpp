@@ -714,11 +714,9 @@ typedef struct
 #define LIGHTMAP_WIDTH      128
 #define LIGHTMAP_HEIGHT     128
 
-#ifndef Q3MAP2
 #define MAX_WORLD_COORD     ( 128 * 1024 )
 #define MIN_WORLD_COORD     ( -128 * 1024 )
 #define WORLD_SIZE          ( MAX_WORLD_COORD - MIN_WORLD_COORD )
-#endif
 
 //=============================================================================
 
@@ -839,8 +837,7 @@ typedef struct
 
 #define drawVert_t_cleared(x) drawVert_t (x) = {{0, 0, 0}, {0, 0}, {0, 0}, {0, 0, 0}, {0, 0, 0, 0}}
 
-#ifndef Q3MAP2
-typedef enum
+enum mapSurfaceType_t
 {
     MST_BAD,
     MST_PLANAR,
@@ -848,8 +845,7 @@ typedef enum
     MST_TRIANGLE_SOUP,
     MST_FLARE,
     MST_FOLIAGE
-} mapSurfaceType_t;
-#endif
+};
 
 typedef struct
 {

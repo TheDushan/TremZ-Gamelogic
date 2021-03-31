@@ -45,6 +45,8 @@
 #include <cgame/cgame_precompiled.hpp>
 #elif defined GAMEDLL
 #include <sgame/sgame_precompiled.hpp>
+#elif defined (OALAUDIO)
+#include <API/soundSystem_api.hpp>
 #else
 #include <framework/precompiled.hpp>
 #endif
@@ -146,7 +148,7 @@ pointer     COM_GetExtension( pointer name )
 {
     sint             length, i;
     
-    length = ( sint )::strlen( name ) - 1;
+    length = static_cast<sint>( ::strlen( name ) ) - 1;
     i = length;
     
     while( name[i] != '.' )
@@ -203,7 +205,7 @@ void COM_StripExtension3( pointer src, valueType* dest, sint destsize )
     
     Q_strncpyz( dest, src, destsize );
     
-    length = ( sint )::strlen( dest ) - 1;
+    length = static_cast<sint>( ::strlen( dest ) ) - 1;
     
     while( length > 0 && dest[length] != '.' )
     {
@@ -368,7 +370,7 @@ sint    LongSwap( sint l )
     b3 = ( l >> 16 ) & 255;
     b4 = ( l >> 24 ) & 255;
     
-    return ( ( sint )b1 << 24 ) + ( ( sint )b2 << 16 ) + ( ( sint )b3 << 8 ) + b4;
+    return ( static_cast<sint>( b1 ) << 24 ) + ( static_cast<sint>( b2 ) << 16 ) + ( static_cast<sint>( b3 ) << 8 ) + b4;
 }
 
 sint LongNoSwap( sint l )
@@ -463,7 +465,9 @@ void COM_ParseError( valueType* format, ... )
     Q_vsprintf_s( string, sizeof( string ), format, argptr );
     va_end( argptr );
     
+#ifndef OALAUDIO
     Com_Printf( S_COLOR_RED "ERROR: %s, line %d: %s\n", com_parsename, com_lines, string );
+#endif
 }
 
 void COM_ParseWarning( valueType* format, ... )
@@ -475,7 +479,9 @@ void COM_ParseWarning( valueType* format, ... )
     Q_vsprintf_s( string, sizeof( string ), format, argptr );
     va_end( argptr );
     
+#ifndef OALAUDIO
     Com_Printf( "WARNING: %s, line %d: %s\n", com_parsename, com_lines, string );
+#endif
 }
 
 /*
@@ -668,7 +674,7 @@ valueType* COM_ParseExt( valueType** data_p, bool allowLineBreaks )
                     if( !c )
                     {
                         com_token[len] = 0;
-                        *data_p = ( valueType* ) data;
+                        *data_p = static_cast<valueType*>( data );
                         break;
                     }
                     if( ( c == '\\' && *( data ) == '\"' ) )
@@ -692,7 +698,7 @@ valueType* COM_ParseExt( valueType** data_p, bool allowLineBreaks )
             if( c == '\"' || !c )
             {
                 com_token[len] = 0;
-                *data_p = ( valueType* ) data;
+                *data_p = static_cast<valueType*>( data );
                 return com_token;
             }
             if( len < MAX_TOKEN_CHARS )
@@ -727,7 +733,7 @@ valueType* COM_ParseExt( valueType** data_p, bool allowLineBreaks )
     }
     com_token[len] = 0;
     
-    *data_p = ( valueType* ) data;
+    *data_p = static_cast<valueType*>( data );
     return com_token;
 }
 
@@ -748,7 +754,9 @@ valueType*           COM_ParseExt2( valueType** data_p, bool allowLineBreaks )
     
     if( !data_p )
     {
+#ifndef OALAUDIO
         Com_Error( ERR_FATAL, "COM_ParseExt: nullptr data_p" );
+#endif
     }
     
     data = *data_p;
@@ -827,7 +835,7 @@ valueType*           COM_ParseExt2( valueType** data_p, bool allowLineBreaks )
             else if( c == '\"' || !c )
             {
                 com_token[len] = 0;
-                *data_p = ( valueType* )data;
+                *data_p = static_cast<valueType*>( data );
                 return com_token;
             }
             else if( *data == '\n' )
@@ -905,7 +913,7 @@ valueType*           COM_ParseExt2( valueType** data_p, bool allowLineBreaks )
         }
         com_token[len] = 0;
         
-        *data_p = ( valueType* )data;
+        *data_p = static_cast<valueType*>( data );
         return com_token;
     }
     
@@ -950,7 +958,7 @@ valueType*           COM_ParseExt2( valueType** data_p, bool allowLineBreaks )
         }
         com_token[len] = 0;
         
-        *data_p = ( valueType* )data;
+        *data_p = static_cast<valueType*>( data );
         return com_token;
     }
     
@@ -960,7 +968,7 @@ valueType*           COM_ParseExt2( valueType** data_p, bool allowLineBreaks )
         sint             l;
         sint             j;
         
-        l = ( sint )::strlen( *punc );
+        l = static_cast<sint>( ::strlen( *punc ) );
         for( j = 0; j < l; j++ )
         {
             if( data[j] != ( *punc )[j] )
@@ -974,7 +982,7 @@ valueType*           COM_ParseExt2( valueType** data_p, bool allowLineBreaks )
             ::memcpy( com_token, *punc, l );
             com_token[l] = 0;
             data += l;
-            *data_p = ( valueType* )data;
+            *data_p = static_cast<valueType*>( data );
             return com_token;
         }
     }
@@ -983,7 +991,7 @@ valueType*           COM_ParseExt2( valueType** data_p, bool allowLineBreaks )
     com_token[0] = *data;
     com_token[1] = 0;
     data++;
-    *data_p = ( valueType* )data;
+    *data_p = static_cast<valueType*>( data );
     
     return com_token;
 }
@@ -1002,7 +1010,9 @@ void COM_MatchToken( valueType** buf_p, valueType* match )
     token = COM_Parse( buf_p );
     if( strcmp( token, match ) )
     {
+#ifndef OALAUDIO
         Com_Error( ERR_DROP, "MatchToken: %s != %s", token, match );
+#endif
     }
 }
 
@@ -1116,13 +1126,17 @@ sint COM_Parse2Infos( valueType* buf, sint max, valueType infos[][MAX_INFO_STRIN
         }
         if( strcmp( token, "{" ) )
         {
+#ifndef OALAUDIO
             Com_Printf( "Missing { in info file\n" );
+#endif
             break;
         }
         
         if( count == max )
         {
+#ifndef OALAUDIO
             Com_Printf( "Max infos exceeded\n" );
+#endif
             break;
         }
         
@@ -1132,7 +1146,9 @@ sint COM_Parse2Infos( valueType* buf, sint max, valueType infos[][MAX_INFO_STRIN
             token = COM_Parse( &buf );
             if( !token[0] )
             {
+#ifndef OALAUDIO
                 Com_Printf( "Unexpected end of info file\n" );
+#endif
                 break;
             }
             if( !strcmp( token, "}" ) )
@@ -1167,7 +1183,7 @@ void COM_Parse21DMatrix( valueType** buf_p, sint x, float32* m, bool checkBracke
     for( i = 0; i < x; i++ )
     {
         token = COM_Parse2( buf_p );
-        m[i] = ( float32 )::atof( token );
+        m[i] = static_cast<float32>( ::atof( token ) );
     }
     
     if( checkBrackets )
@@ -1260,13 +1276,13 @@ pointer Com_QuoteStr( pointer str )
 //	if (!strpbrk (str, "\";"))
 //		return str;
 
-    length = ( uint64 )::strlen( str );
+    length = static_cast<uint64>( ::strlen( str ) );
     
     if( buflen < 2 * length + 3 )
     {
         ::free( buf );
         buflen = 2 * length + 3;
-        buf = ( valueType* )::malloc( buflen );
+        buf = static_cast<valueType*>( ::malloc( buflen ) );
     }
     
     ptr = buf;
@@ -1309,9 +1325,9 @@ pointer Com_UnquoteStr( pointer str )
     // If it doesn't begin with '"', return quickly
     if( *str != '"' )
     {
-        length = ( uint32 )( end + 1 - str );
+        length = static_cast<uint32>( end + 1 - str );
         free( buf );
-        buf = ( valueType* )malloc( length + 1 );
+        buf = static_cast<valueType*>( malloc( length + 1 ) );
         strncpy( buf, str, length );
         buf[length] = 0;
         return buf;
@@ -1322,7 +1338,7 @@ pointer Com_UnquoteStr( pointer str )
         --end;
         
     free( buf );
-    buf = ( valueType* )malloc( end + 1 - str );
+    buf = static_cast<valueType*>( malloc( end + 1 - str ) );
     ptr = buf;
     
     // Copy, unquoting as we go
@@ -1415,9 +1431,9 @@ valueType* Q_strrchr( pointer string, sint c )
 {
     valueType cc = c;
     valueType* s;
-    valueType* sp = ( valueType* )0;
+    valueType* sp = static_cast<valueType*>( 0 );
     
-    s = ( valueType* )string;
+    s = ( const_cast<valueType*>( reinterpret_cast<const valueType*>( string ) ) );
     
     while( *s )
     {
@@ -1455,7 +1471,7 @@ bool Q_strtol( pointer s, sint32* outNum )
         return false;
     }
     
-    *outNum = ( sint32 )::strtod( s, &p );
+    *outNum = static_cast<sint32>( ::strtod( s, &p ) );
     
     return ( bool )( *p == '\0' );
 }
@@ -1468,7 +1484,7 @@ bool Q_strtoi( pointer s, sint* outNum )
         return false;
     }
     
-    *outNum = ( sint )::strtod( s, &p );
+    *outNum = static_cast<sint>( ::strtod( s, &p ) );
     
     return ( bool )( *p == '\0' );
 }
@@ -1494,29 +1510,41 @@ void Q_strncpyz( valueType* dest, pointer src, sint destsize )
 #ifdef _DEBUG
     if( !dest )
     {
+#ifndef OALAUDIO
         Com_Error( ERR_DROP, "Q_strncpyz: nullptr dest (%s, %i)", file, line );
+#endif
     }
     if( !src )
     {
+#ifndef OALAUDIO
         Com_Error( ERR_DROP, "Q_strncpyz: nullptr src (%s, %i)", file, line );
+#endif
     }
     if( destsize < 1 )
     {
+#ifndef OALAUDIO
         Com_Error( ERR_DROP, "Q_strncpyz: destsize < 1 (%s, %i)", file, line );
+#endif
     }
 #else
     if( !dest )
     {
+#ifndef OALAUDIO
         Com_Error( ERR_FATAL, "Q_strncpyz: nullptr dest" );
+#endif
     }
     
     if( !src )
     {
+#ifndef OALAUDIO
         Com_Error( ERR_FATAL, "Q_strncpyz: nullptr src" );
+#endif
     }
     if( destsize < 1 )
     {
+#ifndef OALAUDIO
         Com_Error( ERR_FATAL, "Q_strncpyz: destsize < 1" );
+#endif
     }
 #endif
     
@@ -1564,6 +1592,22 @@ sint Q_stricmpn( pointer s1, pointer s2, sint n )
 {
     sint c1, c2;
     
+    if( s1 == nullptr )
+    {
+        if( s2 == nullptr )
+        {
+            return 0;
+        }
+        else
+        {
+            return -1;
+        }
+    }
+    else if( s2 == nullptr )
+    {
+        return 1;
+    }
+    
     do
     {
         c1 = *s1++;
@@ -1571,7 +1615,8 @@ sint Q_stricmpn( pointer s1, pointer s2, sint n )
         
         if( !n-- )
         {
-            return 0;       // strings are equal until end point
+            // strings are equal until end point
+            return 0;
         }
         
         if( c1 != c2 )
@@ -1592,7 +1637,8 @@ sint Q_stricmpn( pointer s1, pointer s2, sint n )
     }
     while( c1 );
     
-    return 0;       // strings are equal
+    // strings are equal
+    return 0;
 }
 
 sint Q_strncmp( pointer s1, pointer s2, sint n )
@@ -1619,12 +1665,10 @@ sint Q_strncmp( pointer s1, pointer s2, sint n )
     return 0;       // strings are equal
 }
 
-#ifndef Q3MAP2
 sint Q_stricmp( pointer s1, pointer s2 )
 {
     return ( s1 && s2 ) ? Q_stricmpn( s1, s2, 99999 ) : -1;
 }
-#endif
 
 valueType* Q_strlwr( valueType* s1 )
 {
@@ -1661,10 +1705,12 @@ void Q_strcat( valueType* dest, sint size, pointer src )
 {
     sint l1;
     
-    l1 = ( sint )::strlen( dest );
+    l1 = static_cast<sint>( ::strlen( dest ) );
     if( l1 >= size )
     {
+#ifndef OALAUDIO
         Com_Error( ERR_FATAL, "Q_strcat: already overflowed" );
+#endif
     }
     Q_strncpyz( dest + l1, src,  size - l1 );
 }
@@ -1759,10 +1805,12 @@ bool Q_strreplace( valueType* dest, sint destsize, pointer find, pointer replace
     valueType*           s;
     valueType            backup[32000];	// big, but small enough to fit in PPC stack
     
-    lend = ( sint )::strlen( dest );
+    lend = static_cast<sint>( ::strlen( dest ) );
     if( lend >= destsize )
     {
+#ifndef OALAUDIO
         Com_Error( ERR_FATAL, "Q_strreplace: already overflowed" );
+#endif
     }
     
     s = strstr( dest, find );
@@ -1773,9 +1821,9 @@ bool Q_strreplace( valueType* dest, sint destsize, pointer find, pointer replace
     else
     {
         Q_strncpyz( backup, dest, lend + 1 );
-        lstart = ( sint )( s - dest );
-        lfind = ( sint )::strlen( find );
-        lreplace = ( sint )::strlen( replace );
+        lstart = static_cast<sint>( s - dest );
+        lfind = static_cast<sint>( ::strlen( find ) );
+        lreplace = static_cast<sint>( ::strlen( replace ) );
         
         strncpy( s, replace, destsize - lstart - 1 );
         strncpy( s + lreplace, backup + lstart + lfind, destsize - lstart - lreplace - 1 );
@@ -1964,7 +2012,9 @@ valueType* Info_ValueForKey( pointer s, pointer key )
     
     if( strlen( s ) >= BIG_INFO_STRING )
     {
+#ifndef OALAUDIO
         Com_Error( ERR_DROP, "Info_ValueForKey: oversize infostring [%s] [%s]", s, key );
+#endif
     }
     
     valueindex ^= 1;
@@ -2086,7 +2136,9 @@ void Info_RemoveKey( valueType* s, pointer key )
     
     if( strlen( s ) >= MAX_INFO_STRING )
     {
+#ifndef OALAUDIO
         Com_Error( ERR_DROP, "Info_RemoveKey: oversize infostring [%s] [%s]", s, key );
+#endif
     }
     
     if( strchr( key, '\\' ) )
@@ -2152,7 +2204,9 @@ void Info_RemoveKey_Big( valueType* s, pointer key )
     
     if( strlen( s ) >= BIG_INFO_STRING )
     {
+#ifndef OALAUDIO
         Com_Error( ERR_DROP, "Info_RemoveKey_Big: oversize infostring [%s] [%s]", s, key );
+#endif
     }
     
     if( strchr( key, '\\' ) )
@@ -2242,24 +2296,32 @@ bool Info_SetValueForKey( valueType* s, pointer key, pointer value )
     
     if( strlen( s ) >= MAX_INFO_STRING )
     {
+#ifndef OALAUDIO
         Com_Error( ERR_DROP, "SetValueForKey: oversize infostring [%s] [%s] [%s]", s, key, value );
+#endif
     }
     
     if( strchr( key, '\\' ) || strchr( value, '\\' ) )
     {
+#ifndef OALAUDIO
         Com_Printf( "SetValueForKey: Can't use keys or values with a \\\n" );
+#endif
         return false;
     }
     
     if( strchr( key, ';' ) || strchr( value, ';' ) )
     {
+#ifndef OALAUDIO
         Com_Printf( "SetValueForKey: Can't use keys or values with a semicolon\n" );
+#endif
         return false;
     }
     
     if( strlen( key ) > MAX_INFO_KEY - 1 || strlen( value ) > MAX_INFO_KEY - 1 )
     {
+#ifndef OALAUDIO
         Com_Error( ERR_DROP, "SetValueForKey: keys and values must be < %i characters.\n", MAX_INFO_KEY );
+#endif
         return false;
     }
     
@@ -2273,7 +2335,9 @@ bool Info_SetValueForKey( valueType* s, pointer key, pointer value )
     
     if( strlen( newi ) + strlen( s ) > maxsize )
     {
+#ifndef OALAUDIO
         Com_Printf( "SetValueForKey: Info string length exceeded: %s\n", s );
+#endif
         return true;
     }
     
@@ -2307,24 +2371,32 @@ void Info_SetValueForKey_Big( valueType* s, pointer key, pointer value )
     
     if( strlen( s ) >= BIG_INFO_STRING )
     {
+#ifndef OALAUDIO
         Com_Error( ERR_DROP, "Info_SetValueForKey: oversize infostring [%s] [%s] [%s]", s, key, value );
+#endif
     }
     
     if( strchr( key, '\\' ) || strchr( value, '\\' ) )
     {
+#ifndef OALAUDIO
         Com_Printf( "Can't use keys or values with a \\\n" );
+#endif
         return;
     }
     
     if( strchr( key, ';' ) || strchr( value, ';' ) )
     {
+#ifndef OALAUDIO
         Com_Printf( "Can't use keys or values with a semicolon\n" );
+#endif
         return;
     }
     
     if( strchr( key, '\"' ) || strchr( value, '\"' ) )
     {
+#ifndef OALAUDIO
         Com_Printf( "Can't use keys or values with a \"\n" );
+#endif
         return;
     }
     
@@ -2338,11 +2410,13 @@ void Info_SetValueForKey_Big( valueType* s, pointer key, pointer value )
     
     if( strlen( newi ) + strlen( s ) > BIG_INFO_STRING )
     {
+#ifndef OALAUDIO
         Com_Printf( "Info_SetValueForKey_Big: Info string length exceeded: %s\n", s );
+#endif
         return;
     }
     
-    strcat( s, newi );
+    Q_strcat( s, MAX_INFO_STRING, newi );
 }
 
 /*
@@ -2420,7 +2494,6 @@ void Q_vsprintf_s( valueType* pDest, uint32 nDestSize, pointer pFmt, va_list arg
 #endif
 }
 
-#ifndef Q3MAP2
 bool StringContainsWord( pointer haystack, pointer needle )
 {
     if( !*needle )
@@ -2450,8 +2523,6 @@ bool StringContainsWord( pointer haystack, pointer needle )
     }
     return false;
 }
-#endif
-
 
 /*
 ============
@@ -2464,8 +2535,8 @@ bool COM_CompareExtension( pointer in, pointer ext )
 {
     sint inlen, extlen;
     
-    inlen = ( sint )::strlen( in );
-    extlen = ( sint )::strlen( ext );
+    inlen = static_cast<sint>( ::strlen( in ) );
+    extlen = static_cast<sint>( ::strlen( ext ) );
     
     if( extlen <= inlen )
     {
@@ -2488,8 +2559,8 @@ float32 flrand( float32 min, float32 max )
     float32	result;
     
     holdrand = ( holdrand * 214013L ) + 2531011L;
-    result = ( float32 )( holdrand >> 17 ); // 0 - 32767 range
-    result = ( ( result * ( max - min ) ) / ( float32 )QRAND_MAX ) + min;
+    result = static_cast<float32>( ( holdrand ) >> 17 ); // 0 - 32767 range
+    result = ( ( result * ( max - min ) ) / static_cast<float32>( QRAND_MAX ) ) + min;
     
     return( result );
 }
@@ -2615,7 +2686,7 @@ valueType* Com_StringContains( valueType* str1, valueType* str2, sint casesensit
 {
     uint64 len, i, j;
     
-    len = ( sint )::strlen( str1 ) - ( sint )::strlen( str2 );
+    len = static_cast<sint>( ::strlen( str1 ) ) - static_cast<sint>( ::strlen( str2 ) );
     for( i = 0; i <= len; i++, str1++ )
     {
         for( j = 0; str2[j]; j++ )
@@ -2651,8 +2722,8 @@ bool Q_isanumber( pointer s )
     
     if( *s == '\0' )
     {
+        return false;
     }
-    return false;
     
     d = strtod( s, &p );
     
@@ -2661,7 +2732,7 @@ bool Q_isanumber( pointer s )
 
 bool Q_isintegral( float32 f )
 {
-    return ( sint )f == f;
+    return static_cast<sint>( f ) == f;
 }
 
 sint COM_CompressBracedSection( valueType** data_p, valueType** name, valueType** text, sint* nameLength, sint* textLength )
