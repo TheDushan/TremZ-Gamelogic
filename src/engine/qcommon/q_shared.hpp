@@ -680,6 +680,8 @@ void            MatrixTransformPoint( const matrix_t m, const vec3_t in, vec3_t 
 
 //=============================================
 
+//Dushan same as Com_Clamp just for integers
+sint Com_Clampi( sint min, sint max, sint value );
 float32 Com_Clamp( float32 min, float32 max, float32 value );
 
 valueType* Com_SkipTokens( valueType* s, sint numTokens, valueType* sep );
@@ -1525,17 +1527,6 @@ enum flagStatus_t
     FLAG_DROPPED
 };
 
-// Dushan - Tremulous
-enum demoState_t
-{
-    DS_NONE,
-    
-    DS_PLAYBACK,
-    DS_RECORDING,
-    
-    DS_NUM_DEMO_STATES
-};
-
 #define MAX_GLOBAL_SERVERS          4096
 #define MAX_OTHER_SERVERS           128
 #define MAX_PINGREQUESTS            16
@@ -1636,15 +1627,6 @@ void Com_Parse3DMatrix( pointer( *buf_p ), sint z, sint y, sint x, float32* m );
 #define CHECK_NAN_VEC
 #endif
 
-// demo commands
-enum demoCommand_t
-{
-    DC_SERVER_COMMAND = -1,
-    DC_CLIENT_SET = 0,
-    DC_CLIENT_REMOVE,
-    DC_SET_STAGE
-};
-
 void Com_BeginParseSession( pointer filename );
 void Com_EndParseSession( void );
 
@@ -1655,5 +1637,7 @@ bool COM_CompareExtension( pointer in, pointer ext );
 float32 Q_flrand( float32 min, float32 max );
 bool Q_CleanPlayerName( pointer in, valueType* out, sint outSize );
 sint COM_CompressBracedSection( valueType** data_p, valueType** name, valueType** text, sint* nameLength, sint* textLength );
+
+#define KEYBOARDCTRL(a) ((a)-'a'+1)
 
 #endif //!__Q_SHARED_H__

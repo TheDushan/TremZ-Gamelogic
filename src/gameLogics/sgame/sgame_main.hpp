@@ -55,10 +55,6 @@ public:
     static void MapConfigs( pointer mapname );
     static sint TimeTilSuddenDeath( void );
     static void CalculateRanks( void );
-    static void DemoCommand( demoCommand_t cmd, pointer string );
-    static void DemoSetClient( void );
-    static void DemoRemoveClient( void );
-    static void DemoSetStage( void );
     static void SendScoreboardMessageToAllClients( void );
     static void MoveClientToIntermission( gentity_t* client );
     static void FindIntermissionPoint( void );
@@ -78,7 +74,6 @@ public:
     static void CountSpawns( void );
     static void InitSpawnQueue( spawnQueue_t* sq );
     static void UpdateCvars( void );
-    static void CheckDemo( void );
     static void SpawnClients( team_t team );
     static void CalculateAvgPlayers( void );
     static void CalculateStages( void );
