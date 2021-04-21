@@ -59,6 +59,7 @@
 #include <qcommon/qfiles.hpp>
 #include <API/cm_api.hpp>
 #include <API/Parse_api.hpp>
+#include <API/clientCinema_api.hpp>
 #include <API/clientScreen_api.hpp>
 #include <API/clientAVI_api.hpp>
 #include <API/clientGame_api.hpp>

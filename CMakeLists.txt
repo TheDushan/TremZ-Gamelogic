@@ -128,6 +128,7 @@ set( GUI_HEADERS
 	${MOUNT_DIR}/API/gui_api.hpp
 	${MOUNT_DIR}/API/cgame_api.hpp
 	${MOUNT_DIR}/API/Parse_api.hpp
+	${MOUNT_DIR}/API/clientCinema_api.hpp
 	${TREMGAME_DIR}/GUI/gui_local.hpp
 	${TREMGAME_DIR}/GUI/gui_shared.hpp
 	${TREMGAME_DIR}/GUI/keycodes.hpp
@@ -243,6 +244,7 @@ set( CGAMELIST_HEADERS
 	${MOUNT_DIR}/API/CVarSystem_api.hpp
 	${MOUNT_DIR}/API/cgame_api.hpp
 	${MOUNT_DIR}/API/Parse_api.hpp
+	${MOUNT_DIR}/API/clientCinema_api.hpp
 	${TREMGAME_DIR}/GUI/menudef.hpp
 	${MOUNT_DIR}/API/bgame_api.hpp
 	${TREMGAME_DIR}/GUI/gui_shared.hpp
