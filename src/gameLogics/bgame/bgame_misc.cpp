@@ -3551,12 +3551,11 @@ void idBothGamesLocal::ParseCSVEquipmentList(pointer string,
         if(weaponsSize && weapons[i] == WP_NONE && upgradesSize &&
                 upgrades[j] == UP_NONE) {
             Com_Printf(S_COLOR_YELLOW "WARNING: unknown equipment %s\n", q);
-        } else
-            if(weaponsSize && weapons[i] != WP_NONE) {
-                i++;
-            } else if(upgradesSize && upgrades[j] != UP_NONE) {
-                j++;
-            }
+        } else if(weaponsSize && weapons[i] != WP_NONE) {
+            i++;
+        } else if(upgradesSize && upgrades[j] != UP_NONE) {
+            j++;
+        }
 
         if(!EOS) {
             p++;
@@ -3616,8 +3615,7 @@ void idBothGamesLocal::ParseCSVClassList(pointer string, class_t *classes,
 
         if(classes[i] == PCL_NONE) {
             Com_Printf(S_COLOR_YELLOW "WARNING: unknown class %s\n", q);
-        } else
-        {
+        } else {
             i++;
         }
 
@@ -3669,8 +3667,7 @@ void idBothGamesLocal::ParseCSVBuildableList(pointer string,
 
         if(buildables[i] == BA_NONE) {
             Com_Printf(S_COLOR_YELLOW "WARNING: unknown buildable %s\n", q);
-        } else
-        {
+        } else {
             i++;
         }
 
