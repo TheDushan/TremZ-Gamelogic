@@ -165,4 +165,3 @@ typedef struct openALImports_s {
 } openALImports_t;
 
 #endif // !__SOUND_API_H__
-

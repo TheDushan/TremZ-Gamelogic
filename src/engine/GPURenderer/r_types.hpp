@@ -78,7 +78,7 @@ typedef struct poly_s {
     polyVert_t         *verts;
 } poly_t;
 
-typedef enum {
+enum refEntityType_t {
     RT_MODEL,
     RT_POLY,
     RT_SPRITE,
@@ -89,7 +89,7 @@ typedef enum {
     RT_PORTALSURFACE,       // doesn't draw anything, just info for portals
 
     RT_MAX_REF_ENTITY_TYPE
-} refEntityType_t;
+};
 
 typedef struct {
     refEntityType_t reType;
@@ -154,11 +154,11 @@ typedef struct {
 } refdef_t;
 
 
-typedef enum {
+enum stereoFrame_t {
     STEREO_CENTER,
     STEREO_LEFT,
     STEREO_RIGHT
-} stereoFrame_t;
+};
 
 
 /*
@@ -168,47 +168,23 @@ typedef enum {
 ** being run right now.  These are constant once the OpenGL
 ** subsystem is initialized.
 */
-typedef enum {
+
+enum textureCompression_t {
     TC_NONE,
     TC_S3TC,  // this is for the GL_S3_s3tc extension.
     TC_S3TC_ARB,  // this is for the GL_EXT_texture_compression_s3tc extension.
     TC_EXT_COMP_S3TC
-} textureCompression_t;
+};
 
-typedef enum {
+enum glDriverType_t {
     GLDRV_UNKNOWN = -1,
     GLDRV_ICD,                  // driver is integrated with window system
-    // WARNING: there are tests that check for
-    // > GLDRV_ICD for minidriverness, so this
-    // should always be the lowest value in this
-    // enum set
-    GLDRV_STANDALONE,           // driver is a non-3Dfx standalone driver
-    GLDRV_VOODOO,               // driver is a 3Dfx standalone driver
+};
 
-    // XreaL BEGIN
-    GLDRV_OPENGL3,              // new driver system
-    GLDRV_MESA,                 // crap
-    // XreaL END
-
-} glDriverType_t;
-
-typedef enum {
+enum glHardwareType_t {
     GLHW_UNKNOWN = -1,
     GLHW_GENERIC,               // where everthing works the way it should
-    GLHW_3DFX_2D3D,             // Voodoo Banshee or Voodoo3, relevant since if this is
-    // the hardware type then there can NOT exist a secondary
-    // display adapter
-    GLHW_RIVA128,               // where you can't interpolate alpha
-    GLHW_RAGEPRO,               // where you can't modulate alpha on alpha textures
-    GLHW_PERMEDIA2,             // where you don't have src*dst
-
-    // XreaL BEGIN
-    GLHW_ATI,                   // where you don't have proper GLSL support
-    GLHW_ATI_DX10,              // ATI Radeon HD series DX10 hardware
-    GLHW_NV_DX10                // Geforce 8/9 class DX10 hardware
-    // XreaL END
-
-} glHardwareType_t;
+};
 
 typedef struct {
     valueType                   renderer_string[MAX_STRING_CHARS];
@@ -234,6 +210,7 @@ typedef struct {
     // normal screens should be 4/3, but wide aspect monitors may be 16/9
     float32                 windowAspect;
     float32                 displayAspect;
+    float32                 displayScale;
 
     sint                        displayFrequency;
 

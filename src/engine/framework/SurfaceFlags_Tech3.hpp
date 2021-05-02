@@ -20,13 +20,13 @@
 // Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110 - 1301  USA
 //
 // -------------------------------------------------------------------------------------
-// File name:   surfaceflags.h
+// File name:   surfaceFlags_Tech3.h
 // Created:
 // Compilers:   Microsoft (R) C/C++ Optimizing Compiler Version 19.26.28806 for x64,
 //              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0
 // Description: This file must be identical in the quake and utils directories
 //              contents flags are seperate bits a given brush can contribute multiple
-//              content bits these definitions also need to be in q_shared.hpp!
+//              content bits these definitions also need to be in q_shared.h!
 // -------------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////////////////////
 
