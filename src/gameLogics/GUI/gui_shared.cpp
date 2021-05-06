@@ -366,7 +366,7 @@ void PC_SourceWarning(sint handle, valueType *format, ...) {
     static valueType string[4096];
 
     va_start(argptr, format);
-    Q_vsprintf_s(string, sizeof(string), sizeof(string), format, argptr);
+    Q_vsprintf_s(string, sizeof(string), format, argptr);
     va_end(argptr);
 
     filename[0] = '\0';
@@ -389,7 +389,7 @@ void PC_SourceError(sint handle, valueType *format, ...) {
     static valueType string[4096];
 
     va_start(argptr, format);
-    Q_vsprintf_s(string, sizeof(string), sizeof(string), format, argptr);
+    Q_vsprintf_s(string, sizeof(string), format, argptr);
     va_end(argptr);
 
     filename[0] = '\0';
