@@ -848,6 +848,44 @@ typedef struct {
 
 //----(SA) end
 
+
+/*
+==============================================================================
+
+  Wavefront .OBJ model file format
+
+==============================================================================
+*/
+
+typedef struct objElement_s {
+    float32 *vertex;
+    float32 *uv;
+    float32 *normal;
+} objectElement_t;
+
+typedef objectElement_t objectFace_t[3];
+
+typedef struct objectSurface_s {
+    sint ident;
+    valueType shader[MAX_QPATH];
+    sint shaderIndex;
+    sint numFaces;
+    objectFace_t *faces;
+} objectSurface_t;
+
+typedef struct objectModel_s {
+    valueType name[MAX_QPATH];
+    sint numVerts;
+    sint numUVs;
+    sint numNormals;
+    sint numSurfaces;
+    float32 *verts;
+    float32 *UVs;
+    float32 *normals;
+    objectSurface_t *surfaces;
+    vec3_t mins, maxs;
+} objectModel_t;
+
 /*
 ==============================================================================
 

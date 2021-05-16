@@ -61,6 +61,7 @@
 #include <API/CmdSystem_api.hpp>
 #include <API/CVarSystem_api.hpp>
 #include <GPURenderer/r_types.hpp>
+#include <qcommon/qfiles.hpp>
 #include <API/renderer_api.hpp>
 #include <API/FileSystem_api.hpp>
 #include <API/serverGame_api.hpp>
@@ -78,7 +79,6 @@
 #include <sgame/sgame_local.hpp>
 #include <sgame/sgame_admin.hpp>
 #include <GUI/gui_shared.hpp>
-#include <qcommon/qfiles.hpp>
 
 #include <sgame/sgame_weapon.hpp>
 #include <sgame/sgame_utils.hpp>
