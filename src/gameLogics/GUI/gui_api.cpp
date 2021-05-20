@@ -44,6 +44,7 @@ idClientGUISystem *idGUISystem;
 idClientScreenSystem *idScreenSystem;
 idClientCinemaSystem *idClientCinema;
 idClientLocalizationSystem *idClientLocalization;
+idClientKeysSystem *clientKeysSystem;
 
 #ifdef __LINUX__
 extern "C" idUserInterfaceManager *guiEntry(guiImports_t *guiimports)
@@ -66,6 +67,7 @@ Q_EXPORT idUserInterfaceManager *guiEntry(guiImports_t *guiimports)
     idScreenSystem = imports->clientScreenSystem;
     idClientCinema = imports->clientCinemaSystem;
     idClientLocalization = imports->clientLocalization;
+    clientKeysSystem = imports->clientKeysSystem;
 
     return uiManager;
 }
@@ -282,27 +284,27 @@ void trap_Key_GetBindingBuf(sint keynum, valueType *buf, sint buflen) {
 }
 
 void trap_Key_SetBinding(sint keynum, pointer binding) {
-    imports->SetBinding(keynum, binding);
+    imports->clientKeysSystem->SetBinding(keynum, binding);
 }
 
 void trap_Key_KeysForBinding(pointer binding, sint *key1, sint *key2) {
-    imports->GetBindingByString(binding, key1, key2);
+    imports->clientKeysSystem->GetBindingByString(binding, key1, key2);
 }
 
 bool trap_Key_IsDown(sint keynum) {
-    return imports->IsDown(keynum);
+    return imports->clientKeysSystem->IsDown(keynum);
 }
 
 bool trap_Key_GetOverstrikeMode(void) {
-    return imports->GetOverstrikeMode();
+    return imports->clientKeysSystem->GetOverstrikeMode();
 }
 
 void trap_Key_SetOverstrikeMode(bool state) {
-    imports->SetOverstrikeMode(state);
+    imports->clientKeysSystem->SetOverstrikeMode(state);
 }
 
 void trap_Key_ClearStates(void) {
-    imports->ClearStates();
+    imports->clientKeysSystem->ClearStates();
 }
 
 sint trap_Key_GetCatcher(void) {

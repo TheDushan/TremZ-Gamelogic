@@ -45,6 +45,7 @@ idClientScreenSystem *idScreenSystem;
 idParseSystem *ParseSystem;
 idClientCinemaSystem *idClientCinema;
 idClientLocalizationSystem *clientLocalization;
+idClientKeysSystem *clientKeysSystem;
 
 #ifdef __LINUX__
 extern "C" idCGame *cgameEntry(cgameImports_t *cgimports)
@@ -68,6 +69,7 @@ Q_EXPORT idCGame *cgameEntry(cgameImports_t *cgimports)
     ParseSystem = imports->parseSystem;
     idClientCinema = imports->clientCinemaSystem;
     clientLocalization = imports->clientLocalization;
+    clientKeysSystem = imports->clientKeysSystem;
 
     return cgame;
 }
@@ -505,11 +507,11 @@ sint trap_MemoryRemaining(void) {
 }
 
 bool trap_Key_IsDown(sint keynum) {
-    return imports->Key_IsDown(keynum);
+    return imports->clientKeysSystem->IsDown(keynum);
 }
 
 sint trap_Key_GetCatcher(void) {
-    return imports->Key_GetCatcher();
+    return imports->clientKeysSystem->GetCatcher();
 }
 
 void trap_Key_SetCatcher(sint catcher) {
@@ -517,15 +519,15 @@ void trap_Key_SetCatcher(sint catcher) {
 }
 
 sint trap_Key_GetKey(pointer binding) {
-    return imports->Key_GetKey(binding);
+    return imports->clientKeysSystem->GetKey(binding);
 }
 
 bool trap_Key_GetOverstrikeMode(void) {
-    return imports->Key_GetOverstrikeMode();
+    return imports->clientKeysSystem->GetOverstrikeMode();
 }
 
 void trap_Key_SetOverstrikeMode(bool state) {
-    imports->Key_SetOverstrikeMode(state);
+    imports->clientKeysSystem->SetOverstrikeMode(state);
 }
 
 sint trap_PC_AddGlobalDefine(valueType *define) {
@@ -622,7 +624,7 @@ void trap_Key_GetBindingBuf(sint keynum, valueType *buf, sint buflen) {
 }
 
 void trap_Key_SetBinding(sint keynum, pointer binding) {
-    imports->Key_SetBinding(keynum, binding);
+    imports->clientKeysSystem->SetBinding(keynum, binding);
 }
 
 void trap_Key_KeynumToStringBuf(sint keynum, valueType *buf, sint buflen) {
@@ -630,7 +632,7 @@ void trap_Key_KeynumToStringBuf(sint keynum, valueType *buf, sint buflen) {
 }
 
 void trap_Key_KeysForBinding(pointer binding, sint *key1, sint *key2) {
-    imports->Key_GetBindingByString(binding, key1, key2);
+    imports->clientKeysSystem->GetBindingByString(binding, key1, key2);
 }
 
 void trap_CG_TranslateString(pointer string, valueType *buf) {
