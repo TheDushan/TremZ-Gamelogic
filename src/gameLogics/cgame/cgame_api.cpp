@@ -46,6 +46,7 @@ idParseSystem *ParseSystem;
 idClientCinemaSystem *idClientCinema;
 idClientLocalizationSystem *clientLocalization;
 idClientKeysSystem *clientKeysSystem;
+idClientReliableCommandsSystemAPI* clientReliableCommandsSystem;
 
 #ifdef __LINUX__
 extern "C" idCGame *cgameEntry(cgameImports_t *cgimports)
@@ -70,6 +71,7 @@ Q_EXPORT idCGame *cgameEntry(cgameImports_t *cgimports)
     idClientCinema = imports->clientCinemaSystem;
     clientLocalization = imports->clientLocalization;
     clientKeysSystem = imports->clientKeysSystem;
+    clientReliableCommandsSystem = imports->clientReliableCommandsSystem;
 
     return cgame;
 }
@@ -165,7 +167,7 @@ void trap_RemoveCommand(pointer cmdName) {
 }
 
 void trap_SendClientCommand(pointer s) {
-    imports->AddReliableCommand(s);
+    imports->clientReliableCommandsSystem->AddReliableCommand(s);
 }
 
 void trap_UpdateScreen(void) {
@@ -590,23 +592,6 @@ void trap_R_RemapShader(pointer oldShader, pointer newShader,
     imports->renderSystem->RemapShader(oldShader, newShader, timeOffset);
 }
 
-bool trap_loadCamera(sint camNum, pointer name) {
-    return imports->loadCamera(camNum, name);
-}
-
-void trap_startCamera(sint camNum, sint time) {
-    imports->startCamera(camNum, time);
-}
-
-void trap_stopCamera(sint camNum) {
-    imports->stopCamera(camNum);
-}
-
-bool trap_getCameraInfo(sint camNum, sint time, vec3_t *origin,
-                        vec3_t *angles, float32 *fov) {
-    return imports->getCameraInfo(camNum, time, origin, angles, fov);
-}
-
 bool trap_GetEntityToken(valueType *buffer, uint64 bufferSize) {
     return imports->renderSystem->GetEntityToken(buffer, bufferSize);
 }
@@ -687,5 +672,5 @@ sint trap_S_SoundDuration(sfxHandle_t handle) {
 }
 
 void trap_Cvar_SetValue(pointer var_name, float32 value) {
-    imports->SetValue(var_name, PASSFLOAT(value));
+    imports->cvarSystem->SetValue(var_name, PASSFLOAT(value));
 }

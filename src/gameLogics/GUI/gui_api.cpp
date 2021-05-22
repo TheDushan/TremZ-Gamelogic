@@ -45,6 +45,9 @@ idClientScreenSystem *idScreenSystem;
 idClientCinemaSystem *idClientCinema;
 idClientLocalizationSystem *idClientLocalization;
 idClientKeysSystem *clientKeysSystem;
+idClientReliableCommandsSystemAPI* clientReliableCommandsSystem;
+idClientAutoUpdateSystemAPI *clientAutoUpdateSystem;
+idClientMainSystemAPI *clientMainSystem;
 
 #ifdef __LINUX__
 extern "C" idUserInterfaceManager *guiEntry(guiImports_t *guiimports)
@@ -68,6 +71,9 @@ Q_EXPORT idUserInterfaceManager *guiEntry(guiImports_t *guiimports)
     idClientCinema = imports->clientCinemaSystem;
     idClientLocalization = imports->clientLocalization;
     clientKeysSystem = imports->clientKeysSystem;
+    clientReliableCommandsSystem = imports->clientReliableCommandsSystem;
+    clientAutoUpdateSystem = imports->clientAutoUpdateSystem;
+    clientMainSystem = imports->clientMainSystem;
 
     return uiManager;
 }
@@ -86,155 +92,155 @@ sint trap_Milliseconds(void) {
 
 void trap_Cvar_Register(vmConvar_t *cvar, pointer var_name, pointer value,
                         sint flags, pointer description) {
-    cvarSystem->Register(cvar, var_name, value, flags, description);
+    imports->cvarSystem->Register(cvar, var_name, value, flags, description);
 }
 
 void trap_Cvar_Update(vmConvar_t *cvar) {
-    cvarSystem->Update(cvar);
+    imports->cvarSystem->Update(cvar);
 }
 
 void trap_Cvar_Set(pointer var_name, pointer value) {
-    cvarSystem->Set(var_name, value);
+    imports->cvarSystem->Set(var_name, value);
 }
 
 float32 trap_Cvar_VariableValue(pointer var_name) {
-    return cvarSystem->VariableValue(var_name);;
+    return imports->cvarSystem->VariableValue(var_name);;
 }
 
 void trap_Cvar_VariableStringBuffer(pointer var_name, valueType *buffer,
                                     uint64 bufsize) {
-    cvarSystem->VariableStringBuffer(var_name, buffer, bufsize);
+    imports->cvarSystem->VariableStringBuffer(var_name, buffer, bufsize);
 }
 
 void trap_Cvar_LatchedVariableStringBuffer(pointer var_name,
         valueType *buffer, uint64 bufsize) {
-    cvarSystem->VariableStringBuffer(var_name, buffer, bufsize);
+    imports->cvarSystem->VariableStringBuffer(var_name, buffer, bufsize);
 }
 
 void trap_Cvar_SetValue(pointer var_name, float32 value) {
-    cvarSystem->SetValue(var_name, PASSFLOAT(value));
+    imports->cvarSystem->SetValue(var_name, PASSFLOAT(value));
 }
 
 void trap_Cvar_Reset(pointer name) {
-    cvarSystem->Reset(name);
+    imports->cvarSystem->Reset(name);
 }
 
 void trap_Cvar_Create(pointer var_name, pointer var_value, sint flags,
                       pointer description) {
-    cvarSystem->Get(var_name, var_value, flags, description);
+    imports->cvarSystem->Get(var_name, var_value, flags, description);
 }
 
 void trap_Cvar_InfoStringBuffer(sint bit, valueType *buffer,
                                 sint bufsize) {
-    cvarSystem->InfoStringBuffer(bit, buffer, bufsize);
+    imports->cvarSystem->InfoStringBuffer(bit, buffer, bufsize);
 }
 
 sint trap_Argc(void) {
-    return cmdSystem->Argc();
+    return imports->cmdSystem->Argc();
 }
 
 void trap_Argv(sint n, valueType *buffer, sint bufferLength) {
-    cmdSystem->ArgvBuffer(n, buffer, bufferLength);
+    imports->cmdSystem->ArgvBuffer(n, buffer, bufferLength);
 }
 
 void trap_Cmd_ExecuteText(sint exec_when, pointer text) {
-    cmdBufferSystem->ExecuteText(exec_when, text);
+    imports->cmdBufferSystem->ExecuteText(exec_when, text);
 }
 
 void trap_AddCommand(pointer cmdName, pointer cmdDesc) {
-    cmdSystem->AddCommand(cmdName, nullptr, cmdDesc);
+    imports->cmdSystem->AddCommand(cmdName, nullptr, cmdDesc);
 }
 
 sint trap_FS_FOpenFile(pointer qpath, fileHandle_t *f, fsMode_t mode) {
-    return fileSystem->FOpenFileByMode(qpath, f, mode);
+    return imports->fileSystem->FOpenFileByMode(qpath, f, mode);
 }
 
 void trap_FS_Read(void *buffer, sint len, fileHandle_t f) {
-    fileSystem->Read(buffer, len, f);
+    imports->fileSystem->Read(buffer, len, f);
 }
 
 sint trap_FS_Write(const void *buffer, sint len, fileHandle_t f) {
-    return fileSystem->Write(buffer, len, f);
+    return imports->fileSystem->Write(buffer, len, f);
 }
 
 void trap_FS_FCloseFile(fileHandle_t f) {
-    fileSystem->FCloseFile(f);
+    imports->fileSystem->FCloseFile(f);
 }
 
 sint trap_FS_Delete(valueType *filename) {
-    return fileSystem->Delete(filename);
+    return imports->fileSystem->Delete(filename);
 }
 
 sint trap_FS_GetFileList(pointer path, pointer extension,
                          valueType *listbuf, sint bufsize) {
-    return fileSystem->GetFileList(path, extension, listbuf, bufsize);
+    return imports->fileSystem->GetFileList(path, extension, listbuf, bufsize);
 }
 
 sint trap_FS_Seek(fileHandle_t f, sint32 offset, sint origin) {
-    return fileSystem->Seek(f, offset, origin);
+    return imports->fileSystem->Seek(f, offset, origin);
 }
 
 qhandle_t trap_R_RegisterModel(pointer name) {
-    return renderSystem->RegisterModel(name);
+    return imports->renderSystem->RegisterModel(name);
 }
 
 qhandle_t trap_R_RegisterSkin(pointer name) {
-    return renderSystem->RegisterSkin(name);
+    return imports->renderSystem->RegisterSkin(name);
 }
 
 qhandle_t trap_R_RegisterShaderNoMip(pointer name) {
-    return renderSystem->RegisterShaderNoMip(name);
+    return imports->renderSystem->RegisterShaderNoMip(name);
 }
 
 void trap_R_ClearScene(void) {
-    renderSystem->ClearScene();
+    imports->renderSystem->ClearScene();
 }
 
 void trap_R_AddRefEntityToScene(const refEntity_t *re) {
-    renderSystem->AddRefEntityToScene(re);
+    imports->renderSystem->AddRefEntityToScene(re);
 }
 
 void trap_R_AddPolyToScene(qhandle_t hShader, sint numVerts,
                            const polyVert_t *verts) {
-    renderSystem->AddPolyToScene(hShader, numVerts, verts, 1);
+    imports->renderSystem->AddPolyToScene(hShader, numVerts, verts, 1);
 }
 
 void trap_R_AddPolysToScene(qhandle_t hShader, sint numVerts,
                             const polyVert_t *verts, sint numPolys) {
-    renderSystem->AddPolyToScene(hShader, numVerts, verts, numPolys);
+    imports->renderSystem->AddPolyToScene(hShader, numVerts, verts, numPolys);
 }
 
 void trap_R_AddLightToScene(const vec3_t org, float32 intensity, float32 r,
                             float32 g, float32 b) {
-    renderSystem->AddLightToScene(org, PASSFLOAT(intensity), PASSFLOAT(r),
+    imports->renderSystem->AddLightToScene(org, PASSFLOAT(intensity), PASSFLOAT(r),
                                   PASSFLOAT(g), PASSFLOAT(b));
 }
 
 void trap_R_AddCoronaToScene(const vec3_t org, float32 r, float32 g,
                              float32 b, float32 scale, sint id, bool visible) {
-    //renderSystem->AddCoronaToScene( org, PASSFLOAT( r ), PASSFLOAT( g ), PASSFLOAT( b ), PASSFLOAT( scale ), id, visible );
+    //imports->renderSystem->AddCoronaToScene( org, PASSFLOAT( r ), PASSFLOAT( g ), PASSFLOAT( b ), PASSFLOAT( scale ), id, visible );
 }
 ;
 void trap_R_RenderScene(const refdef_t *fd) {
-    renderSystem->RenderScene(fd);
+    imports->renderSystem->RenderScene(fd);
 }
 
 void trap_R_SetColor(const float32 *rgba) {
-    renderSystem->SetColor(rgba);
+    imports->renderSystem->SetColor(rgba);
 }
 
 void trap_R_SetClipRegion(const float32 *region) {
-    renderSystem->SetClipRegion(region);
+    imports->renderSystem->SetClipRegion(region);
 }
 
 void trap_R_Add2dPolys(polyVert_t *verts, sint numverts,
                        qhandle_t hShader) {
-    //renderSystem->Add2dPolys( verts, numverts, hShader );
+    //imports->renderSystem->Add2dPolys( verts, numverts, hShader );
 }
 
 void trap_R_DrawStretchPic(float32 x, float32 y, float32 w, float32 h,
                            float32 s1, float32 t1, float32 s2, float32 t2, qhandle_t hShader) {
-    renderSystem->DrawStretchPic(PASSFLOAT(x), PASSFLOAT(y), PASSFLOAT(w),
+    imports->renderSystem->DrawStretchPic(PASSFLOAT(x), PASSFLOAT(y), PASSFLOAT(w),
                                  PASSFLOAT(h), PASSFLOAT(s1), PASSFLOAT(t1), PASSFLOAT(s2), PASSFLOAT(t2),
                                  hShader);
 }
@@ -242,11 +248,11 @@ void trap_R_DrawStretchPic(float32 x, float32 y, float32 w, float32 h,
 void trap_R_DrawRotatedPic(float32 x, float32 y, float32 w, float32 h,
                            float32 s1, float32 t1, float32 s2, float32 t2, qhandle_t hShader,
                            float32 angle) {
-    //renderSystem->DrawRotatedPic( PASSFLOAT( x ), PASSFLOAT( y ), PASSFLOAT( w ), PASSFLOAT( h ), PASSFLOAT( s1 ), PASSFLOAT( t1 ), PASSFLOAT( s2 ), PASSFLOAT( t2 ), hShader, PASSFLOAT( angle ) );
+    //imports->renderSystem->DrawRotatedPic( PASSFLOAT( x ), PASSFLOAT( y ), PASSFLOAT( w ), PASSFLOAT( h ), PASSFLOAT( s1 ), PASSFLOAT( t1 ), PASSFLOAT( s2 ), PASSFLOAT( t2 ), hShader, PASSFLOAT( angle ) );
 }
 
 void trap_R_ModelBounds(clipHandle_t model, vec3_t mins, vec3_t maxs) {
-    renderSystem->ModelBounds(model, mins, maxs);
+    imports->renderSystem->ModelBounds(model, mins, maxs);
 }
 
 void trap_UpdateScreen(void) {
@@ -255,12 +261,12 @@ void trap_UpdateScreen(void) {
 
 sint trap_CM_LerpTag(orientation_t *tag, clipHandle_t mod, sint startFrame,
                      sint endFrame, float32 frac, pointer tagName) {
-    return renderSystem->LerpTag(tag, mod, startFrame, endFrame,
+    return imports->renderSystem->LerpTag(tag, mod, startFrame, endFrame,
                                  PASSFLOAT(frac), tagName);
 }
 
 sfxHandle_t trap_S_RegisterSound(pointer sample) {
-    sint i = soundSystem->RegisterSound(sample, false);
+    sint i = imports->soundSystem->RegisterSound(sample, false);
 #ifdef _DEBUG
 
     if(i == 0) {
@@ -272,7 +278,7 @@ sfxHandle_t trap_S_RegisterSound(pointer sample) {
 }
 
 void trap_S_StartLocalSound(sfxHandle_t sfx, sint channelNum) {
-    soundSystem->StartLocalSound(sfx, channelNum);
+    imports->soundSystem->StartLocalSound(sfx, channelNum);
 }
 
 void trap_Key_KeynumToStringBuf(sint keynum, valueType *buf, sint buflen) {
@@ -425,7 +431,7 @@ sint trap_MemoryRemaining(void) {
 
 void trap_R_RegisterFont(pointer fontName, sint pointSize,
                          fontInfo_t *font) {
-    renderSystem->RegisterFont(fontName, pointSize, font);
+    imports->renderSystem->RegisterFont(fontName, pointSize, font);
 }
 
 sint trap_PC_LoadSource(pointer filename) {
@@ -446,11 +452,11 @@ sint trap_PC_SourceFileAndLine(sint handle, valueType *filename,
 }
 
 void trap_S_StopBackgroundTrack(void) {
-    soundSystem->StopBackgroundTrack();
+    imports->soundSystem->StopBackgroundTrack();
 }
 
 void trap_S_StartBackgroundTrack(pointer intro, pointer loop) {
-    soundSystem->StartBackgroundTrack(intro, loop);
+    imports->soundSystem->StartBackgroundTrack(intro, loop);
 }
 
 sint trap_RealTime(qtime_t *qtime) {
@@ -476,7 +482,7 @@ void trap_CIN_DrawCinematic(sint handle) {
 }
 
 void trap_CIN_SetExtents(sint handle, sint x, sint y, sint w, sint h) {
-    imports->SetExtents(handle, x, y, w, h);
+    imports->clientCinemaSystem->SetExtents(handle, x, y, w, h);
 }
 
 void trap_R_RemapShader(pointer oldShader, pointer newShader,
@@ -500,15 +506,15 @@ valueType *trap_TranslateString(pointer string) {
 }
 
 void trap_CheckAutoUpdate(void) {
-    imports->CheckAutoUpdate();
+    imports->clientAutoUpdateSystem->CheckAutoUpdate();
 }
 
 void trap_GetAutoUpdate(void) {
-    imports->GetAutoUpdate();
+    imports->clientAutoUpdateSystem->GetAutoUpdate();
 }
 
 void trap_OpenURL(pointer s) {
-    imports->OpenURL(s);
+    imports->clientMainSystem->OpenURL(s);
 }
 
 void trap_GetHunkData(sint *hunkused, sint *hunkexpected) {
@@ -516,7 +522,7 @@ void trap_GetHunkData(sint *hunkused, sint *hunkexpected) {
 }
 
 sint trap_Cvar_VariableInt(pointer var_name) {
-    return cvarSystem->VariableIntegerValue(var_name);
+    return imports->cvarSystem->VariableIntegerValue(var_name);
 }
 
 sint trap_CrosshairPlayer(void) {

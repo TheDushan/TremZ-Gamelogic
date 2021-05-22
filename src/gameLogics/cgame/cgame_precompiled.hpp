@@ -72,6 +72,9 @@
 #include <API/FileSystem_api.hpp>
 #include <API/system_api.hpp>
 #include <API/soundSystem_api.hpp>
+#include <API/clientAutoUpdate_api.hpp>
+#include <API/clientMain_api.hpp>
+#include <API/clientReliableCommands_api.hpp>
 #include <API/clientLocalization_api.hpp>
 #include <API/clientKeys_api.hpp>
 #include <API/cgame_api.hpp>
