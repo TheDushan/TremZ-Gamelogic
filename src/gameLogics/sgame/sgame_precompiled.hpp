@@ -63,7 +63,8 @@
 #include <API/CVarSystem_api.hpp>
 #include <GPURenderer/r_types.hpp>
 #include <qcommon/qfiles.hpp>
-#include <API/renderer_api.hpp>
+#include <API/clientReliableCommands_api.hpp>>
+#include <API/system_api.hpp>
 #include <API/FileSystem_api.hpp>
 #include <API/serverGame_api.hpp>
 #include <API/serverInit_api.hpp>
@@ -71,6 +72,10 @@
 #include <API/serverWorld_api.hpp>
 #include <API/CmdSystem_api.hpp>
 #include <API/system_api.hpp>
+#include <API/clientRenderer_api.hpp>
+#include <API/clientAVI_api.hpp>
+#include <API/clientCinema_api.hpp>
+#include <API/renderer_api.hpp>
 #include <API/soundSystem_api.hpp>
 #include <API/bgame_api.hpp>
 #include <bgame/bgame_local.hpp>

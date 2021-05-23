@@ -176,8 +176,9 @@ typedef sint clipHandle_t;
 // rain - increased to 36 to match MAX_NETNAME, fixes #13 - UI stuff breaks
 // with very long names
 #define MAX_NAME_LENGTH     36      // max length of a client name
+#define MAX_COLORFUL_NAME_LENGTH MAX_CVAR_VALUE_STRING
 
-#define MAX_SAY_TEXT        150
+#define MAX_SAY_TEXT        800
 
 enum messageStatus_t {
     MESSAGE_EMPTY = 0,
@@ -260,14 +261,6 @@ enum ha_pref {
     h_low,
     h_dontcare
 };
-
-#ifdef HUNK_DEBUG
-#define Hunk_Alloc( size, preference ) Hunk_AllocDebug( size, preference, # size, __FILE__, __LINE__ )
-void *Hunk_AllocDebug(uint64 size, ha_pref preference, valueType *label,
-                      valueType *file, sint line);
-#else
-void *Hunk_Alloc(uint64 size, ha_pref preference);
-#endif
 
 #define CIN_system  1
 #define CIN_loop    2
@@ -365,62 +358,214 @@ extern vec4_t colorMdGrey;
 extern vec4_t colorDkGrey;
 extern vec4_t colorMdRed;
 extern vec4_t colorMdGreen;
+extern vec4_t colorGray;
+extern vec4_t colorOrange;
+extern vec4_t colorRoseBud;
+extern vec4_t colorPaleGreen;
+extern vec4_t colorPaleGolden;
+extern vec4_t colorColumbiaBlue;
+extern vec4_t colorPaleTurquoise;
+extern vec4_t colorPaleVioletRed;
+extern vec4_t colorPalacePaleWhite;
+extern vec4_t colorOlive;
+extern vec4_t colorTomato;
+extern vec4_t colorLime;
+extern vec4_t colorLemon;
+extern vec4_t colorBlueBerry;
+extern vec4_t colorTurquoise;
+extern vec4_t colorWildWatermelon;
+extern vec4_t colorSaltpan;
+extern vec4_t colorGrayChateau;
+extern vec4_t colorRust;
+extern vec4_t colorCopperGreen;
+extern vec4_t colorGold;
+extern vec4_t colorSteelBlue;
+extern vec4_t colorSteelGray;
+extern vec4_t colorBronze;
+extern vec4_t colorSilver;
+extern vec4_t colorDarkGray;
+extern vec4_t colorDarkOrange;
+extern vec4_t colorDarkGreen;
+extern vec4_t colorRedOrange;
+extern vec4_t colorForestGreen;
+extern vec4_t colorBrightSun;
+extern vec4_t colorMediumSlateBlue;
+extern vec4_t colorCeleste;
+extern vec4_t colorIronstone;
+extern vec4_t colorTimberwolf;
+extern vec4_t colorOnyx;
+extern vec4_t colorRosewood;
+extern vec4_t colorKokoda;
+extern vec4_t colorPorsche;
+extern vec4_t colorCloudBurst;
+extern vec4_t colorBlueDiane;
+extern vec4_t colorRope;
+extern vec4_t colorBlonde;
+extern vec4_t colorSmokeyBlack;
+extern vec4_t colorAmericanRose;
+extern vec4_t colorNeonGreen;
+extern vec4_t colorNeonYellow;
+extern vec4_t colorUltramarine;
+extern vec4_t colorTurquoiseBlue;
+extern vec4_t colorDarkMagenta;
+extern vec4_t colorMagicMint;
+extern vec4_t colorLightGray;
+extern vec4_t colorLightSalmon;
+extern vec4_t colorLightGreen;
 
 #define GAME_INIT_FRAMES    6
 #define FRAMETIME           100                 // msec
 
 #define NUMBER_OF_COLORS 62
 #define Q_COLOR_ESCAPE  '^'
+#define Q_COLOR_HEX_ESCAPE '#'
+bool Q_IsShortHexColor(pointer p);
+bool Q_IsLongHexColor(pointer p);
+bool Q_IsHexColor(pointer p);
+bool Q_IsHardcodedColor(pointer p);
 bool Q_IsColorString(pointer p);
+bool Q_IsColorEscapeEscape(pointer p);
+bool Q_IsColorNULLString(pointer p);
+sint Q_ColorStringLength(pointer p);
+sint Q_NumOfColorCodeDigits(pointer p);
 
-#define COLOR_DEFAULT   '-'
-#define COLOR_BLACK     '0'
-#define COLOR_RED       '1'
-#define COLOR_GREEN     '2'
-#define COLOR_YELLOW    '3'
-#define COLOR_BLUE      '4'
-#define COLOR_CYAN      '5'
-#define COLOR_MAGENTA   '6'
-#define COLOR_WHITE     '7'
-#define COLOR_ORANGE    '8'
-#define COLOR_MDGREY    '9'
-#define COLOR_LTGREY    ':'
-//#define COLOR_LTGREY  ';'
-#define COLOR_MDGREEN   '<'
-#define COLOR_MDYELLOW  '='
-#define COLOR_MDBLUE    '>'
-#define COLOR_MDRED     '?'
-#define COLOR_LTORANGE  'A'
-#define COLOR_MDCYAN    'B'
-#define COLOR_MDPURPLE  'C'
-#define COLOR_NULL      '*'
+#define COLOR_BLACK             '0'
+#define COLOR_RED               '1'
+#define COLOR_GREEN             '2'
+#define COLOR_YELLOW            '3'
+#define COLOR_BLUE              '4'
+#define COLOR_CYAN              '5'
+#define COLOR_MAGENTA           '6'
+#define COLOR_WHITE             '7'
+#define COLOR_GRAY              '8'
+#define COLOR_ORANGE            '9'
+#define COLOR_ROSE_BUD          'a'
+#define COLOR_PALE_GREEN        'b'
+#define COLOR_PALE_GOLDEN       'c'
+#define COLOR_COLUMBIA_BLUE     'd'
+#define COLOR_PALE_TURQUOISE    'e'
+#define COLOR_PALE_VIOLET_RED   'f'
+#define COLOR_PALACE_PALE_WHITE 'g'
+#define COLOR_OLIVE             'h'
+#define COLOR_TOMATO            'i'
+#define COLOR_LIME              'j'
+#define COLOR_LEMON             'k'
+#define COLOR_BLUE_BERRY        'l'
+#define COLOR_TURQUOISE         'm'
+#define COLOR_WILD_WATERMELON   'n'
+#define COLOR_SALTPAN           'o'
+#define COLOR_GRAY_CHATEAU      'p'
+#define COLOR_RUST              'q'
+#define COLOR_COPPER_GREEN      'r'
+#define COLOR_GOLD              's'
+#define COLOR_STEEL_BLUE        't'
+#define COLOR_STEEL_GRAY        'u'
+#define COLOR_BRONZE            'v'
+#define COLOR_SILVER            'w'
+#define COLOR_DARK_GRAY         'x'
+#define COLOR_DARK_ORANGE       'y'
+#define COLOR_DARK_GREEN        'z'
+#define COLOR_RED_ORANGE        'A'
+#define COLOR_FOREST_GREEN      'B'
+#define COLOR_BRIGHT_SUN        'C'
+#define COLOR_MEDIUM_SLATE_BLUE 'D'
+#define COLOR_CELESTE           'E'
+#define COLOR_IRONSTONE         'F'
+#define COLOR_TIMBERWOLF        'G'
+#define COLOR_ONYX              'H'
+#define COLOR_ROSEWOOD          'I'
+#define COLOR_KOKODA            'J'
+#define COLOR_PORSCHE           'K'
+#define COLOR_CLOUD_BURST       'L'
+#define COLOR_BLUE_DIANE        'M'
+#define COLOR_ROPE              'N'
+#define COLOR_BLONDE            'O'
+#define COLOR_SMOKEY_BLACK      'P'
+#define COLOR_AMERICAN_ROSE     'Q'
+#define COLOR_NEON_GREEN        'R'
+#define COLOR_NEON_YELLOW       'S'
+#define COLOR_ULTRAMARINE       'T'
+#define COLOR_TURQUOISE_BLUE    'U'
+#define COLOR_DARK_MAGENTA      'V'
+#define COLOR_MAGIC_MINT        'W'
+#define COLOR_LIGHT_GRAY        'X'
+#define COLOR_LIGHT_SALMON      'Y'
+#define COLOR_LIGHT_GREEN       'Z'
+#define COLOR_NULL              '*'
 
 #define COLOR_BITS  31
-#define ColorIndex(c)   ( (((c)) >= 'A' && ((c)) <= 'Z') ? (((c))-'A'+36) : ((((c)) >= 'a' && ((c)) <= 'z')?(((c))-'a'+10):(((c))-'0')) )
+#define ColorIndex(c) (((((c) >= '0') && ((c) <= '9')) ? ((c) - '0') : ((((c) >= 'a') && ((c) <= 'z')) ? ((c) - 'a' + 10) : ((((c) >= 'A') && ((c) <= 'Z')) ? ((c) - 'A' + 36) : 7))))
 
-#define S_COLOR_BLACK       "^0"
-#define S_COLOR_RED         "^1"
-#define S_COLOR_GREEN       "^2"
-#define S_COLOR_YELLOW      "^3"
-#define S_COLOR_BLUE        "^4"
-#define S_COLOR_CYAN        "^5"
-#define S_COLOR_MAGENTA     "^6"
-#define S_COLOR_WHITE       "^7"
-#define S_COLOR_ORANGE      "^8"
-#define S_COLOR_MDGREY      "^9"
-#define S_COLOR_LTGREY      "^:"
-//#define S_COLOR_LTGREY        "^;"
-#define S_COLOR_MDGREEN     "^<"
-#define S_COLOR_MDYELLOW    "^="
-#define S_COLOR_MDBLUE      "^>"
-#define S_COLOR_MDRED       "^?"
-#define S_COLOR_LTORANGE    "^A"
-#define S_COLOR_MDCYAN      "^B"
-#define S_COLOR_MDPURPLE    "^C"
-#define S_COLOR_NULL        "^*"
+#define S_COLOR_BLACK             "^0"
+#define S_COLOR_RED               "^1"
+#define S_COLOR_GREEN             "^2"
+#define S_COLOR_YELLOW            "^3"
+#define S_COLOR_BLUE              "^4"
+#define S_COLOR_CYAN              "^5"
+#define S_COLOR_MAGENTA           "^6"
+#define S_COLOR_WHITE             "^7"
+#define S_COLOR_GRAY              '^8'
+#define S_COLOR_ORANGE            '^9'
+#define S_COLOR_ROSE_BUD          '^a'
+#define S_COLOR_PALE_GREEN        '^b'
+#define S_COLOR_PALE_GOLDEN       '^c'
+#define S_COLOR_COLUMBIA_BLUE     '^d'
+#define S_COLOR_PALE_TURQUOISE    '^e'
+#define S_COLOR_PALE_VIOLET_RED   '^f'
+#define S_COLOR_PALACE_PALE_WHITE '^g'
+#define S_COLOR_OLIVE             '^h'
+#define S_COLOR_TOMATO            '^i'
+#define S_COLOR_LIME              '^j'
+#define S_COLOR_LEMON             '^k'
+#define S_COLOR_BLUE_BERRY        '^l'
+#define S_COLOR_TURQUOISE         '^m'
+#define S_COLOR_WILD_WATERMELON   '^n'
+#define S_COLOR_SALTPAN           '^o'
+#define S_COLOR_GRAY_CHATEAU      '^p'
+#define S_COLOR_RUST              '^q'
+#define S_COLOR_COPPER_GREEN      '^r'
+#define S_COLOR_GOLD              '^s'
+#define S_COLOR_STEEL_BLUE        '^t'
+#define S_COLOR_STEEL_GRAY        '^u'
+#define S_COLOR_BRONZE            '^v'
+#define S_COLOR_SILVER            '^w'
+#define S_COLOR_DARK_GRAY         '^x'
+#define S_COLOR_DARK_ORANGE       '^y'
+#define S_COLOR_DARK_GREEN        '^z'
+#define S_COLOR_RED_ORANGE        '^A'
+#define S_COLOR_FOREST_GREEN      '^B'
+#define S_COLOR_BRIGHT_SUN        '^C'
+#define S_COLOR_MEDIUM_SLATE_BLUE '^D'
+#define S_COLOR_CELESTE           '^E'
+#define S_COLOR_IRONSTONE         '^F'
+#define S_COLOR_TIMBERWOLF        '^G'
+#define S_COLOR_ONYX              '^H'
+#define S_COLOR_ROSEWOOD          '^I'
+#define S_COLOR_KOKODA            '^J'
+#define S_COLOR_PORSCHE           '^K'
+#define S_COLOR_CLOUD_BURST       '^L'
+#define S_COLOR_BLUE_DIANE        '^M'
+#define S_COLOR_ROPE              '^N'
+#define S_COLOR_BLONDE            '^O'
+#define S_COLOR_SMOKEY_BLACK      '^P'
+#define S_COLOR_AMERICAN_ROSE     '^Q'
+#define S_COLOR_NEON_GREEN        '^R'
+#define S_COLOR_NEON_YELLOW       '^S'
+#define S_COLOR_ULTRAMARINE       '^T'
+#define S_COLOR_TURQUOISE_BLUE    '^U'
+#define S_COLOR_DARK_MAGENTA      '^V'
+#define S_COLOR_MAGIC_MINT        '^W'
+#define S_COLOR_LIGHT_GRAY        '^X'
+#define S_COLOR_LIGHT_SALMON      '^Y'
+#define S_COLOR_LIGHT_GREEN       '^Z'
+#define S_COLOR_NULL              "^*"
+
+void Q_GetVectFromHexColor(pointer color_code, vec4_t color);
+sint Q_ApproxBasicColorIndexFromVectColor(const vec4_t color);
 
 // Dushan - Tremulous
 #define INDENT_MARKER       '\v'
+void Q_StripIndentMarker(valueType *string);
 
 #define MAX_CCODES  62
 
@@ -524,6 +669,14 @@ bool BoundsIntersectPoint(const vec3_t mins, const vec3_t maxs,
                           const vec3_t origin);
 
 sint VectorCompare(const vec3_t v1, const vec3_t v2);
+
+static ID_INLINE sint Vector4Compare(const vec4_t v1, const vec4_t v2) {
+    if(v1[0] != v2[0] || v1[1] != v2[1] || v1[2] != v2[2] || v1[3] != v2[3]) {
+        return 0;
+    }
+
+    return 1;
+}
 
 static ID_INLINE void VectorLerp(const vec3_t from, const vec3_t to,
                                  float32 frac, vec3_t out) {
@@ -881,6 +1034,11 @@ void Q_strstrip(valueType *string, pointer strip, pointer repl);
 sint Q_PrintStrlen(pointer string);
 // removes color sequences from string
 valueType *Q_CleanStr(valueType *string);
+void Q_ApproxStrHexColors(
+    pointer in_string, valueType *out_string,
+    const uint32 in_string_length, const uint32 out_string_length);
+void Q_StringToLower(valueType *in, valueType *out, sint len);
+void Q_RemoveUnusedColorStrings(valueType *in, valueType *out, sint len);
 // Count the number of valueType tocount encountered in string
 sint Q_CountChar(pointer string, valueType tocount);
 // removes whitespaces and other bad directory characters
@@ -910,7 +1068,6 @@ void Com_FatalError(pointer error, ...);
 void Com_DropError(pointer error, ...);
 void Com_Warning(pointer error, ...);
 void Com_Printf(pointer msg, ...) _attribute((format(printf, 1, 2)));
-void Com_DPrintf(pointer msg, ...) _attribute((format(printf, 1, 2)));
 
 /*
 ==========================================================
@@ -974,7 +1131,7 @@ enum soundChannel_t {
 //
 // per-level limits
 //
-#define CLIENTNUM_BITS      7
+#define CLIENTNUM_BITS      8
 #define MAX_CLIENTS         (1<<CLIENTNUM_BITS)     // absolute limit
 
 #define GENTITYNUM_BITS     12  // JPW NERVE put q3ta default back for testing  // don't need to send any more
