@@ -53,6 +53,7 @@
 #include <framework/types.hpp>
 #include <qcommon/q_platform.hpp>
 #include <qcommon/q_shared.hpp>
+#include <API/Memory_api.hpp>
 #include <sgame/tremulous.hpp>
 #include <framework/SurfaceFlags_Tech3.hpp>
 #include <API/Parse_api.hpp>

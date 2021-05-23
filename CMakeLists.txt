@@ -130,6 +130,11 @@ set( GUI_HEADERS
 	${MOUNT_DIR}/API/Parse_api.hpp
 	${MOUNT_DIR}/API/clientCinema_api.hpp
 	${MOUNT_DIR}/API/clientLocalization_api.hpp
+	${MOUNT_DIR}/API/clientAutoUpdate_api.hpp
+	${MOUNT_DIR}/API/clientMain_api.hpp
+	${MOUNT_DIR}/API/clientReliableCommands_api.hpp
+	${MOUNT_DIR}/API/clientKeys_api.hpp
+	${MOUNT_DIR}/API/Memory_api.hpp
 	${TREMGAME_DIR}/GUI/gui_local.hpp
 	${TREMGAME_DIR}/GUI/gui_shared.hpp
 	${TREMGAME_DIR}/GUI/keycodes.hpp

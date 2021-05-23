@@ -40,6 +40,7 @@ idServerMainSystem *serverMainSystem;
 idCmdBufferSystem *cmdBufferSystem;
 idCmdSystem *cmdSystem;
 idSystem *idsystem;
+idMemorySystem *memorySystem;
 
 #ifdef GAMEDLL
 typedef struct gclient_s gclient_t;
@@ -67,6 +68,7 @@ Q_EXPORT idSGame *gameEntry(gameImports_t *gimports)
     cmdBufferSystem = imports->cmdBufferSystem;
     cmdSystem = imports->cmdSystem;
     idsystem = imports->idsystem;
+    memorySystem = imports->memorySystem;
 
     return sgame;
 }

@@ -46,7 +46,8 @@ idParseSystem *ParseSystem;
 idClientCinemaSystem *idClientCinema;
 idClientLocalizationSystem *clientLocalization;
 idClientKeysSystem *clientKeysSystem;
-idClientReliableCommandsSystemAPI* clientReliableCommandsSystem;
+idClientReliableCommandsSystemAPI *clientReliableCommandsSystem;
+idMemorySystem *memorySystem;
 
 #ifdef __LINUX__
 extern "C" idCGame *cgameEntry(cgameImports_t *cgimports)
@@ -72,6 +73,7 @@ Q_EXPORT idCGame *cgameEntry(cgameImports_t *cgimports)
     clientLocalization = imports->clientLocalization;
     clientKeysSystem = imports->clientKeysSystem;
     clientReliableCommandsSystem = imports->clientReliableCommandsSystem;
+    memorySystem = imports->memorySystem;
 
     return cgame;
 }
@@ -505,7 +507,7 @@ void trap_SetClientLerpOrigin(float32 x, float32 y, float32 z) {
 }
 
 sint trap_MemoryRemaining(void) {
-    return imports->Hunk_MemoryRemaining();
+    return imports->memorySystem->MemoryRemaining();
 }
 
 bool trap_Key_IsDown(sint keynum) {

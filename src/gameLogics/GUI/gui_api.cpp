@@ -45,9 +45,10 @@ idClientScreenSystem *idScreenSystem;
 idClientCinemaSystem *idClientCinema;
 idClientLocalizationSystem *idClientLocalization;
 idClientKeysSystem *clientKeysSystem;
-idClientReliableCommandsSystemAPI* clientReliableCommandsSystem;
+idClientReliableCommandsSystemAPI *clientReliableCommandsSystem;
 idClientAutoUpdateSystemAPI *clientAutoUpdateSystem;
 idClientMainSystemAPI *clientMainSystem;
+idMemorySystem *memorySystem;
 
 #ifdef __LINUX__
 extern "C" idUserInterfaceManager *guiEntry(guiImports_t *guiimports)
@@ -74,6 +75,7 @@ Q_EXPORT idUserInterfaceManager *guiEntry(guiImports_t *guiimports)
     clientReliableCommandsSystem = imports->clientReliableCommandsSystem;
     clientAutoUpdateSystem = imports->clientAutoUpdateSystem;
     clientMainSystem = imports->clientMainSystem;
+    memorySystem = imports->memorySystem;
 
     return uiManager;
 }
@@ -212,8 +214,9 @@ void trap_R_AddPolysToScene(qhandle_t hShader, sint numVerts,
 
 void trap_R_AddLightToScene(const vec3_t org, float32 intensity, float32 r,
                             float32 g, float32 b) {
-    imports->renderSystem->AddLightToScene(org, PASSFLOAT(intensity), PASSFLOAT(r),
-                                  PASSFLOAT(g), PASSFLOAT(b));
+    imports->renderSystem->AddLightToScene(org, PASSFLOAT(intensity),
+                                           PASSFLOAT(r),
+                                           PASSFLOAT(g), PASSFLOAT(b));
 }
 
 void trap_R_AddCoronaToScene(const vec3_t org, float32 r, float32 g,
@@ -240,9 +243,10 @@ void trap_R_Add2dPolys(polyVert_t *verts, sint numverts,
 
 void trap_R_DrawStretchPic(float32 x, float32 y, float32 w, float32 h,
                            float32 s1, float32 t1, float32 s2, float32 t2, qhandle_t hShader) {
-    imports->renderSystem->DrawStretchPic(PASSFLOAT(x), PASSFLOAT(y), PASSFLOAT(w),
-                                 PASSFLOAT(h), PASSFLOAT(s1), PASSFLOAT(t1), PASSFLOAT(s2), PASSFLOAT(t2),
-                                 hShader);
+    imports->renderSystem->DrawStretchPic(PASSFLOAT(x), PASSFLOAT(y),
+                                          PASSFLOAT(w),
+                                          PASSFLOAT(h), PASSFLOAT(s1), PASSFLOAT(t1), PASSFLOAT(s2), PASSFLOAT(t2),
+                                          hShader);
 }
 
 void trap_R_DrawRotatedPic(float32 x, float32 y, float32 w, float32 h,
@@ -262,7 +266,7 @@ void trap_UpdateScreen(void) {
 sint trap_CM_LerpTag(orientation_t *tag, clipHandle_t mod, sint startFrame,
                      sint endFrame, float32 frac, pointer tagName) {
     return imports->renderSystem->LerpTag(tag, mod, startFrame, endFrame,
-                                 PASSFLOAT(frac), tagName);
+                                          PASSFLOAT(frac), tagName);
 }
 
 sfxHandle_t trap_S_RegisterSound(pointer sample) {
@@ -426,7 +430,7 @@ sint trap_LAN_CompareServers(sint source, sint sortKey, sint sortDir,
 }
 
 sint trap_MemoryRemaining(void) {
-    return imports->Hunk_MemoryRemaining();
+    return imports->memorySystem->MemoryRemaining();
 }
 
 void trap_R_RegisterFont(pointer fontName, sint pointSize,
@@ -518,7 +522,7 @@ void trap_OpenURL(pointer s) {
 }
 
 void trap_GetHunkData(sint *hunkused, sint *hunkexpected) {
-    imports->GetHunkInfo(hunkused, hunkexpected);
+    imports->memorySystem->GetHunkInfo(hunkused, hunkexpected);
 }
 
 sint trap_Cvar_VariableInt(pointer var_name) {
