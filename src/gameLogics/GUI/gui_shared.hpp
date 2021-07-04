@@ -416,7 +416,7 @@ typedef struct {
     void (*getBindingBuf)(sint keynum, valueType *buf, sint buflen);
     void (*setBinding)(sint keynum, pointer binding);
     void (*executeText)(sint exec_when, pointer text);
-    void (*Error)(sint level, pointer error, ...);
+    void (*Error)(errorParm_t level, pointer error, ...);
     void (*Print)(pointer msg, ...);
     void (*Pause)(bool b);
     sint(*ownerDrawWidth)(sint ownerDraw, float32 scale);

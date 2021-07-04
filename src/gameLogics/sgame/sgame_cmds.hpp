@@ -44,6 +44,7 @@ public:
     static sint SayArgc(void);
     static bool SayArgv(sint n, valueType *buffer, sint bufferLength);
     static valueType *SayConcatArgs(sint start);
+    static void UnEscapeString(valueType* in, valueType* out, sint len);
     static void DecolorString(valueType *in, valueType *out, sint len);
     static void MatchOnePlayer(sint *plist, sint num, valueType *err,
                                sint len);

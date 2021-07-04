@@ -601,7 +601,7 @@ void idCGameLocal::Error(pointer msg, ...) {
 Com_Error
 ===============
 */
-void Com_Error(sint level, pointer error, ...) {
+void Com_Error(errorParm_t level, pointer error, ...) {
     va_list argptr;
     valueType text[1024];
 

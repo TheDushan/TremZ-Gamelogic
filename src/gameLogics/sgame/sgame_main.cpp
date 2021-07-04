@@ -709,7 +709,7 @@ void idSGameLocal::Shutdown(sint restart) {
     }
 }
 
-void Com_Error(sint level, pointer error, ...) {
+void Com_Error(errorParm_t level, pointer error, ...) {
     va_list argptr;
     valueType    text[ 1024 ];
 
@@ -1816,9 +1816,8 @@ Print to the logfile with a time stamp if it is open, and to the server console
 */
 void idSGameMain::LogPrintf(pointer fmt, ...) {
     va_list argptr;
-    valueType string[BIG_INFO_STRING], decolored[BIG_INFO_STRING];
+    valueType string[MAX_STRING_CHARS], decolored[MAX_STRING_CHARS];
     sint min, tens, sec;
-    uint32 tslen;
 
     sec = level.time / 1000;
 
@@ -1830,11 +1829,15 @@ void idSGameMain::LogPrintf(pointer fmt, ...) {
     Q_vsprintf_s(string, sizeof(string), sizeof(string), "%3i:%i%i ", min,
                  tens, sec);
 
-    tslen = strlen(string);
-
     va_start(argptr, fmt);
-    Q_vsprintf_s(string + tslen, sizeof(string) - tslen, fmt, argptr);
+    Q_vsprintf_s(string + 7, sizeof(string) - 7, fmt, argptr);
     va_end(argptr);
+
+    if (g_dedicated.integer)
+    {
+        idSGameCmds::UnEscapeString(string, decolored, sizeof(decolored));
+        idSGameMain::Printf("%s", decolored + 7);
+    }
 
     if(!level.logFile) {
         return;
