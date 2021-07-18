@@ -52,6 +52,8 @@ idMemorySystem *memorySystem;
 
 #ifdef __LINUX__
 extern "C" idUserInterfaceManager *guiEntry(guiImports_t *guiimports)
+#elif defined (__MACOSX__)
+extern "C" idUserInterfaceManager * guiEntry(guiImports_t * cgimports)
 #else
 Q_EXPORT idUserInterfaceManager *guiEntry(guiImports_t *guiimports)
 #endif

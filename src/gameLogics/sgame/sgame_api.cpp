@@ -51,6 +51,8 @@ typedef struct gentity_s gentity_t;
 
 #ifdef __LINUX__
 extern "C" idSGame *gameEntry(gameImports_t *gimports)
+#elif defined (__MACOSX__)
+extern "C" idSGame * gameEntry(gameImports_t * cgimports)
 #else
 Q_EXPORT idSGame *gameEntry(gameImports_t *gimports)
 #endif

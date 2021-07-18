@@ -51,6 +51,8 @@ idMemorySystem *memorySystem;
 
 #ifdef __LINUX__
 extern "C" idCGame *cgameEntry(cgameImports_t *cgimports)
+#elif defined (__MACOSX__)
+extern "C" idCGame * cgameEntry(cgameImports_t * cgimports)
 #else
 Q_EXPORT idCGame *cgameEntry(cgameImports_t *cgimports)
 #endif

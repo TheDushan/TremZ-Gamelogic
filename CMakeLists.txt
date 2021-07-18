@@ -84,7 +84,7 @@ if( MSVC )
 	set( CONSOLE "win32" )
 elseif( UNIX )
 	if( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
-		add_definitions( -DMACOS_X -DMACOS_X_ACCELERATION_HACK -D USE_FILE32API -DMACOS_X_CURSOR_HACK )
+		add_definitions( -DMACOS_X -D__MACOSX__ -DMACOS_X_ACCELERATION_HACK -D USE_FILE32API -DMACOS_X_CURSOR_HACK )
 	endif()
 	set( PLATFORM "unix" )
 endif()
@@ -123,7 +123,7 @@ set( GUI_HEADERS
 	${MOUNT_DIR}/API/soundSystem_api.hpp
 	${MOUNT_DIR}/API/FileSystem_api.hpp
 	${MOUNT_DIR}/API/CVarSystem_api.hpp
-	${MOUNT_DIR}/GPURenderer/r_types.hpp
+	${MOUNT_DIR}/renderSystem/r_types.hpp
 	${MOUNT_DIR}/API/bgame_api.hpp
 	${MOUNT_DIR}/API/gui_api.hpp
 	${MOUNT_DIR}/API/cgame_api.hpp
@@ -255,7 +255,7 @@ set( CGAMELIST_HEADERS
 	${TREMGAME_DIR}/GUI/menudef.hpp
 	${MOUNT_DIR}/API/bgame_api.hpp
 	${TREMGAME_DIR}/GUI/gui_shared.hpp
-	${MOUNT_DIR}/GPURenderer/r_types.hpp
+	${MOUNT_DIR}/renderSystem//r_types.hpp
 	${TREMGAME_DIR}/bgame/bgame_local.hpp
 	${TREMGAME_DIR}/cgame/cgame_local.hpp
 	${TREMGAME_DIR}/cgame/cgame_precompiled.hpp

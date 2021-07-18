@@ -61,7 +61,7 @@
 #include <API/CmdBuffer_api.hpp>
 #include <API/CmdSystem_api.hpp>
 #include <API/CVarSystem_api.hpp>
-#include <GPURenderer/r_types.hpp>
+#include <renderSystem/r_types.hpp>
 #include <qcommon/qfiles.hpp>
 #include <API/clientReliableCommands_api.hpp>>
 #include <API/system_api.hpp>
