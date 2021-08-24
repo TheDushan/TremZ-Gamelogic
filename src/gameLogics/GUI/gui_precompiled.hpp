@@ -70,6 +70,7 @@
 #include <API/CVarSystem_api.hpp>
 #include <API/FileSystem_api.hpp>
 #include <API/system_api.hpp>
+#include <API/Common_api.hpp>
 #include <API/soundSystem_api.hpp>
 #include <API/clientScreen_api.hpp>
 #include <API/clientAutoUpdate_api.hpp>

@@ -3565,19 +3565,18 @@ valueType *idSGameCmds::SayConcatArgs(sint start) {
     return s;
 }
 
-void idSGameCmds::UnEscapeString(valueType* in, valueType* out, sint len)
-{
+void idSGameCmds::UnEscapeString(valueType *in, valueType *out, sint len) {
     len--;
 
-    while (*in && len > 0)
-    {
-        if (*in >= ' ' || *in == '\n')
-        {
+    while(*in && len > 0) {
+        if(*in >= ' ' || *in == '\n') {
             *out++ = *in;
             len--;
         }
+
         in++;
     }
+
     *out = '\0';
 }
 

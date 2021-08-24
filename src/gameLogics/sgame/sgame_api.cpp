@@ -41,6 +41,7 @@ idCmdBufferSystem *cmdBufferSystem;
 idCmdSystem *cmdSystem;
 idSystem *idsystem;
 idMemorySystem *memorySystem;
+idCommon *common;
 
 #ifdef GAMEDLL
 typedef struct gclient_s gclient_t;
@@ -52,7 +53,7 @@ typedef struct gentity_s gentity_t;
 #ifdef __LINUX__
 extern "C" idSGame *gameEntry(gameImports_t *gimports)
 #elif defined (__MACOSX__)
-extern "C" idSGame * gameEntry(gameImports_t * cgimports)
+extern "C" idSGame *gameEntry(gameImports_t *cgimports)
 #else
 Q_EXPORT idSGame *gameEntry(gameImports_t *gimports)
 #endif
@@ -71,6 +72,7 @@ Q_EXPORT idSGame *gameEntry(gameImports_t *gimports)
     cmdSystem = imports->cmdSystem;
     idsystem = imports->idsystem;
     memorySystem = imports->memorySystem;
+    common = imports->common;
 
     return sgame;
 }
@@ -78,11 +80,11 @@ Q_EXPORT idSGame *gameEntry(gameImports_t *gimports)
 #define PASSFLOAT(x) x
 
 void trap_Print(pointer fmt) {
-    imports->Printf(fmt);
+    imports->common->Printf(fmt);
 }
 
 void trap_Error(pointer fmt) {
-    imports->Error(ERR_DROP, fmt);
+    imports->common->Error(ERR_DROP, fmt);
 }
 
 sint trap_Milliseconds(void) {
@@ -300,7 +302,7 @@ bool trap_GetEntityToken(valueType *buffer, uint64 bufferSize) {
 }
 
 sint trap_RealTime(qtime_t *qtime) {
-    return imports->RealTime(qtime);
+    return imports->common->RealTime(qtime);
 }
 
 void trap_SnapVector(float32 *v) {

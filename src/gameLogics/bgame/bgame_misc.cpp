@@ -39,14 +39,6 @@
 idBothGamesLocal bgLocal;
 bgGame *bggame = &bgLocal;
 
-sint trap_FS_FOpenFile(pointer qpath, fileHandle_t *f, fsMode_t mode);
-void trap_FS_Read(void *buffer, sint len, fileHandle_t f);
-sint trap_FS_Write(const void *buffer, sint len, fileHandle_t f);
-void trap_FS_FCloseFile(fileHandle_t f);
-sint trap_FS_Seek(fileHandle_t f, sint32 offset, sint origin);
-sint trap_FS_GetFileList(pointer path, pointer extension,
-                         valueType *listbuf, sint bufsize);
-
 static const buildableAttributes_t bg_buildableList[ ] = {
     {
         BA_A_SPAWN,            //int       buildNum;

@@ -48,11 +48,12 @@ idClientLocalizationSystem *clientLocalization;
 idClientKeysSystem *clientKeysSystem;
 idClientReliableCommandsSystemAPI *clientReliableCommandsSystem;
 idMemorySystem *memorySystem;
+idCommon *common;
 
 #ifdef __LINUX__
 extern "C" idCGame *cgameEntry(cgameImports_t *cgimports)
 #elif defined (__MACOSX__)
-extern "C" idCGame * cgameEntry(cgameImports_t * cgimports)
+extern "C" idCGame *cgameEntry(cgameImports_t *cgimports)
 #else
 Q_EXPORT idCGame *cgameEntry(cgameImports_t *cgimports)
 #endif
@@ -76,12 +77,13 @@ Q_EXPORT idCGame *cgameEntry(cgameImports_t *cgimports)
     clientKeysSystem = imports->clientKeysSystem;
     clientReliableCommandsSystem = imports->clientReliableCommandsSystem;
     memorySystem = imports->memorySystem;
+    common = imports->common;
 
     return cgame;
 }
 
 void trap_Print(pointer fmt) {
-    imports->Print(fmt);
+    imports->common->Printf(fmt);
 }
 
 void trap_Error(pointer fmt) {
@@ -562,7 +564,7 @@ void trap_S_StopBackgroundTrack(void) {
 }
 
 sint trap_RealTime(qtime_t *qtime) {
-    return imports->RealTime(qtime);
+    return imports->common->RealTime(qtime);
 }
 
 void trap_SnapVector(float32 *v) {

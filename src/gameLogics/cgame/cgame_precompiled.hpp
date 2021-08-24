@@ -53,6 +53,7 @@
 #include <framework/types.hpp>
 #include <qcommon/q_platform.hpp>
 #include <qcommon/q_shared.hpp>
+#include <API/Common_api.hpp>
 #include <API/Memory_api.hpp>
 #include <renderSystem/r_types.hpp>
 #include <sgame/tremulous.hpp>

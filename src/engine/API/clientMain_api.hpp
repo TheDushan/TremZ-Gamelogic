@@ -30,7 +30,6 @@
 #define __CLIENTMAIN_API_H__
 
 #if defined (GUI) || defined (CGAMEDLL)
-typedef struct netadr_s netadr_t;
 typedef struct msg_t msg_t;
 #endif
 
@@ -54,6 +53,7 @@ public:
     virtual void Shutdown(void) = 0;
     virtual void OpenURL(pointer url) = 0;
     virtual void AddToLimboChat(pointer str) = 0;
+    virtual void LogPrintf(fileHandle_t fileHandle, pointer fmt, ...) = 0;
 };
 
 extern idClientMainSystemAPI *clientMainSystem;

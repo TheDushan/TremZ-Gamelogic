@@ -49,11 +49,12 @@ idClientReliableCommandsSystemAPI *clientReliableCommandsSystem;
 idClientAutoUpdateSystemAPI *clientAutoUpdateSystem;
 idClientMainSystemAPI *clientMainSystem;
 idMemorySystem *memorySystem;
+idCommon *common;
 
 #ifdef __LINUX__
 extern "C" idUserInterfaceManager *guiEntry(guiImports_t *guiimports)
 #elif defined (__MACOSX__)
-extern "C" idUserInterfaceManager * guiEntry(guiImports_t * cgimports)
+extern "C" idUserInterfaceManager *guiEntry(guiImports_t *guiimports)
 #else
 Q_EXPORT idUserInterfaceManager *guiEntry(guiImports_t *guiimports)
 #endif
@@ -67,6 +68,8 @@ Q_EXPORT idUserInterfaceManager *guiEntry(guiImports_t *guiimports)
     cmdBufferSystem = imports->cmdBufferSystem;
     cmdSystem = imports->cmdSystem;
     idsystem = imports->idsystem;
+    memorySystem = imports->memorySystem;
+    common = imports->common;
     idCgame = imports->idcgame;
     idLANSystem = imports->idLANSystem;
     idGUISystem = imports->idGUISystem;
@@ -77,17 +80,16 @@ Q_EXPORT idUserInterfaceManager *guiEntry(guiImports_t *guiimports)
     clientReliableCommandsSystem = imports->clientReliableCommandsSystem;
     clientAutoUpdateSystem = imports->clientAutoUpdateSystem;
     clientMainSystem = imports->clientMainSystem;
-    memorySystem = imports->memorySystem;
 
     return uiManager;
 }
 
 void trap_Error(pointer string) {
-    imports->Error(ERR_DROP, string);
+    imports->common->Error(ERR_DROP, string);
 }
 
 void trap_Print(pointer string) {
-    imports->Print(string);
+    imports->common->Printf(string);
 }
 
 sint trap_Milliseconds(void) {
@@ -466,7 +468,7 @@ void trap_S_StartBackgroundTrack(pointer intro, pointer loop) {
 }
 
 sint trap_RealTime(qtime_t *qtime) {
-    return imports->RealTime(qtime);
+    return imports->common->RealTime(qtime);
 }
 
 sint trap_CIN_PlayCinematic(pointer arg0, sint xpos, sint ypos, sint width,

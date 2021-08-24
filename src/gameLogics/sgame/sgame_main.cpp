@@ -1833,8 +1833,7 @@ void idSGameMain::LogPrintf(pointer fmt, ...) {
     Q_vsprintf_s(string + 7, sizeof(string) - 7, fmt, argptr);
     va_end(argptr);
 
-    if (g_dedicated.integer)
-    {
+    if(g_dedicated.integer) {
         idSGameCmds::UnEscapeString(string, decolored, sizeof(decolored));
         idSGameMain::Printf("%s", decolored + 7);
     }
