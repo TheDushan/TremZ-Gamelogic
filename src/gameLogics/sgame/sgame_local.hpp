@@ -924,13 +924,6 @@ extern vmConvar_t g_adminTempBan;
 extern vmConvar_t g_dretchPunt;
 extern vmConvar_t g_privateMessages;
 extern vmConvar_t g_publicAdminMessages;
-extern vmConvar_t bot_developer;
-extern vmConvar_t bot_challenge;
-extern vmConvar_t bot_thinktime;
-extern vmConvar_t bot_minaliens;
-extern vmConvar_t bot_minhumans;
-extern vmConvar_t bot_nochat;
-extern vmConvar_t bot_fastchat;
 
 //
 // idGame

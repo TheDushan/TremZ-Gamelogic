@@ -210,9 +210,11 @@ float32 idSGameCombat::RewardAttackers(gentity_t *self) {
 
             // add to stage counters
             if(player->client->ps.stats[STAT_TEAM] == TEAM_ALIENS) {
-                //trap_Cvar_Set( "g_alienCredits", va( "%d", g_alienCredits.integer + stageValue ) );
+                trap_Cvar_Set("g_alienCredits", va("%d",
+                                                   g_alienCredits.integer + stageValue));
             } else if(player->client->ps.stats[STAT_TEAM] == TEAM_HUMANS) {
-                //trap_Cvar_Set( "g_humanCredits", va( "%d", g_humanCredits.integer + stageValue ) );
+                trap_Cvar_Set("g_humanCredits", va("%d",
+                                                   g_humanCredits.integer + stageValue));
             }
         }
 

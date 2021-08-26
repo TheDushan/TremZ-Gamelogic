@@ -4979,7 +4979,7 @@ Com_Error
 */
 void Com_Error(errorParm_t level, pointer error, ...) {
     va_list argptr;
-    valueType text[1024];
+    valueType text[8192];
 
     va_start(argptr, error);
     Q_vsprintf_s(text, sizeof(text), error, argptr);
@@ -4995,7 +4995,7 @@ Com_Printf
 */
 void Com_Printf(pointer msg, ...) {
     va_list argptr;
-    valueType text[1024];
+    valueType text[8192];
 
     va_start(argptr, msg);
     Q_vsprintf_s(text, sizeof(text), msg, argptr);

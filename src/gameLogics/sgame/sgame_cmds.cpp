@@ -3112,26 +3112,6 @@ sint idSGameCmds::FloodLimited(gentity_t *ent) {
     return ms;
 }
 
-extern vmConvar_t bot_developer;
-void idSGameCmds::Cmd_EditBotInv_f(gentity_t *ent) {
-    //gentity_t *ent2;
-    //sint i;
-    gentity_t  *spec_ent;
-
-    if(!bot_developer.integer) {
-        trap_SendServerCommand(ent - g_entities,
-                               va("print \"this cmd is only for bot testing\n\""));
-        return;
-    }
-
-    spec_ent = &g_entities[ ent->client->sess.spectatorClient ];
-
-    if(spec_ent != ent) {
-        EditPlayerInventory(spec_ent);
-    }
-
-}
-
 /*
 =================
 idSGameCmds::Share_f
@@ -3347,7 +3327,6 @@ commands_t cmds[ ] = {
     { "destroy", CMD_CHEAT | CMD_TEAM | CMD_LIVING, &idSGameCmds::Cmd_Destroy_f },
     { "test", CMD_CHEAT, &idSGameCmds::Cmd_Test_f },
     { "damage", CMD_CHEAT | CMD_LIVING, &idSGameCmds::Cmd_Damage_f },
-    { "botgod", CMD_CHEAT, &idSGameCmds::Cmd_EditBotInv_f },
     { "where", 0, &idSGameCmds::Cmd_Where_f },
 
     // game commands

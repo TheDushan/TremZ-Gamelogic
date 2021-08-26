@@ -87,7 +87,6 @@ public:
     static void Cmd_Ignore_f(gentity_t *ent);
     static void Cmd_Test_f(gentity_t *ent);
     static void Cmd_Damage_f(gentity_t *ent);
-    static void Cmd_EditBotInv_f(gentity_t *ent);
     static void Cmd_Stats_f(gentity_t *ent);
     static valueType *ConcatArgs(sint start);
     static void EditPlayerInventory(gentity_t *ent);

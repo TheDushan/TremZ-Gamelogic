@@ -145,13 +145,6 @@ vmConvar_t  g_dretchPunt;
 vmConvar_t  g_privateMessages;
 vmConvar_t  g_publicAdminMessages;
 vmConvar_t  g_tag;
-vmConvar_t  bot_developer;
-vmConvar_t  bot_challenge;
-vmConvar_t  bot_thinktime;
-vmConvar_t  bot_minaliens;
-vmConvar_t  bot_minhumans;
-vmConvar_t  bot_nochat;
-vmConvar_t  bot_fastchat;
 
 idSGameLocal sgameLocal;
 idSGame *sgame = &sgameLocal;
@@ -178,8 +171,8 @@ static cvarTable_t   gameCvarTable[ ] = {
     { &g_maxGameClients, "g_maxGameClients", "0", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, false  },
 
     { &g_timelimit, "timelimit", "0", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART, 0, true },
-    { &g_suddenDeathTime, "g_suddenDeathTime", "0", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART, 0, true },
-    { &g_suddenDeath, "g_suddenDeath", "0", CVAR_SERVERINFO | CVAR_NORESTART, 0, true },
+    { &g_suddenDeathTime, "g_suddenDeathTime", "0", CVAR_ARCHIVE | CVAR_NORESTART, 0, true },
+    { &g_suddenDeath, "g_suddenDeath", "0", CVAR_NORESTART, 0, true },
 
     { &g_synchronousClients, "g_synchronousClients", "0", CVAR_SYSTEMINFO, 0, false  },
 
@@ -290,16 +283,6 @@ static cvarTable_t   gameCvarTable[ ] = {
     { &g_publicAdminMessages, "g_publicAdminMessages", "1", CVAR_ARCHIVE, 0, false  },
 
     { &g_tag, "g_tag", "main", CVAR_INIT, 0, false },
-
-    //Start Champ bot cvars
-    { &bot_thinktime, "bot_thinktime", "100", CVAR_CHEAT, 0, false  },
-    { &bot_minaliens, "bot_minaliens", "0", CVAR_SERVERINFO, 0, false  },
-    { &bot_minhumans, "bot_minhumans", "0", CVAR_SERVERINFO, 0, false  },
-    { &bot_developer, "bot_developer", "0", CVAR_SERVERINFO, 0, false  },
-    { &bot_challenge, "bot_challenge", "0", CVAR_SERVERINFO, 0, false  },
-    { &bot_nochat,    "bot_nochat",    "0", CVAR_TEMP, 0, false  },
-    { &bot_fastchat,  "bot_fastchat",  "0", CVAR_TEMP, 0, false  },
-    //End Champ bot cvars
 
     { &g_rankings, "g_rankings", "0", 0, 0, false}
 };
@@ -1412,9 +1395,13 @@ void idSGameMain::CalculateStages(void) {
         }
 
         lastHumanStageModCount = g_humanStage.modificationCount;
-        //trap_Cvar_Set( "g_humanStage", va( "%d", g_humanStage.integer - 1 ) );
-        //trap_Cvar_Set( "g_humanCredits", va( "%d", ( sint )ceil( g_humanCredits.integer - g_humanStageThreshold.integer * humanPlayerCountMod ) ) );
-        //trap_Cvar_Set( "g_alienCredits", va( "%d", ( sint )ceil( g_alienCredits.integer - g_alienStageThreshold.integer * alienPlayerCountMod ) ) );
+        trap_Cvar_Set("g_humanStage", va("%d", g_humanStage.integer - 1));
+        trap_Cvar_Set("g_humanCredits", va("%d",
+                                           (sint)ceil(g_humanCredits.integer - g_humanStageThreshold.integer *
+                                                   humanPlayerCountMod)));
+        trap_Cvar_Set("g_alienCredits", va("%d",
+                                           (sint)ceil(g_alienCredits.integer - g_alienStageThreshold.integer *
+                                                   alienPlayerCountMod)));
         LogPrintf("stagedownlog: after: %d %d %d %d %d %d\n",
                   trap_Cvar_VariableIntegerValue("g_humanStage"),
                   trap_Cvar_VariableIntegerValue("g_humanCredits"),
@@ -1467,12 +1454,12 @@ void idSGameMain::CalculateAvgPlayers(void) {
     //where the average tends to 0
     if(!level.numAlienClients) {
         level.numAlienSamples = 0;
-        //trap_Cvar_Set( "g_alienCredits", "0" );
+        trap_Cvar_Set("g_alienCredits", "0");
     }
 
     if(!level.numHumanClients) {
         level.numHumanSamples = 0;
-        //trap_Cvar_Set( "g_humanCredits", "0" );
+        trap_Cvar_Set("g_humanCredits", "0");
     }
 
     //calculate average number of clients for stats
@@ -2172,8 +2159,6 @@ void idSGameMain::CheckExitRules(void) {
         }
     }
 
-#if 0
-
     if(level.uncondHumanWin || ((level.time > level.startTime + 1000) &&
                                 (level.numAlienSpawns == 0) && (level.numLiveAlienClients == 0))) {
         //humans win
@@ -2193,8 +2178,6 @@ void idSGameMain::CheckExitRules(void) {
 
         idSGameMain::LogExit("Aliens win.");
     }
-
-#endif
 }
 
 /*

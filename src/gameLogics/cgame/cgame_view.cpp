@@ -1006,33 +1006,29 @@ sint idCGameView::CalcFov(void) {
             if(cg.zoomed) {
                 f = (cg.time - cg.zoomTime) / (float32)ZOOM_TIME;
 
-                if(f > 1.0) {
-                    fov_x = zoomFov;
-                } else {
-                    fov_x = fov_x + f * (zoomFov - fov_x);
-                }
-
-                // BUTTON_ATTACK2 isn't held so unzoom next time
-                if(!(cmd.buttons & BUTTON_ATTACK2)) {
-                    cg.zoomed = false;
-                    cg.zoomTime = MIN(cg.time, cg.time + cg.time - cg.zoomTime - ZOOM_TIME);
-                }
-            } else {
-                f = (cg.time - cg.zoomTime) / (float32)ZOOM_TIME;
-
-                if(f > 1.0) {
-                    fov_x = fov_x;
-                } else {
+                if(f <= 1.0) {
                     fov_x = zoomFov + f * (fov_x - zoomFov);
                 }
 
                 // BUTTON_ATTACK2 is held so zoom next time
                 if(cmd.buttons & BUTTON_ATTACK2) {
-                    cg.zoomed   = true;
+                    cg.zoomed = true;
                     cg.zoomTime = MIN(cg.time, cg.time + cg.time - cg.zoomTime - ZOOM_TIME);
                 }
             }
         }
+    }
+
+    x = cg.refdef.width / tan(fov_x / 360 * M_PI);
+    fov_y = atan2(cg.refdef.height, x);
+    fov_y = fov_y * 360 / M_PI;
+
+    if(cg.snap->ps.stats[STAT_HEALTH] < 40 && !cg.zoomed &&
+            cg.snap->ps.persistant[PERS_SPECSTATE] != SPECTATOR_NOT) {
+        phase = cg.time / 1000.0 * 0.03 * M_PI * 2;
+        v = 10 * ::sin(phase);
+        fov_x += v;
+        fov_y -= v;
     }
 
     x = cg.refdef.width / tan(fov_x / 360 * M_PI);
