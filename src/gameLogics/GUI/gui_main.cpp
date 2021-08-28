@@ -107,6 +107,7 @@ vmConvar_t ui_profile;
 
 vmConvar_t  cl_profile;
 vmConvar_t  cl_defaultProfile;
+vmConvar_t ui_chatCommands;
 
 static cvarTable_t    cvarTable[ ] = {
     { &ui_browserShowFull, "ui_browserShowFull", "1", CVAR_ARCHIVE },
@@ -135,8 +136,8 @@ static cvarTable_t    cvarTable[ ] = {
     { &ui_screenname, "ui_screenname", "", CVAR_ROM },
     { &cl_profile, "cl_profile", "", CVAR_ROM },
     { &cl_defaultProfile, "cl_defaultProfile", "", CVAR_ROM },
-    { &cl_defaultProfile, "cl_defaultProfile", "", CVAR_ROM },
     { &ui_profile, "ui_profile", "", CVAR_ROM },
+    { &ui_chatCommands, "ui_chatCommands", "1", CVAR_ARCHIVE },
 };
 
 static sint    cvarTableSize = sizeof(cvarTable) / sizeof(cvarTable[0]);
@@ -3137,6 +3138,8 @@ static void UI_RunMenuScript(valueType **args) {
             if(len > -1) {
                 trap_FS_FCloseFile(f);
             }
+
+#if 0
         } else if(Q_stricmp(name, "Say") == 0) {
             valueType buffer[MAX_CVAR_VALUE_STRING];
             trap_Cvar_VariableStringBuffer("ui_sayBuffer", buffer, sizeof(buffer));
@@ -3168,6 +3171,50 @@ static void UI_RunMenuScript(valueType **args) {
             } else {
                 trap_Cmd_ExecuteText(EXEC_APPEND, va("say \"%s\"\n", buffer));
             }
+
+#else
+            else if(Q_stricmp(name, "Say") == 0) {
+                valueType buffer[MAX_CVAR_VALUE_STRING];
+                trap_Cvar_VariableStringBuffer("ui_sayBuffer", buffer, sizeof(buffer));
+
+                if(!buffer[0])
+                    ;
+                else if(ui_chatCommands.integer && (buffer[0] == '/' ||
+                                                    buffer[0] == '\\')) {
+                    trap_Cmd_ExecuteText(EXEC_APPEND, va("%s\n", buffer + 1));
+                } else if(uiInfo.chatTeam) {
+                    trap_Cmd_ExecuteText(EXEC_APPEND, va("say_team \"%s\"\n", buffer));
+                } else if(uiInfo.chatAdmins) {
+                    trap_Cmd_ExecuteText(EXEC_APPEND, va("say_admins \"%s\"\n", buffer));
+                } else if(uiInfo.chatClan) {
+                    valueType clantagDecolored[32];
+                    trap_Cvar_VariableStringBuffer("cl_clantag", clantagDecolored,
+                                                   sizeof(clantagDecolored));
+                    Q_CleanStr(clantagDecolored);
+
+                    if(strlen(clantagDecolored) > 2 && strlen(clantagDecolored) < 11) {
+                        trap_Cmd_ExecuteText(EXEC_APPEND, va("m \"%s\" \"%s\"\n", clantagDecolored,
+                                                             buffer));
+                    }
+                } else {
+                    trap_Cmd_ExecuteText(EXEC_APPEND, va("say \"%s\"\n", buffer));
+                }
+            } else if(Q_stricmp(name, "SayKeydown") == 0) {
+                if(ui_chatCommands.integer) {
+                    valueType buffer[MAX_CVAR_VALUE_STRING];
+                    trap_Cvar_VariableStringBuffer("ui_sayBuffer", buffer, sizeof(buffer));
+
+                    if(buffer[0] == '/' || buffer[0] == '\\') {
+                        Menus_ReplaceActiveByName("say_command");
+                    } else if(uiInfo.chatTeam) {
+                        Menus_ReplaceActiveByName("say_team");
+                    } else {
+                        Menus_ReplaceActiveByName("say");
+                    }
+                }
+            }
+
+#endif
         } else if(Q_stricmp(name, "playMovie") == 0) {
             if(uiInfo.previewMovie >= 0) {
                 trap_CIN_StopCinematic(uiInfo.previewMovie);

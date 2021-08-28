@@ -256,6 +256,8 @@ modelDef_t;
 #define CVAR_SHOW      0x00000004
 #define CVAR_HIDE      0x00000008
 
+typedef enum { TYPE_ANY = -1, TYPE_NONE, TYPE_LIST, TYPE_EDIT, TYPE_MULTI, TYPE_COMBO, TYPE_MODEL } itemDataType_t;
+
 typedef struct itemDef_s {
     WinDow window;                 // common positional, border, style, layout info
     rectangle textRect;            // rectangle the text ( if any ) consumes
@@ -278,6 +280,7 @@ typedef struct itemDef_s {
     pointer onFocus;           // select script
     pointer leaveFocus;        // select script
     pointer onTextEntry;       // called when text entered
+    pointer onCharEntry;       // called when text entered
     pointer cvar;              // associated cvar
     pointer cvarTest;          // associated cvar for enable actions
     pointer enableCvar;         // enable, disable, show, or hide based on value, this can contain a list
@@ -289,6 +292,8 @@ typedef struct itemDef_s {
     sint modifier;                 // sint used for feeder id's etc.. diff per type
     sint cursorPos;                 // cursor position in characters
     void *typeData;                // type specific data ptr's
+    sint feederID;  // where to get data for this item
+    sint startPos;
 }
 itemDef_t;
 
@@ -489,6 +494,7 @@ void Menu_PaintAll(void);
 void Menu_Reset(void);
 bool Menus_AnyFullScreenVisible(void);
 menuDef_t *Menus_ActivateByName(pointer p);
+menuDef_t *Menus_ReplaceActiveByName(pointer p);
 void Menus_Activate(menuDef_t *menu);
 menuDef_t *Menu_Get(sint handle);
 

@@ -289,6 +289,7 @@ extern uiInfo_t uiInfo;
 
 extern vmConvar_t cl_profile;
 extern vmConvar_t cl_defaultProfile;
+extern vmConvar_t ui_chatCommands;
 
 valueType      *UI_Cvar_VariableString(pointer var_name);
 void      UI_SetColor(const float32 *rgba);

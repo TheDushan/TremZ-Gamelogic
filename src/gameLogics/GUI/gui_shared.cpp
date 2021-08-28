@@ -85,6 +85,7 @@ sint openMenuCount = 0;
 #define DOUBLE_CLICK_DELAY 300
 static sint lastListBoxClickTime = 0;
 
+itemDataType_t Item_DataType(itemDef_t *item);
 void Item_RunScript(itemDef_t *item, pointer s);
 void Item_SetupKeywordHash(void);
 void Menu_SetupKeywordHash(void);
@@ -4642,6 +4643,8 @@ void Menu_HandleKey(menuDef_t *menu, sint key, bool down) {
             Display_MouseMove(nullptr, DC->cursorx, DC->cursory);
         } else if(key == K_TAB || key == K_UPARROW || key == K_DOWNARROW) {
             return;
+        } else {
+            Item_RunScript(g_editItem, g_editItem->onCharEntry);
         }
     }
 
@@ -6750,6 +6753,110 @@ menuDef_t *Menus_ActivateByName(pointer p) {
     return m;
 }
 
+/*
+===============
+Item_DataType
+Give a numeric representation of which typeData union element this item uses
+===============
+*/
+itemDataType_t Item_DataType(itemDef_t *item) {
+    switch(item->type) {
+        default:
+        case ITEM_TYPE_LISTBOX:
+            return TYPE_LIST;
+
+        case ITEM_TYPE_EDITFIELD:
+        case ITEM_TYPE_NUMERICFIELD:
+        case ITEM_TYPE_YESNO:
+        case ITEM_TYPE_BIND:
+        case ITEM_TYPE_SLIDER:
+        case ITEM_TYPE_TEXT:
+            return TYPE_EDIT;
+
+        case ITEM_TYPE_MULTI:
+            return TYPE_MULTI;
+
+        case ITEM_TYPE_MODEL:
+            return TYPE_MODEL;
+    }
+}
+
+
+bool Menus_ReplaceActive(menuDef_t *menu) {
+    sint i;
+    menuDef_t *active;
+
+    if(openMenuCount < 1) {
+        return false;
+    }
+
+    active = menuStack[openMenuCount - 1];
+
+    if(!(active->window.flags & WINDOW_HASFOCUS) ||
+            !(active->window.flags & WINDOW_VISIBLE)) {
+        return false;
+    }
+
+    if(menu == active) {
+        return false;
+    }
+
+    if(menu->itemCount != active->itemCount) {
+        Com_Printf(S_COLOR_YELLOW
+                   "WARNING: Menus_ReplaceActive: expecting %i menu items, found %i\n",
+                   menu->itemCount,
+                   active->itemCount);
+        return false;
+    }
+
+    for(i = 0; i < menu->itemCount; i++) {
+        if(menu->items[i]->type != active->items[i]->type) {
+            Com_Printf(S_COLOR_YELLOW
+                       "WARNING: Menus_ReplaceActive: type mismatch on item %i\n", i + 1);
+            return false;
+        }
+    }
+
+    active->window.flags &= ~(WINDOW_FADINGOUT | WINDOW_VISIBLE);
+    menu->window.flags |= (WINDOW_HASFOCUS | WINDOW_VISIBLE);
+
+    menuStack[openMenuCount - 1] = menu;
+
+    if(menu->onOpen) {
+        itemDef_t item;
+        item.parent = menu;
+        Item_RunScript(&item, menu->onOpen);
+    }
+
+    // set the cursor position on the new menu to match the active one
+    for(i = 0; i < menu->itemCount; i++) {
+        menu->items[i]->cursorPos = active->items[i]->cursorPos;
+        menu->items[i]->feederID = active->items[i]->feederID;
+    }
+
+    return true;
+}
+
+menuDef_t *Menus_ReplaceActiveByName(pointer p) {
+    sint i;
+    menuDef_t *m = nullptr;
+
+    // Activate one menu
+
+    for(i = 0; i < menuCount; i++) {
+        if(Q_stricmp(Menus[i].window.name, p) == 0) {
+            m = &Menus[i];
+
+            if(!Menus_ReplaceActive(m)) {
+                return NULL;
+            }
+
+            break;
+        }
+    }
+
+    return m;
+}
 
 void Item_Init(itemDef_t *item) {
     ::memset(item, 0, sizeof(itemDef_t));
@@ -7953,6 +8060,13 @@ bool ItemParse_hideCvar(itemDef_t *item, sint handle) {
     return false;
 }
 
+bool ItemParse_onCharEntry(itemDef_t *item, int handle) {
+    if(!PC_Script_Parse(handle, &item->onCharEntry)) {
+        return false;
+    }
+
+    return true;
+}
 
 keywordHash_t itemParseKeywords[] = {
     {"name", ItemParse_name, nullptr},
@@ -8023,6 +8137,7 @@ keywordHash_t itemParseKeywords[] = {
     {"hideCvar", ItemParse_hideCvar, nullptr},
     {"cinematic", ItemParse_cinematic, nullptr},
     {"doubleclick", ItemParse_doubleClick, nullptr},
+    {"onCharEntry", ItemParse_onCharEntry, nullptr},
     {nullptr, voidFunction2, nullptr}
 };
 
