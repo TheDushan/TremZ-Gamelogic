@@ -1897,7 +1897,7 @@ static void UI_BuildPlayerList(void) {
 static void UI_DrawGLInfo(rectDef_t *rect, float32 scale, sint textalign,
                           sint textvalign,
                           vec4_t color, sint textStyle, float32 text_x, float32 text_y) {
-    valueType      buffer[ 4096 ];
+    valueType buffer[16384] = { 0 };
 
     Q_vsprintf_s(buffer, sizeof(buffer), sizeof(buffer),
                  "VENDOR: %s\nVERSION: %s\n"
