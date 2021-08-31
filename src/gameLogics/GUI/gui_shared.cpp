@@ -4828,17 +4828,15 @@ void Item_SetTextExtents(itemDef_t *item, sint *width, sint *height,
 
     if(*width == 0 || (item->type == ITEM_TYPE_OWNERDRAW &&
                        item->textalignment == ALIGN_CENTER)) {
-        sint originalWidth;
+        sint originalWidth = UI_Text_Width( item->text, item->textscale, 0 );
 
         if(item->type == ITEM_TYPE_EDITFIELD &&
                 item->textalignment == ALIGN_CENTER && item->cvar) {
-            //FIXME: this will only be called once?
             valueType buff[256];
             DC->getCVarString(item->cvar, buff, 256);
-            originalWidth = UI_Text_Width(item->text, item->textscale, 0) +
-                            UI_Text_Width(buff, item->textscale, 0);
+            originalWidth += UI_Text_Width(buff, item->textscale, 0);
         } else {
-            originalWidth = UI_Text_Width(item->text, item->textscale, 0);
+            originalWidth = UI_Text_Width(text, item->textscale, 0);
         }
 
         *width = UI_Text_Width(textPtr, item->textscale, 0);
@@ -5441,16 +5439,13 @@ void Item_YesNo_Paint(itemDef_t *item) {
         memcpy(&newColor, &item->window.foreColor, sizeof(vec4_t));
     }
 
-    offset = (item->text && *item->text) ? ITEM_VALUE_OFFSET : 0;
-
-    if(item->text) {
+    if (item->text) {
         Item_Text_Paint(item);
-        UI_Text_Paint(item->textRect.x + item->textRect.w + offset,
-                      item->textRect.y, item->textscale,
-                      newColor, (value != 0) ? "Yes" : "No", 0, 0, item->textStyle);
-    } else {
-        UI_Text_Paint(item->textRect.x, item->textRect.y, item->textscale,
-                      newColor, (value != 0) ? "Yes" : "No", 0, 0, item->textStyle);
+        UI_Text_Paint(item->textRect.x + item->textRect.w + 8, item->textRect.y, item->textscale, newColor,
+            (value != 0) ? DC->translateString("Yes") : DC->translateString("No"), 0, 0, item->textStyle);
+    }
+    else {
+        UI_Text_Paint(item->textRect.x, item->textRect.y, item->textscale, newColor, (value != 0) ? "Yes" : "No", 0, 0, item->textStyle);
     }
 }
 
@@ -5467,14 +5462,12 @@ void Item_Multi_Paint(itemDef_t *item) {
 
     text = Item_Multi_Setting(item);
 
-    if(item->text) {
+    if (item->text) {
         Item_Text_Paint(item);
-        UI_Text_Paint(item->textRect.x + item->textRect.w + ITEM_VALUE_OFFSET,
-                      item->textRect.y,
-                      item->textscale, newColor, text, 0, 0, item->textStyle);
-    } else {
-        UI_Text_Paint(item->textRect.x, item->textRect.y, item->textscale,
-                      newColor, text, 0, 0, item->textStyle);
+        UI_Text_Paint(item->textRect.x + item->textRect.w + 8, item->textRect.y, item->textscale, newColor, text, 0, 0, item->textStyle);
+    }
+    else {
+        UI_Text_Paint(item->textRect.x, item->textRect.y, item->textscale, newColor, text, 0, 0, item->textStyle);
     }
 }
 
@@ -6389,27 +6382,32 @@ void Item_OwnerDraw_Paint(itemDef_t *item) {
             ::memcpy(color, parent->disableColor, sizeof(vec4_t));
         }
 
-        if(DC->ownerDrawText &&
-                (text = DC->ownerDrawText(item->window.ownerDraw))) {
-            if(item->text && *item->text) {
-                Item_Text_Paint(item);
-
+        if (item->text) {
+            Item_Text_Paint(item);
+            if (item->text[0])
+            {
                 UI_Text_Paint(item->textRect.x + item->textRect.w + ITEM_VALUE_OFFSET,
-                              item->textRect.y, item->textscale,
-                              color, text, 0, 0, item->textStyle);
-            } else {
-                item->text = text;
-                Item_Text_Paint(item);
-                item->text = nullptr;
+                    item->textRect.y, item->textscale,
+                    color, text, 0, 0, item->textStyle);
             }
-        } else {
+            else {
+                DC->ownerDrawItem(item->window.rect.x + item->textRect.w, item->window.rect.y,
+                    item->window.rect.w, item->window.rect.h,
+                    item->textalignx, item->textaligny,
+                    item->window.ownerDraw, item->window.ownerDrawFlags,
+                    item->alignment, item->textalignment, item->textvalignment,
+                    item->special, item->textscale, color, item->window.backColor,
+                    item->window.background, item->textStyle);
+            }
+        }
+        else {
             DC->ownerDrawItem(item->window.rect.x, item->window.rect.y,
-                              item->window.rect.w, item->window.rect.h,
-                              item->textalignx, item->textaligny,
-                              item->window.ownerDraw, item->window.ownerDrawFlags,
-                              item->alignment, item->textalignment, item->textvalignment,
-                              item->special, item->textscale, color, item->window.backColor,
-                              item->window.background, item->textStyle);
+                item->window.rect.w, item->window.rect.h,
+                item->textalignx, item->textaligny,
+                item->window.ownerDraw, item->window.ownerDrawFlags,
+                item->alignment, item->textalignment, item->textvalignment,
+                item->special, item->textscale, color, item->window.backColor,
+                item->window.background, item->textStyle);
         }
     }
 }
@@ -6979,8 +6977,7 @@ void Menu_HandleMouseMove(menuDef_t *menu, float32 x, float32 y) {
 
 void Menu_Paint(menuDef_t *menu, bool forcePaint) {
     sint i;
-    itemDef_t item;
-    valueType listened_text[1024];
+    itemDef_t* item = nullptr;
 
     if(menu == nullptr) {
         return;
@@ -6999,17 +6996,6 @@ void Menu_Paint(menuDef_t *menu, bool forcePaint) {
         menu->window.flags |= WINDOW_FORCED;
     }
 
-    //Executes the text stored in the listened cvar as an UIscript
-    if(menu->listenCvar && menu->listenCvar[0]) {
-        DC->getCVarString(menu->listenCvar, listened_text, sizeof(listened_text));
-
-        if(listened_text[0]) {
-            item.parent = menu;
-            Item_RunScript(&item, listened_text);
-            DC->setCVar(menu->listenCvar, "");
-        }
-    }
-
     // draw the background if necessary
     if(menu->fullScreen) {
         // implies a background shader
@@ -7026,6 +7012,9 @@ void Menu_Paint(menuDef_t *menu, bool forcePaint) {
 
     for(i = 0; i < menu->itemCount; i++) {
         Item_Paint(menu->items[i]);
+        if (menu->items[i]->window.flags & WINDOW_MOUSEOVER) {
+            item = menu->items[i];
+        }
     }
 
     if(DC->getCVarValue("ui_developer")) {
