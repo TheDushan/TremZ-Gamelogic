@@ -152,7 +152,7 @@ UI_Alloc
 ===============
 */
 void *UI_Alloc(sint size) {
-    valueType  *p;
+    valueType *p;
 
     if(allocPoint + size > MEM_POOL_SIZE) {
         outOfMemory = true;
@@ -165,7 +165,7 @@ void *UI_Alloc(sint size) {
         return nullptr;
     }
 
-    p = &UI_memoryPool[ allocPoint ];
+    p = &UI_memoryPool[allocPoint];
 
     allocPoint += (size + 15) & ~15;
 
@@ -178,7 +178,7 @@ UI_HUDAlloc
 ===============
 */
 void *UI_HUDAlloc(sint size) {
-    valueType  *p;
+    valueType *p;
 
     if(hudallocPoint + size > MEM_POOL_SIZE) {
         DC->Print("GUI_HUDAlloc: Out of memory! Reinititing hud Memory!!\n");
@@ -186,7 +186,7 @@ void *UI_HUDAlloc(sint size) {
         UI_ResetHUDMemory();
     }
 
-    p = &UI_hudmemoryPool[ hudallocPoint ];
+    p = &UI_hudmemoryPool[hudallocPoint];
 
     hudallocPoint += (size + 15) & ~15;
 
@@ -254,7 +254,7 @@ static stringDef_t *strHandle[HASH_TABLE_SIZE];
 pointer String_Alloc(pointer p) {
     sint len;
     long hash;
-    stringDef_t *str, *last;
+    stringDef_t *str, * last;
     static pointer staticNULL = "";
 
     if(p == nullptr) {
@@ -333,7 +333,7 @@ void String_Init(void) {
     sint i;
 
     for(i = 0; i < HASH_TABLE_SIZE; i++) {
-        strHandle[ i ] = 0;
+        strHandle[i] = 0;
     }
 
     strHandleCount = 0;
@@ -427,7 +427,7 @@ Float_Parse
 =================
 */
 bool Float_Parse(valueType **p, float32 *f) {
-    valueType  *token;
+    valueType *token;
     token = COM_ParseExt(p, false);
 
     if(token && token[0] != 0) {
@@ -456,7 +456,7 @@ typedef struct exprToken_s {
 exprToken_t;
 
 typedef struct exprList_s {
-    exprToken_t l[ MAX_EXPR_ELEMENTS ];
+    exprToken_t l[MAX_EXPR_ELEMENTS];
     sint f, b;
 }
 exprList_t;
@@ -546,12 +546,12 @@ static bool PC_Expression_Parse(sint handle, float32 *f) {
     stack.b = fifo.b = -1;
 
     while(trap_PC_ReadToken(handle, &token)) {
-        if(!unmatchedParentheses && token.string[ 0 ] == ')') {
+        if(!unmatchedParentheses && token.string[0] == ')') {
             break;
         }
 
         // Special case to catch negative numbers
-        if(expectingNumber && token.string[ 0 ] == '-') {
+        if(expectingNumber && token.string[0] == '-') {
             if(!trap_PC_ReadToken(handle, &token)) {
                 return false;
             }
@@ -568,7 +568,7 @@ static bool PC_Expression_Parse(sint handle, float32 *f) {
 
             PUSH_VAL(fifo, token.floatvalue);
         } else {
-            switch(token.string[ 0 ]) {
+            switch(token.string[0]) {
                 case '(':
                     unmatchedParentheses++;
                     PUSH_OP(stack, '(');
@@ -602,15 +602,15 @@ static bool PC_Expression_Parse(sint handle, float32 *f) {
                     expectingNumber = !expectingNumber;
 
                     if(EMPTY(stack)) {
-                        PUSH_OP(stack, token.string[ 0 ]);
+                        PUSH_OP(stack, token.string[0]);
                     } else {
                         while(!EMPTY(stack) &&
-                                OpPrec(token.string[ 0 ]) < OpPrec(PEEK_STACK_OP(stack))) {
+                                OpPrec(token.string[0]) < OpPrec(PEEK_STACK_OP(stack))) {
                             POP_STACK(stack);
                             PUSH_OP(fifo, value.u.op);
                         }
 
-                        PUSH_OP(stack, token.string[ 0 ]);
+                        PUSH_OP(stack, token.string[0]);
                     }
 
                     break;
@@ -696,7 +696,7 @@ bool PC_Float_Parse(sint handle, float32 *f) {
         return false;
     }
 
-    if(token.string[ 0 ] == '(') {
+    if(token.string[0] == '(') {
         return PC_Expression_Parse(handle, f);
     }
 
@@ -714,7 +714,7 @@ bool PC_Float_Parse(sint handle, float32 *f) {
     }
 
     if(negative) {
-        * f = -token.floatvalue;
+        *f = -token.floatvalue;
     } else {
         *f = token.floatvalue;
     }
@@ -768,7 +768,7 @@ Int_Parse
 =================
 */
 bool Int_Parse(valueType **p, sint *i) {
-    valueType  *token;
+    valueType *token;
     token = COM_ParseExt(p, false);
 
     if(token && token[0] != 0) {
@@ -792,7 +792,7 @@ bool PC_Int_Parse(sint handle, sint *i) {
         return false;
     }
 
-    if(token.string[ 0 ] == '(') {
+    if(token.string[0] == '(') {
         float32 f;
 
         if(PC_Expression_Parse(handle, &f)) {
@@ -819,7 +819,7 @@ bool PC_Int_Parse(sint handle, sint *i) {
     *i = token.intvalue;
 
     if(negative) {
-        * i = - *i;
+        *i = -*i;
     }
 
     return true;
@@ -1213,17 +1213,17 @@ void Menu_AspectCompensate(menuDef_t *menu) {
         Menu_AspectiseRect(menu->window.aspectBias, &menu->window.rect);
 
         for(i = 0; i < menu->itemCount; i++) {
-            menu->items[ i ]->window.rectClient.x *= DC->aspectScale;
-            menu->items[ i ]->window.rectClient.w *= DC->aspectScale;
-            menu->items[ i ]->textalignx *= DC->aspectScale;
+            menu->items[i]->window.rectClient.x *= DC->aspectScale;
+            menu->items[i]->window.rectClient.w *= DC->aspectScale;
+            menu->items[i]->textalignx *= DC->aspectScale;
         }
     } else {
         for(i = 0; i < menu->itemCount; i++) {
-            Menu_AspectiseRect(menu->items[ i ]->window.aspectBias,
-                               &menu->items[ i ]->window.rectClient);
+            Menu_AspectiseRect(menu->items[i]->window.aspectBias,
+                               &menu->items[i]->window.rectClient);
 
-            if(menu->items[ i ]->window.aspectBias != ASPECT_NONE) {
-                menu->items[ i ]->textalignx *= DC->aspectScale;
+            if(menu->items[i]->window.aspectBias != ASPECT_NONE) {
+                menu->items[i]->textalignx *= DC->aspectScale;
             }
         }
     }
@@ -1359,8 +1359,8 @@ void Script_SetAsset(itemDef_t *item, valueType **args) {
     if(String_Parse(args, &name)) {
         // check for a model
 
-        if(item->type == ITEM_TYPE_MODEL)
-        {}
+        if(item->type == ITEM_TYPE_MODEL) {
+        }
 
     }
 
@@ -1487,7 +1487,7 @@ menuDef_t *Menus_FindByName(pointer p) {
 
     for(i = 0; i < menuCount; i++) {
         if(Q_stricmp(Menus[i].window.name, p) == 0) {
-            return & Menus[i];
+            return &Menus[i];
         }
     }
 
@@ -1512,7 +1512,7 @@ static void Menus_Close(menuDef_t *menu) {
         }
 
         if(openMenuCount > 0) {
-            Menus_Activate(menuStack[ openMenuCount - 1 ]);
+            Menus_Activate(menuStack[openMenuCount - 1]);
         }
     }
 }
@@ -1527,7 +1527,7 @@ void Menus_CloseAll(bool force) {
     // Close any menus on the stack first
     if(openMenuCount > 0) {
         for(i = openMenuCount; i > 0; i--) {
-            Menus_Close(menuStack[ i ]);
+            Menus_Close(menuStack[i]);
         }
 
         openMenuCount = 0;
@@ -1535,7 +1535,7 @@ void Menus_CloseAll(bool force) {
 
     for(i = 0; i < menuCount; i++)
         if(!(Menus[i].window.flags & WINDOW_DONTCLOSEALL) || force) {
-            Menus_Close(&Menus[ i ]);
+            Menus_Close(&Menus[i]);
         }
 
     if(force) {
@@ -2287,7 +2287,7 @@ void Script_SetItemBackground(itemDef_t *item, valueType **args) {
 
 static bool UI_Text_Emoticon(pointer s, bool *escaped, sint *length,
                              qhandle_t *h, sint *width) {
-    valueType name[ MAX_EMOTICON_NAME_LEN ] = {""};
+    valueType name[MAX_EMOTICON_NAME_LEN] = { "" };
     pointer p = s;
     sint i = 0;
     sint j = 0;
@@ -2308,18 +2308,18 @@ static bool UI_Text_Emoticon(pointer s, bool *escaped, sint *length,
     while(*p && i < (MAX_EMOTICON_NAME_LEN - 1)) {
         if(*p == ']') {
             for(j = 0; j < DC->Assets.emoticonCount; j++) {
-                if(!Q_stricmp(DC->Assets.emoticons[ j ], name)) {
+                if(!Q_stricmp(DC->Assets.emoticons[j], name)) {
                     if(*escaped) {
                         *length = 1;
                         return true;
                     }
 
                     if(h) {
-                        *h = DC->Assets.emoticonShaders[ j ];
+                        *h = DC->Assets.emoticonShaders[j];
                     }
 
                     if(width) {
-                        *width = DC->Assets.emoticonWidths[ j ];
+                        *width = DC->Assets.emoticonWidths[j];
                     }
 
                     *length = i + 2;
@@ -2330,8 +2330,8 @@ static bool UI_Text_Emoticon(pointer s, bool *escaped, sint *length,
             return false;
         }
 
-        name[ i++ ] = *p;
-        name[ i ] = '\0';
+        name[i++] = *p;
+        name[i] = '\0';
         p++;
     }
 
@@ -2520,15 +2520,15 @@ void UI_Text_Paint_Limit(float32 *maxX, float32 x, float32 y,
         while(s && *s && count < len) {
             float32 width, height, skip, yadj;
 
-            glyph = &font->glyphs[(uchar8) * s ];
+            glyph = &font->glyphs[(uchar8) * s];
             width = glyph->imageWidth * DC->aspectScale;
             height = glyph->imageHeight;
             skip = glyph->xSkip * DC->aspectScale;
             yadj = useScale * glyph->top;
 
             if(Q_IsColorString(s)) {
-                memcpy(newColor, g_color_table[ ColorIndex(*(s + 1)) ], sizeof(newColor));
-                newColor[ 3 ] = color[ 3 ];
+                memcpy(newColor, g_color_table[ColorIndex(*(s + 1))], sizeof(newColor));
+                newColor[3] = color[3];
                 DC->setColor(newColor);
                 s += 2;
                 continue;
@@ -2656,22 +2656,22 @@ void UI_Text_Paint(float32 x, float32 y, float32 scale, vec4_t color,
             } else if(style == ITEM_TEXTSTYLE_NEON) {
                 vec4_t glow, outer, inner, white;
 
-                glow[ 0 ] = newColor[ 0 ] * 0.5;
-                glow[ 1 ] = newColor[ 1 ] * 0.5;
-                glow[ 2 ] = newColor[ 2 ] * 0.5;
-                glow[ 3 ] = newColor[ 3 ] * 0.2;
+                glow[0] = newColor[0] * 0.5;
+                glow[1] = newColor[1] * 0.5;
+                glow[2] = newColor[2] * 0.5;
+                glow[3] = newColor[3] * 0.2;
 
-                outer[ 0 ] = newColor[ 0 ];
-                outer[ 1 ] = newColor[ 1 ];
-                outer[ 2 ] = newColor[ 2 ];
-                outer[ 3 ] = newColor[ 3 ];
+                outer[0] = newColor[0];
+                outer[1] = newColor[1];
+                outer[2] = newColor[2];
+                outer[3] = newColor[3];
 
-                inner[ 0 ] = newColor[ 0 ] * 1.5 > 1.0f ? 1.0f : newColor[ 0 ] * 1.5;
-                inner[ 1 ] = newColor[ 1 ] * 1.5 > 1.0f ? 1.0f : newColor[ 1 ] * 1.5;
-                inner[ 2 ] = newColor[ 2 ] * 1.5 > 1.0f ? 1.0f : newColor[ 2 ] * 1.5;
-                inner[ 3 ] = newColor[ 3 ];
+                inner[0] = newColor[0] * 1.5 > 1.0f ? 1.0f : newColor[0] * 1.5;
+                inner[1] = newColor[1] * 1.5 > 1.0f ? 1.0f : newColor[1] * 1.5;
+                inner[2] = newColor[2] * 1.5 > 1.0f ? 1.0f : newColor[2] * 1.5;
+                inner[3] = newColor[3];
 
-                white[ 0 ] = white[ 1 ] = white[ 2 ] = white[ 3 ] = 1.0f;
+                white[0] = white[1] = white[2] = white[3] = 1.0f;
 
                 DC->setColor(glow);
                 UI_Text_PaintChar(x - 1.5, y - yadj - 1.5,
@@ -2734,7 +2734,7 @@ void UI_Text_PaintWithCursor(float32 x, float32 y, float32 scale,
                              sint cursorPos, valueType cursor, sint limit, sint style) {
     sint len, count;
     vec4_t newColor;
-    glyphInfo_t *glyph, *glyph2;
+    glyphInfo_t *glyph, * glyph2;
     float32 yadj;
     float32 useScale;
     fontInfo_t *font = &DC->Assets.textFont;
@@ -2759,7 +2759,7 @@ void UI_Text_PaintWithCursor(float32 x, float32 y, float32 scale,
         }
 
         count = 0;
-        glyph2 = &font->glyphs[(uchar8) cursor];
+        glyph2 = &font->glyphs[(uchar8)cursor];
         width2 = glyph2->imageWidth * DC->aspectScale;
         height2 = glyph2->imageHeight;
         skip2 = glyph2->xSkip * DC->aspectScale;
@@ -2798,22 +2798,22 @@ void UI_Text_PaintWithCursor(float32 x, float32 y, float32 scale,
             } else if(style == ITEM_TEXTSTYLE_NEON) {
                 vec4_t glow, outer, inner, white;
 
-                glow[ 0 ] = newColor[ 0 ] * 0.5;
-                glow[ 1 ] = newColor[ 1 ] * 0.5;
-                glow[ 2 ] = newColor[ 2 ] * 0.5;
-                glow[ 3 ] = newColor[ 3 ] * 0.2;
+                glow[0] = newColor[0] * 0.5;
+                glow[1] = newColor[1] * 0.5;
+                glow[2] = newColor[2] * 0.5;
+                glow[3] = newColor[3] * 0.2;
 
-                outer[ 0 ] = newColor[ 0 ];
-                outer[ 1 ] = newColor[ 1 ];
-                outer[ 2 ] = newColor[ 2 ];
-                outer[ 3 ] = newColor[ 3 ];
+                outer[0] = newColor[0];
+                outer[1] = newColor[1];
+                outer[2] = newColor[2];
+                outer[3] = newColor[3];
 
-                inner[ 0 ] = newColor[ 0 ] * 1.5 > 1.0f ? 1.0f : newColor[ 0 ] * 1.5;
-                inner[ 1 ] = newColor[ 1 ] * 1.5 > 1.0f ? 1.0f : newColor[ 1 ] * 1.5;
-                inner[ 2 ] = newColor[ 2 ] * 1.5 > 1.0f ? 1.0f : newColor[ 2 ] * 1.5;
-                inner[ 3 ] = newColor[ 3 ];
+                inner[0] = newColor[0] * 1.5 > 1.0f ? 1.0f : newColor[0] * 1.5;
+                inner[1] = newColor[1] * 1.5 > 1.0f ? 1.0f : newColor[1] * 1.5;
+                inner[2] = newColor[2] * 1.5 > 1.0f ? 1.0f : newColor[2] * 1.5;
+                inner[3] = newColor[3];
 
-                white[ 0 ] = white[ 1 ] = white[ 2 ] = white[ 3 ] = 1.0f;
+                white[0] = white[1] = white[2] = white[3] = 1.0f;
 
                 DC->setColor(glow);
                 UI_Text_PaintChar(x - 1.5, y - yadj - 1.5,
@@ -2935,7 +2935,7 @@ sint scriptCommandCount = sizeof(commandList) / sizeof(commandDef_t);
 
 
 void Item_RunScript(itemDef_t *item, pointer s) {
-    valueType script[1024], *p;
+    valueType script[1024], * p;
     sint i;
     bool bRan;
     ::memset(script, 0, sizeof(script));
@@ -2976,7 +2976,7 @@ void Item_RunScript(itemDef_t *item, pointer s) {
 
 
 bool Item_EnableShowViaCvar(itemDef_t *item, sint flag) {
-    valueType script[1024], *p;
+    valueType script[1024], * p;
     ::memset(script, 0, sizeof(script));
 
     if(item && item->enableCvar && *item->enableCvar && item->cvarTest &&
@@ -3130,7 +3130,7 @@ sint Item_ListBox_ThumbPosition(itemDef_t *item) {
         size = item->window.rect.w - (SCROLLBAR_WIDTH * 2) - 2;
 
         if(max > 0) {
-            pos = (size - SCROLLBAR_WIDTH) / (float32) max;
+            pos = (size - SCROLLBAR_WIDTH) / (float32)max;
         } else {
             pos = 0;
         }
@@ -3141,7 +3141,7 @@ sint Item_ListBox_ThumbPosition(itemDef_t *item) {
         size = item->window.rect.h - (SCROLLBAR_HEIGHT * 2) - 2;
 
         if(max > 0) {
-            pos = (size - SCROLLBAR_HEIGHT) / (float32) max;
+            pos = (size - SCROLLBAR_HEIGHT) / (float32)max;
         } else {
             pos = 0;
         }
@@ -3350,7 +3350,7 @@ void Item_ListBox_MouseEnter(itemDef_t *item, float32 x, float32 y) {
                 r.w = item->window.rect.w - listPtr->drawPadding;
 
                 if(Rect_ContainsPoint(&r, x, y)) {
-                    listPtr->cursorPos = (sint)((x - r.x) / listPtr->elementWidth)  +
+                    listPtr->cursorPos = (sint)((x - r.x) / listPtr->elementWidth) +
                                          listPtr->startPos;
 
                     if(listPtr->cursorPos >= listPtr->endPos) {
@@ -3368,7 +3368,7 @@ void Item_ListBox_MouseEnter(itemDef_t *item, float32 x, float32 y) {
         r.h = item->window.rect.h - listPtr->drawPadding;
 
         if(Rect_ContainsPoint(&r, x, y)) {
-            listPtr->cursorPos = (sint)((y - 2 - r.y) / listPtr->elementHeight)  +
+            listPtr->cursorPos = (sint)((y - 2 - r.y) / listPtr->elementHeight) +
                                  listPtr->startPos;
 
             if(listPtr->cursorPos > listPtr->endPos) {
@@ -3906,8 +3906,8 @@ bool Item_Multi_HandleKey(itemDef_t *item, sint key) {
                 } else {
                     float32 value = multiPtr->cvarValue[current];
 
-                    if(((float32)((sint) value)) == value) {
-                        DC->setCVar(item->cvar, va("%i", (sint) value));
+                    if(((float32)((sint)value)) == value) {
+                        DC->setCVar(item->cvar, va("%i", (sint)value));
                     } else {
                         DC->setCVar(item->cvar, va("%f", value));
                     }
@@ -3926,7 +3926,7 @@ bool Item_Multi_HandleKey(itemDef_t *item, sint key) {
 
 static void Item_TextField_CalcPaintOffset(itemDef_t *item,
         valueType *buff) {
-    editFieldDef_t  *editPtr = (editFieldDef_t *)item->typeData;
+    editFieldDef_t *editPtr = (editFieldDef_t *)item->typeData;
 
     if(item->cursorPos < editPtr->paintOffset) {
         editPtr->paintOffset = item->cursorPos;
@@ -3937,18 +3937,18 @@ static void Item_TextField_CalcPaintOffset(itemDef_t *item,
             // If the cursor is at the end of the string, maximise the amount of the
             // string that's visible
 
-            if(buff[ item->cursorPos + 1 ] == '\0') {
-                while(UI_Text_Width(&buff[ editPtr->paintOffset ], item->textscale, 0) <=
+            if(buff[item->cursorPos + 1] == '\0') {
+                while(UI_Text_Width(&buff[editPtr->paintOffset], item->textscale, 0) <=
                         (editPtr->maxFieldWidth - EDIT_CURSOR_WIDTH) && editPtr->paintOffset > 0) {
                     editPtr->paintOffset--;
                 }
             }
 
-            buff[ item->cursorPos + 1 ] = '\0';
+            buff[item->cursorPos + 1] = '\0';
 
             // Shift paintOffset so that the cursor is visible
 
-            while(UI_Text_Width(&buff[ editPtr->paintOffset ], item->textscale, 0) >
+            while(UI_Text_Width(&buff[editPtr->paintOffset], item->textscale, 0) >
                     (editPtr->maxFieldWidth - EDIT_CURSOR_WIDTH)) {
                 editPtr->paintOffset++;
             }
@@ -4019,7 +4019,7 @@ bool Item_TextField_HandleKey(itemDef_t *item, sint key) {
                     goto exit;
                 }
 
-                buff[ item->cursorPos ] = key;
+                buff[item->cursorPos] = key;
 
                 DC->setCVar(item->cvar, buff);
 
@@ -4505,7 +4505,7 @@ void Menus_Activate(menuDef_t *menu) {
     sint i;
     bool onTopOfMenuStack = false;
 
-    if(openMenuCount > 0 && menuStack[ openMenuCount - 1 ] == menu) {
+    if(openMenuCount > 0 && menuStack[openMenuCount - 1] == menu) {
         onTopOfMenuStack = true;
     }
 
@@ -4530,21 +4530,21 @@ void Menus_Activate(menuDef_t *menu) {
 
         for(i = 0; i < menu->itemCount;
                 i++) {  // reset selection in listboxes when opened
-            if(menu->items[ i ]->type == ITEM_TYPE_LISTBOX) {
-                listBoxDef_t *listPtr = (listBoxDef_t *)menu->items[ i ]->typeData;
-                menu->items[ i ]->cursorPos = 0;
+            if(menu->items[i]->type == ITEM_TYPE_LISTBOX) {
+                listBoxDef_t *listPtr = (listBoxDef_t *)menu->items[i]->typeData;
+                menu->items[i]->cursorPos = 0;
                 listPtr->startPos = 0;
-                DC->feederSelection(menu->items[ i ]->special, 0);
-            } else if(menu->items[ i ]->type == ITEM_TYPE_COMBO) {
-                comboBoxDef_t *comboPtr = (comboBoxDef_t *)menu->items[ i ]->typeData;
+                DC->feederSelection(menu->items[i]->special, 0);
+            } else if(menu->items[i]->type == ITEM_TYPE_COMBO) {
+                comboBoxDef_t *comboPtr = (comboBoxDef_t *)menu->items[i]->typeData;
 
-                comboPtr->cursorPos = DC->feederInitialise(menu->items[ i ]->special);
+                comboPtr->cursorPos = DC->feederInitialise(menu->items[i]->special);
             }
 
         }
 
         if(openMenuCount < MAX_OPEN_MENUS) {
-            menuStack[ openMenuCount++ ] = menu;
+            menuStack[openMenuCount++] = menu;
         }
     }
 }
@@ -4725,7 +4725,7 @@ void Menu_HandleKey(menuDef_t *menu, sint key, bool down) {
                 } else if(item->type == ITEM_TYPE_EDITFIELD ||
                           item->type == ITEM_TYPE_NUMERICFIELD) {
                     if(Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory)) {
-                        valueType buffer[ MAX_STRING_CHARS ] = { 0 };
+                        valueType buffer[MAX_STRING_CHARS] = { 0 };
 
                         if(item->cvar) {
                             DC->getCVarString(item->cvar, buffer, sizeof(buffer));
@@ -4775,7 +4775,7 @@ void Menu_HandleKey(menuDef_t *menu, sint key, bool down) {
             if(item) {
                 if(item->type == ITEM_TYPE_EDITFIELD ||
                         item->type == ITEM_TYPE_NUMERICFIELD) {
-                    valueType buffer[ MAX_STRING_CHARS ] = { 0 };
+                    valueType buffer[MAX_STRING_CHARS] = { 0 };
 
                     if(item->cvar) {
                         DC->getCVarString(item->cvar, buffer, sizeof(buffer));
@@ -4828,15 +4828,17 @@ void Item_SetTextExtents(itemDef_t *item, sint *width, sint *height,
 
     if(*width == 0 || (item->type == ITEM_TYPE_OWNERDRAW &&
                        item->textalignment == ALIGN_CENTER)) {
-        sint originalWidth = UI_Text_Width( item->text, item->textscale, 0 );
+        sint originalWidth;
 
         if(item->type == ITEM_TYPE_EDITFIELD &&
                 item->textalignment == ALIGN_CENTER && item->cvar) {
+            //FIXME: this will only be called once?
             valueType buff[256];
             DC->getCVarString(item->cvar, buff, 256);
-            originalWidth += UI_Text_Width(buff, item->textscale, 0);
+            originalWidth = UI_Text_Width(item->text, item->textscale, 0) +
+                            UI_Text_Width(buff, item->textscale, 0);
         } else {
-            originalWidth = UI_Text_Width(text, item->textscale, 0);
+            originalWidth = UI_Text_Width(item->text, item->textscale, 0);
         }
 
         *width = UI_Text_Width(textPtr, item->textscale, 0);
@@ -4898,9 +4900,9 @@ void Item_TextColor(itemDef_t *item, vec4_t *newColor) {
 }
 
 static pointer Item_Text_Wrap(pointer text, float32 scale, float32 width) {
-    static valueType   out[ 8192 ] = "";
-    valueType          *paint = out;
-    valueType          c[ 3 ] = "^7";
+    static valueType   out[8192] = "";
+    valueType *paint = out;
+    valueType          c[3] = "^7";
     pointer    p = text;
     pointer    eol;
     pointer    q = nullptr, qMinus1 = nullptr;
@@ -4920,8 +4922,8 @@ static pointer Item_Text_Wrap(pointer text, float32 scale, float32 width) {
 
         while(*p) {
             if(Q_IsColorString(p)) {
-                c[ 0 ] = p[ 0 ];
-                c[ 1 ] = p[ 1 ];
+                c[0] = p[0];
+                c[1] = p[1];
                 p += 2;
             } else if(*p != '\n' && isspace(*p)) {
                 p++;
@@ -4943,8 +4945,8 @@ static pointer Item_Text_Wrap(pointer text, float32 scale, float32 width) {
         q = p + 1;
 
         while(Q_IsColorString(q)) {
-            c[ 0 ] = q[ 0 ];
-            c[ 1 ] = q[ 1 ];
+            c[0] = q[0];
+            c[1] = q[1];
             q += 2;
         }
 
@@ -4960,8 +4962,8 @@ static pointer Item_Text_Wrap(pointer text, float32 scale, float32 width) {
             for(i = 0; i < testLength;) {
                 // Skip color escapes
                 while(Q_IsColorString(q)) {
-                    c[ 0 ] = q[ 0 ];
-                    c[ 1 ] = q[ 1 ];
+                    c[0] = q[0];
+                    c[1] = q[1];
                     q += 2;
                 }
 
@@ -4981,8 +4983,8 @@ static pointer Item_Text_Wrap(pointer text, float32 scale, float32 width) {
 
             // Some color escapes might still be present
             while(Q_IsColorString(q)) {
-                c[ 0 ] = q[ 0 ];
-                c[ 1 ] = q[ 1 ];
+                c[0] = q[0];
+                c[1] = q[1];
                 q += 2;
             }
 
@@ -5018,14 +5020,14 @@ static pointer Item_Text_Wrap(pointer text, float32 scale, float32 width) {
         // Copy text
         strncpy(paint, p, eol - p);
 
-        paint[ eol - p ] = '\0';
+        paint[eol - p] = '\0';
 
         // Add a \n if it's not there already
-        if(out[ strlen(out) - 1 ] != '\n') {
+        if(out[strlen(out) - 1] != '\n') {
             Q_strcat(out, sizeof(out), "\n ");
             Q_strcat(out, sizeof(out), c);
         } else {
-            c[ 0 ] = '\0';
+            c[0] = '\0';
         }
 
         paint = out + strlen(out);
@@ -5041,48 +5043,48 @@ static pointer Item_Text_Wrap(pointer text, float32 scale, float32 width) {
 #define MAX_WRAP_TEXT   512
 
 typedef struct {
-    valueType      text[ MAX_WRAP_TEXT *
-                                       MAX_WRAP_LINES ]; //FIXME: augment with hash?
+    valueType      text[MAX_WRAP_TEXT *
+                                      MAX_WRAP_LINES]; //FIXME: augment with hash?
     rectDef_t rect;
     float32     scale;
-    valueType      lines[ MAX_WRAP_LINES ][ MAX_WRAP_TEXT ];
-    float32     lineCoords[ MAX_WRAP_LINES ][ 2 ];
+    valueType      lines[MAX_WRAP_LINES][MAX_WRAP_TEXT];
+    float32     lineCoords[MAX_WRAP_LINES][2];
     sint       numLines;
 }
 
 wrapCache_t;
 
-static wrapCache_t  wrapCache[ MAX_WRAP_CACHE ];
-static sint          cacheWriteIndex   = 0;
-static sint          cacheReadIndex    = 0;
-static sint          cacheReadLineNum  = 0;
+static wrapCache_t  wrapCache[MAX_WRAP_CACHE];
+static sint          cacheWriteIndex = 0;
+static sint          cacheReadIndex = 0;
+static sint          cacheReadLineNum = 0;
 
 static void UI_CreateCacheEntry(pointer text, rectDef_t *rect,
                                 float32 scale) {
-    wrapCache_t *cacheEntry = &wrapCache[ cacheWriteIndex ];
+    wrapCache_t *cacheEntry = &wrapCache[cacheWriteIndex];
 
     Q_strncpyz(cacheEntry->text, text, sizeof(cacheEntry->text));
-    cacheEntry->rect.x    = rect->x;
-    cacheEntry->rect.y    = rect->y;
-    cacheEntry->rect.w    = rect->w;
-    cacheEntry->rect.h    = rect->h;
-    cacheEntry->scale     = scale;
-    cacheEntry->numLines  = 0;
+    cacheEntry->rect.x = rect->x;
+    cacheEntry->rect.y = rect->y;
+    cacheEntry->rect.w = rect->w;
+    cacheEntry->rect.h = rect->h;
+    cacheEntry->scale = scale;
+    cacheEntry->numLines = 0;
 }
 
 static void UI_AddCacheEntryLine(pointer text, float32 x, float32 y) {
-    wrapCache_t *cacheEntry = &wrapCache[ cacheWriteIndex ];
+    wrapCache_t *cacheEntry = &wrapCache[cacheWriteIndex];
 
     if(cacheEntry->numLines >= MAX_WRAP_LINES) {
         return;
     }
 
-    Q_strncpyz(cacheEntry->lines[ cacheEntry->numLines ], text,
-               sizeof(cacheEntry->lines[ 0 ]));
+    Q_strncpyz(cacheEntry->lines[cacheEntry->numLines], text,
+               sizeof(cacheEntry->lines[0]));
 
-    cacheEntry->lineCoords[ cacheEntry->numLines ][ 0 ] = x;
+    cacheEntry->lineCoords[cacheEntry->numLines][0] = x;
 
-    cacheEntry->lineCoords[ cacheEntry->numLines ][ 1 ] = y;
+    cacheEntry->lineCoords[cacheEntry->numLines][1] = y;
 
     cacheEntry->numLines++;
 }
@@ -5096,7 +5098,7 @@ static bool UI_CheckWrapCache(pointer text, rectDef_t *rect,
     sint i;
 
     for(i = 0; i < MAX_WRAP_CACHE; i++) {
-        wrapCache_t *cacheEntry = &wrapCache[ i ];
+        wrapCache_t *cacheEntry = &wrapCache[i];
 
         if(Q_stricmp(text, cacheEntry->text)) {
             continue;
@@ -5126,17 +5128,17 @@ static bool UI_CheckWrapCache(pointer text, rectDef_t *rect,
 }
 
 static bool UI_NextWrapLine(pointer *text, float32 *x, float32 *y) {
-    wrapCache_t *cacheEntry = &wrapCache[ cacheReadIndex ];
+    wrapCache_t *cacheEntry = &wrapCache[cacheReadIndex];
 
     if(cacheReadLineNum >= cacheEntry->numLines) {
         return false;
     }
 
-    *text = cacheEntry->lines[ cacheReadLineNum ];
+    *text = cacheEntry->lines[cacheReadLineNum];
 
-    *x    = cacheEntry->lineCoords[ cacheReadLineNum ][ 0 ];
+    *x = cacheEntry->lineCoords[cacheReadLineNum][0];
 
-    *y    = cacheEntry->lineCoords[ cacheReadLineNum ][ 1 ];
+    *y = cacheEntry->lineCoords[cacheReadLineNum][1];
 
     cacheReadLineNum++;
 
@@ -5144,7 +5146,7 @@ static bool UI_NextWrapLine(pointer *text, float32 *x, float32 *y) {
 }
 
 void Item_Text_Wrapped_Paint(itemDef_t *item) {
-    valueType        text[ 1024 ];
+    valueType        text[1024];
     pointer  p, textPtr;
     float32       x, y, w, h;
     vec4_t      color;
@@ -5174,10 +5176,10 @@ void Item_Text_Wrapped_Paint(itemDef_t *item) {
                           p, 0, 0, item->textStyle);
         }
     } else {
-        valueType        buff[ 4096 ];
-        float32       fontHeight    = UI_Text_EmHeight(item->textscale);
-        const float32 lineSpacing   = fontHeight * 0.4f;
-        float32       lineHeight    = fontHeight + lineSpacing;
+        valueType        buff[4096];
+        float32       fontHeight = UI_Text_EmHeight(item->textscale);
+        const float32 lineSpacing = fontHeight * 0.4f;
+        float32       lineHeight = fontHeight + lineSpacing;
         float32       textHeight;
         sint         textLength;
         sint         paintLines, totalLines, lineNum = 0;
@@ -5198,7 +5200,7 @@ void Item_Text_Wrapped_Paint(itemDef_t *item) {
         totalLines = 0;
 
         for(i = 0; i < textLength; i++) {
-            if(textPtr[ i ] == '\n') {
+            if(textPtr[i] == '\n') {
                 totalLines++;
             }
         }
@@ -5230,42 +5232,42 @@ void Item_Text_Wrapped_Paint(itemDef_t *item) {
         p = textPtr;
 
         for(i = 0, lineNum = 0; i < textLength && lineNum < paintLines; i++) {
-            sint lineLength = &textPtr[ i ] - p;
+            sint lineLength = &textPtr[i] - p;
 
             if(lineLength >= sizeof(buff) - 1) {
                 break;
             }
 
-            if(textPtr[ i ] == '\n' || textPtr[ i ] == '\0') {
+            if(textPtr[i] == '\n' || textPtr[i] == '\0') {
                 itemDef_t   lineItem;
                 sint         width, height;
 
                 strncpy(buff, p, lineLength);
-                buff[ lineLength ] = '\0';
-                p = &textPtr[ i + 1 ];
+                buff[lineLength] = '\0';
+                p = &textPtr[i + 1];
 
-                lineItem.type               = ITEM_TYPE_TEXT;
-                lineItem.textscale          = item->textscale;
-                lineItem.textStyle          = item->textStyle;
-                lineItem.text               = buff;
-                lineItem.textalignment      = item->textalignment;
-                lineItem.textvalignment     = VALIGN_TOP;
-                lineItem.textalignx         = 0.0f;
-                lineItem.textaligny         = 0.0f;
+                lineItem.type = ITEM_TYPE_TEXT;
+                lineItem.textscale = item->textscale;
+                lineItem.textStyle = item->textStyle;
+                lineItem.text = buff;
+                lineItem.textalignment = item->textalignment;
+                lineItem.textvalignment = VALIGN_TOP;
+                lineItem.textalignx = 0.0f;
+                lineItem.textaligny = 0.0f;
 
-                lineItem.textRect.w         = 0.0f;
-                lineItem.textRect.h         = 0.0f;
-                lineItem.window.rect.x      = x;
-                lineItem.window.rect.y      = paintY + (lineNum * lineHeight);
-                lineItem.window.rect.w      = w;
-                lineItem.window.rect.h      = lineHeight;
-                lineItem.window.border      = item->window.border;
-                lineItem.window.borderSize  = item->window.borderSize;
+                lineItem.textRect.w = 0.0f;
+                lineItem.textRect.h = 0.0f;
+                lineItem.window.rect.x = x;
+                lineItem.window.rect.y = paintY + (lineNum * lineHeight);
+                lineItem.window.rect.w = w;
+                lineItem.window.rect.h = lineHeight;
+                lineItem.window.border = item->window.border;
+                lineItem.window.borderSize = item->window.borderSize;
 
                 if(DC->getCVarValue("ui_developer")) {
                     vec4_t color;
-                    color[ 0 ] = color[ 2 ] = color[ 3 ] = 1.0f;
-                    color[ 1 ] = 0.0f;
+                    color[0] = color[2] = color[3] = 1.0f;
+                    color[1] = 0.0f;
                     DC->drawRect(lineItem.window.rect.x, lineItem.window.rect.y,
                                  lineItem.window.rect.w, lineItem.window.rect.h, 1, color);
                 }
@@ -5366,8 +5368,8 @@ void Item_TextField_Paint(itemDef_t *item) {
     vec4_t          newColor;
     sint             offset = (item->text &&
                                *item->text) ? ITEM_VALUE_OFFSET : 0;
-    menuDef_t       *parent = (menuDef_t *)item->parent;
-    editFieldDef_t  *editPtr = (editFieldDef_t *)item->typeData;
+    menuDef_t *parent = (menuDef_t *)item->parent;
+    editFieldDef_t *editPtr = (editFieldDef_t *)item->typeData;
     valueType            cursor = DC->getOverstrikeMode() ? '|' : '_';
     bool        editing = (item->window.flags & WINDOW_HASFOCUS &&
                            g_editingField);
@@ -5399,7 +5401,7 @@ void Item_TextField_Paint(itemDef_t *item) {
     // Shorten string to max viewable
     while(UI_Text_Width(buff + editPtr->paintOffset, item->textscale, 0) >
             (editPtr->maxFieldWidth - cursorWidth) && strlen(buff) > 0) {
-        buff[ strlen(buff) - 1 ] = '\0';
+        buff[strlen(buff) - 1] = '\0';
     }
 
     parent = (menuDef_t *)item->parent;
@@ -5439,13 +5441,16 @@ void Item_YesNo_Paint(itemDef_t *item) {
         memcpy(&newColor, &item->window.foreColor, sizeof(vec4_t));
     }
 
-    if (item->text) {
+    offset = (item->text && *item->text) ? ITEM_VALUE_OFFSET : 0;
+
+    if(item->text) {
         Item_Text_Paint(item);
-        UI_Text_Paint(item->textRect.x + item->textRect.w + 8, item->textRect.y, item->textscale, newColor,
-            (value != 0) ? DC->translateString("Yes") : DC->translateString("No"), 0, 0, item->textStyle);
-    }
-    else {
-        UI_Text_Paint(item->textRect.x, item->textRect.y, item->textscale, newColor, (value != 0) ? "Yes" : "No", 0, 0, item->textStyle);
+        UI_Text_Paint(item->textRect.x + item->textRect.w + offset,
+                      item->textRect.y, item->textscale,
+                      newColor, (value != 0) ? "Yes" : "No", 0, 0, item->textStyle);
+    } else {
+        UI_Text_Paint(item->textRect.x, item->textRect.y, item->textscale,
+                      newColor, (value != 0) ? "Yes" : "No", 0, 0, item->textStyle);
     }
 }
 
@@ -5462,12 +5467,14 @@ void Item_Multi_Paint(itemDef_t *item) {
 
     text = Item_Multi_Setting(item);
 
-    if (item->text) {
+    if(item->text) {
         Item_Text_Paint(item);
-        UI_Text_Paint(item->textRect.x + item->textRect.w + 8, item->textRect.y, item->textscale, newColor, text, 0, 0, item->textStyle);
-    }
-    else {
-        UI_Text_Paint(item->textRect.x, item->textRect.y, item->textscale, newColor, text, 0, 0, item->textStyle);
+        UI_Text_Paint(item->textRect.x + item->textRect.w + ITEM_VALUE_OFFSET,
+                      item->textRect.y,
+                      item->textscale, newColor, text, 0, 0, item->textStyle);
+    } else {
+        UI_Text_Paint(item->textRect.x, item->textRect.y, item->textscale,
+                      newColor, text, 0, 0, item->textStyle);
     }
 }
 
@@ -5500,7 +5507,7 @@ void Item_Combobox_Paint(itemDef_t *item) {
 
 
 typedef struct {
-    valueType  *command;
+    valueType *command;
     sint   id;
     sint   defaultbind1;
     sint   defaultbind2;
@@ -5617,15 +5624,15 @@ Controls_GetConfig
 */
 void Controls_GetConfig(void) {
     sint   i;
-    sint   twokeys[ 2 ];
+    sint   twokeys[2];
 
     // iterate each command, get its numeric binding
 
     for(i = 0; i < g_bindCount; i++) {
-        Controls_GetKeyAssignment(g_bindings[ i ].command, twokeys);
+        Controls_GetKeyAssignment(g_bindings[i].command, twokeys);
 
-        g_bindings[ i ].bind1 = twokeys[ 0 ];
-        g_bindings[ i ].bind2 = twokeys[ 1 ];
+        g_bindings[i].bind1 = twokeys[0];
+        g_bindings[i].bind2 = twokeys[1];
     }
 }
 
@@ -6002,7 +6009,7 @@ void Item_Model_Paint(itemDef_t *item) {
     ent.hModel = hModel;
 
 
-    if(modelPtr->frameTime) {    // don't advance on the first frame
+    if(modelPtr->frameTime) {     // don't advance on the first frame
         modelPtr->backlerp += (((DC->realTime - modelPtr->frameTime) / 1000.0f) *
                                (float32)modelPtr->fps);
     }
@@ -6029,9 +6036,9 @@ void Item_Model_Paint(itemDef_t *item) {
 
     modelPtr->frameTime = DC->realTime;
 
-    ent.frame       = modelPtr->frame;
-    ent.oldframe    = modelPtr->oldframe;
-    ent.backlerp    = 1.0f - modelPtr->backlerp;
+    ent.frame = modelPtr->frame;
+    ent.oldframe = modelPtr->oldframe;
+    ent.backlerp = 1.0f - modelPtr->backlerp;
 
     VectorCopy(origin, ent.origin);
     VectorCopy(origin, ent.lightingOrigin);
@@ -6223,7 +6230,7 @@ void Item_ListBox_Paint(itemDef_t *item) {
             y = item->window.rect.y + 1;
 
             for(i = listPtr->startPos; i < count; i++) {
-                valueType text[ MAX_STRING_CHARS ];
+                valueType text[MAX_STRING_CHARS];
                 // always draw at least one
                 // which may overdraw the box if it is too small for the element
 
@@ -6236,14 +6243,14 @@ void Item_ListBox_Paint(itemDef_t *item) {
 
                         if(menu->window.aspectBias != ASPECT_NONE ||
                                 item->window.aspectBias != ASPECT_NONE) {
-                            columnPos = (listPtr->columnInfo[ j ].pos + 4.0f) * DC->aspectScale;
-                            width = listPtr->columnInfo[ j ].width * DC->aspectScale;
+                            columnPos = (listPtr->columnInfo[j].pos + 4.0f) * DC->aspectScale;
+                            width = listPtr->columnInfo[j].width * DC->aspectScale;
                         } else {
-                            columnPos = (listPtr->columnInfo[ j ].pos + 4.0f);
-                            width = listPtr->columnInfo[ j ].width;
+                            columnPos = (listPtr->columnInfo[j].pos + 4.0f);
+                            width = listPtr->columnInfo[j].width;
                         }
 
-                        height = listPtr->columnInfo[ j ].width;
+                        height = listPtr->columnInfo[j].width;
 
                         Q_strncpyz(text, DC->feederItemText(item->special, i, j, &optionalImage),
                                    sizeof(text));
@@ -6252,7 +6259,7 @@ void Item_ListBox_Paint(itemDef_t *item) {
                             DC->drawHandlePic(x + columnPos,
                                               y + ((listPtr->elementHeight - height) / 2.0f),
                                               width, height, optionalImage);
-                        } else if(text[ 0 ]) {
+                        } else if(text[0]) {
                             sint alignOffset = 0.0f, tw;
 
                             tw = UI_Text_Width(text, item->textscale, 0);
@@ -6260,11 +6267,11 @@ void Item_ListBox_Paint(itemDef_t *item) {
                             // Shorten the string if it's too long
 
                             while(tw > width && strlen(text) > 0) {
-                                text[ strlen(text) - 1 ] = '\0';
+                                text[strlen(text) - 1] = '\0';
                                 tw = UI_Text_Width(text, item->textscale, 0);
                             }
 
-                            switch(listPtr->columnInfo[ j ].align) {
+                            switch(listPtr->columnInfo[j].align) {
                                 case ALIGN_LEFT:
                                     alignOffset = 0.0f;
                                     break;
@@ -6303,7 +6310,7 @@ void Item_ListBox_Paint(itemDef_t *item) {
                     if(optionalImage >= 0) {
                         DC->drawHandlePic(x + offset, y, listPtr->elementHeight,
                                           listPtr->elementHeight, optionalImage);
-                    } else if(text[ 0 ]) {
+                    } else if(text[0]) {
                         UI_Text_Paint(x + offset, y + m + ((listPtr->elementHeight - m) / 2.0f),
                                       item->textscale, item->window.foreColor, text, 0,
                                       0, item->textStyle);
@@ -6382,32 +6389,27 @@ void Item_OwnerDraw_Paint(itemDef_t *item) {
             ::memcpy(color, parent->disableColor, sizeof(vec4_t));
         }
 
-        if (item->text) {
-            Item_Text_Paint(item);
-            if (item->text[0])
-            {
+        if(DC->ownerDrawText &&
+                (text = DC->ownerDrawText(item->window.ownerDraw))) {
+            if(item->text && *item->text) {
+                Item_Text_Paint(item);
+
                 UI_Text_Paint(item->textRect.x + item->textRect.w + ITEM_VALUE_OFFSET,
-                    item->textRect.y, item->textscale,
-                    color, text, 0, 0, item->textStyle);
+                              item->textRect.y, item->textscale,
+                              color, text, 0, 0, item->textStyle);
+            } else {
+                item->text = text;
+                Item_Text_Paint(item);
+                item->text = nullptr;
             }
-            else {
-                DC->ownerDrawItem(item->window.rect.x + item->textRect.w, item->window.rect.y,
-                    item->window.rect.w, item->window.rect.h,
-                    item->textalignx, item->textaligny,
-                    item->window.ownerDraw, item->window.ownerDrawFlags,
-                    item->alignment, item->textalignment, item->textvalignment,
-                    item->special, item->textscale, color, item->window.backColor,
-                    item->window.background, item->textStyle);
-            }
-        }
-        else {
+        } else {
             DC->ownerDrawItem(item->window.rect.x, item->window.rect.y,
-                item->window.rect.w, item->window.rect.h,
-                item->textalignx, item->textaligny,
-                item->window.ownerDraw, item->window.ownerDrawFlags,
-                item->alignment, item->textalignment, item->textvalignment,
-                item->special, item->textscale, color, item->window.backColor,
-                item->window.background, item->textStyle);
+                              item->window.rect.w, item->window.rect.h,
+                              item->textalignx, item->textaligny,
+                              item->window.ownerDraw, item->window.ownerDrawFlags,
+                              item->alignment, item->textalignment, item->textvalignment,
+                              item->special, item->textscale, color, item->window.backColor,
+                              item->window.background, item->textStyle);
         }
     }
 }
@@ -6663,7 +6665,7 @@ menuDef_t *Menu_GetFocused(void) {
     for(i = 0; i < menuCount; i++) {
         if(Menus[i].window.flags & WINDOW_HASFOCUS &&
                 Menus[i].window.flags & WINDOW_VISIBLE) {
-            return & Menus[i];
+            return &Menus[i];
         }
     }
 
@@ -6891,8 +6893,8 @@ void Menu_HandleMouseMove(menuDef_t *menu, float32 x, float32 y) {
     // KTW: Draggable windows
     if((menu->window.flags & WINDOW_HASFOCUS) &&
             (menu->window.flags & WINDOW_DRAG)) {
-        menu->window.rect.x +=  DC->cursordx;
-        menu->window.rect.y +=  DC->cursordy;
+        menu->window.rect.x += DC->cursordx;
+        menu->window.rect.y += DC->cursordy;
 
         if(menu->window.rect.x < 0) {
             menu->window.rect.x = 0;
@@ -6977,13 +6979,14 @@ void Menu_HandleMouseMove(menuDef_t *menu, float32 x, float32 y) {
 
 void Menu_Paint(menuDef_t *menu, bool forcePaint) {
     sint i;
-    itemDef_t* item = nullptr;
+    itemDef_t item;
+    valueType listened_text[1024];
 
     if(menu == nullptr) {
         return;
     }
 
-    if(!(menu->window.flags & WINDOW_VISIBLE) &&  !forcePaint) {
+    if(!(menu->window.flags & WINDOW_VISIBLE) && !forcePaint) {
         return;
     }
 
@@ -6994,6 +6997,17 @@ void Menu_Paint(menuDef_t *menu, bool forcePaint) {
 
     if(forcePaint) {
         menu->window.flags |= WINDOW_FORCED;
+    }
+
+    //Executes the text stored in the listened cvar as an UIscript
+    if(menu->listenCvar && menu->listenCvar[0]) {
+        DC->getCVarString(menu->listenCvar, listened_text, sizeof(listened_text));
+
+        if(listened_text[0]) {
+            item.parent = menu;
+            Item_RunScript(&item, listened_text);
+            DC->setCVar(menu->listenCvar, "");
+        }
     }
 
     // draw the background if necessary
@@ -7012,9 +7026,6 @@ void Menu_Paint(menuDef_t *menu, bool forcePaint) {
 
     for(i = 0; i < menu->itemCount; i++) {
         Item_Paint(menu->items[i]);
-        if (menu->items[i]->window.flags & WINDOW_MOUSEOVER) {
-            item = menu->items[i];
-        }
     }
 
     if(DC->getCVarValue("ui_developer")) {
@@ -7052,8 +7063,8 @@ void Item_ValidateTypeData(itemDef_t *item) {
         ::memset(item->typeData, 0, sizeof(editFieldDef_t));
 
         if(item->type == ITEM_TYPE_EDITFIELD) {
-            if(!((editFieldDef_t *) item->typeData)->maxPaintChars) {
-                ((editFieldDef_t *) item->typeData)->maxPaintChars = MAX_EDITFIELD;
+            if(!((editFieldDef_t *)item->typeData)->maxPaintChars) {
+                ((editFieldDef_t *)item->typeData)->maxPaintChars = MAX_EDITFIELD;
             }
         }
     } else if(item->type == ITEM_TYPE_MULTI) {
@@ -7308,9 +7319,9 @@ bool ItemParse_model_animplay(itemDef_t *item, sint handle) {
         return false;
     }
 
-    modelPtr->frame     = modelPtr->startframe + 1;
-    modelPtr->oldframe  = modelPtr->startframe;
-    modelPtr->backlerp  = 0.0f;
+    modelPtr->frame = modelPtr->startframe + 1;
+    modelPtr->oldframe = modelPtr->startframe;
+    modelPtr->backlerp = 0.0f;
     modelPtr->frameTime = DC->realTime;
     return true;
 }
@@ -7602,7 +7613,7 @@ bool ItemParse_backcolor(itemDef_t *item, sint handle) {
             return false;
         }
 
-        item->window.backColor[i]  = f;
+        item->window.backColor[i] = f;
     }
 
     return true;
@@ -7617,7 +7628,7 @@ bool ItemParse_forecolor(itemDef_t *item, sint handle) {
             return false;
         }
 
-        item->window.foreColor[i]  = f;
+        item->window.foreColor[i] = f;
         item->window.flags |= WINDOW_FORECOLORSET;
     }
 
@@ -7633,7 +7644,7 @@ bool ItemParse_bordercolor(itemDef_t *item, sint handle) {
             return false;
         }
 
-        item->window.borderColor[i]  = f;
+        item->window.borderColor[i] = f;
     }
 
     return true;
@@ -8142,8 +8153,8 @@ void Item_SetupKeywordHash(void) {
 
     ::memset(itemParseKeywordHash, 0, sizeof(itemParseKeywordHash));
 
-    for(i = 0; itemParseKeywords[ i ].keyword; i++) {
-        KeywordHash_Add(itemParseKeywordHash, &itemParseKeywords[ i ]);
+    for(i = 0; itemParseKeywords[i].keyword; i++) {
+        KeywordHash_Add(itemParseKeywordHash, &itemParseKeywords[i]);
     }
 }
 
@@ -8381,7 +8392,7 @@ bool MenuParse_backcolor(itemDef_t *item, sint handle) {
             return false;
         }
 
-        menu->window.backColor[i]  = f;
+        menu->window.backColor[i] = f;
     }
 
     return true;
@@ -8397,7 +8408,7 @@ bool MenuParse_forecolor(itemDef_t *item, sint handle) {
             return false;
         }
 
-        menu->window.foreColor[i]  = f;
+        menu->window.foreColor[i] = f;
         menu->window.flags |= WINDOW_FORECOLORSET;
     }
 
@@ -8414,7 +8425,7 @@ bool MenuParse_bordercolor(itemDef_t *item, sint handle) {
             return false;
         }
 
-        menu->window.borderColor[i]  = f;
+        menu->window.borderColor[i] = f;
     }
 
     return true;
@@ -8430,7 +8441,7 @@ bool MenuParse_focuscolor(itemDef_t *item, sint handle) {
             return false;
         }
 
-        menu->focusColor[i]  = f;
+        menu->focusColor[i] = f;
     }
 
     return true;
@@ -8446,7 +8457,7 @@ bool MenuParse_disablecolor(itemDef_t *item, sint handle) {
             return false;
         }
 
-        menu->disableColor[i]  = f;
+        menu->disableColor[i] = f;
     }
 
     return true;
@@ -8646,8 +8657,8 @@ void Menu_SetupKeywordHash(void) {
 
     ::memset(menuParseKeywordHash, 0, sizeof(menuParseKeywordHash));
 
-    for(i = 0; menuParseKeywords[ i ].keyword; i++) {
-        KeywordHash_Add(menuParseKeywordHash, &menuParseKeywords[ i ]);
+    for(i = 0; menuParseKeywords[i].keyword; i++) {
+        KeywordHash_Add(menuParseKeywordHash, &menuParseKeywords[i]);
     }
 }
 
@@ -8739,7 +8750,7 @@ void Menu_PaintAll(void) {
     }
 
     if(DC->getCVarValue("ui_developer")) {
-        vec4_t v = {1, 1, 1, 1};
+        vec4_t v = { 1, 1, 1, 1 };
         UI_Text_Paint(5, 25, .5, v, va("fps: %f", DC->FPS), 0, 0, 0);
     }
 }
@@ -8757,7 +8768,7 @@ void *Display_CaptureItem(sint x, sint y) {
 
     for(i = 0; i < menuCount; i++) {
         if(Rect_ContainsPoint(&Menus[i].window.rect, x, y)) {
-            return & Menus[i];
+            return &Menus[i];
         }
     }
 
