@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 // Copyright(C) 1999 - 2010 id Software LLC, a ZeniMax Media company.
-// Copyright(C) 2011 - 2021 Dusan Jocic <dusanjocic@msn.com>
+// Copyright(C) 2011 - 2022 Dusan Jocic <dusanjocic@msn.com>
 //
 // This file is part of the OpenWolf GPL Source Code.
 // OpenWolf Source Code is free software: you can redistribute it and/or modify
@@ -30,13 +30,14 @@
 // File name:   q_platform.hpp
 // Created:
 // Compilers:   Microsoft (R) C/C++ Optimizing Compiler Version 19.26.28806 for x64,
-//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0
+//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0,
+//              AppleClang 9.0.0.9000039
 // Description:
 // -------------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __Q_PLATFORM_H
-#define __Q_PLATFORM_H
+#ifndef __Q_PLATFORM_HPP__
+#define __Q_PLATFORM_HPP__
 
 //================================================================= WIN64/32 ===
 #if defined(_WIN64) || defined(__WIN64__)
@@ -168,9 +169,9 @@
 #define PATH_SEP '/'
 
 #if defined __amd64__
-#define ARCH_STRING "amd64"
+#define ARCH_STRING "AMD564"
 #elif defined __x86_64__
-#define ARCH_STRING "x86_64"
+#define ARCH_STRING "AMD64"
 #endif
 
 #if BYTE_ORDER == BIG_ENDIAN
@@ -244,4 +245,4 @@ float32 FloatSwap(float32 f);
 #define PLATFORM_STRING OS_STRING "-" ARCH_STRING "-debug"
 #endif
 
-#endif
+#endif //!__Q_PLATFORM_HPP__

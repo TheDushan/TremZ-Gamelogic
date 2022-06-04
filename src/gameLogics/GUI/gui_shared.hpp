@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 // Copyright(C) 1999 - 2005 Id Software, Inc.
 // Copyright(C) 2000 - 2006 Tim Angus
-// Copyright(C) 2011 - 2021 Dusan Jocic <dusanjocic@msn.com>
+// Copyright(C) 2011 - 2022 Dusan Jocic <dusanjocic@msn.com>
 //
 // This file is part of OpenWolf.
 //
@@ -23,13 +23,14 @@
 // File name:   gui_shared.hpp
 // Created:
 // Compilers:   Microsoft (R) C/C++ Optimizing Compiler Version 19.26.28806 for x64,
-//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0
+//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0,
+//              AppleClang 9.0.0.9000039
 // Description:
 // -------------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GUI_SHARED_H__
-#define __GUI_SHARED_H__
+#ifndef __GUI_SHARED_HPP__
+#define __GUI_SHARED_HPP__
 
 #define MAX_MENUNAME 32
 #define MAX_ITEMTEXT 64
@@ -554,4 +555,4 @@ void    BindingFromName(pointer cvar);
 extern valueType g_nameBind1[ 32 ];
 extern valueType g_nameBind2[ 32 ];
 
-#endif //!__GUI_SHARED_H__
+#endif //!__GUI_SHARED_HPP__

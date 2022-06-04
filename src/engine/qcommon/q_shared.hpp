@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 // Copyright(C) 1999 - 2010 id Software LLC, a ZeniMax Media company.
-// Copyright(C) 2011 - 2021 Dusan Jocic <dusanjocic@msn.com>
+// Copyright(C) 2011 - 2022 Dusan Jocic <dusanjocic@msn.com>
 //
 // This file is part of the OpenWolf GPL Source Code.
 // OpenWolf Source Code is free software: you can redistribute it and/or modify
@@ -30,14 +30,15 @@
 // File name:   q_shared.hpp
 // Created:
 // Compilers:   Microsoft (R) C/C++ Optimizing Compiler Version 19.26.28806 for x64,
-//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0
+//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0,
+//              AppleClang 9.0.0.9000039
 // Description: included first by ALL program modules.
 //              A user mod should never modify this file
 // -------------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __Q_SHARED_H__
-#define __Q_SHARED_H__
+#ifndef __Q_SHARED_HPP__
+#define __Q_SHARED_HPP__
 
 #ifndef PRE_RELEASE_DEMO
 // Dushan for ET game, basegame folder was "ETMAIN"
@@ -977,7 +978,6 @@ valueType *Q_StripColor(valueType *string);
 bool        Q_strtol(pointer s, sint32 *out);
 bool        Q_strtoi(pointer s, sint *out);
 
-[[nodiscard]]
 ID_INLINE uint32 Q_strlen(pointer str) {
     return static_cast<uint32>(strlen(str));
 }
@@ -1706,4 +1706,4 @@ valueType *COM_SkipPath(valueType *pathname);
 
 #define KEYBOARDCTRL(a) ((a)-'a'+1)
 
-#endif //!__Q_SHARED_H__
+#endif //!__Q_SHARED_HPP__

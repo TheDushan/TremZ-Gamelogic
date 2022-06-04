@@ -21,13 +21,14 @@
 // File name:   cgame_precompiled.hpp
 // Created:
 // Compilers:   Microsoft (R) C/C++ Optimizing Compiler Version 19.26.28806 for x64,
-//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0
+//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0,
+//              AppleClang 9.0.0.9000039
 // Description:
 // -------------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __CG_PRECOMPILED_H__
-#define __CG_PRECOMPILED_H__
+#ifndef __CGAME_PRECOMPILED_HPP__
+#define __CGAME_PRECOMPILED_HPP__
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -117,4 +118,4 @@
 #include <cgame/cgame_view.hpp>
 #include <cgame/cgame_weapons.hpp>
 
-#endif // !__CG_PRECOMPILED_H__
+#endif // !__CGAME_PRECOMPILED_HPP__

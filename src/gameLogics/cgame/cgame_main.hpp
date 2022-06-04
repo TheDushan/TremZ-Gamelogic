@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////
-// Copyright(C) 2018 - 2021 Dusan Jocic <dusanjocic@msn.com>
+// Copyright(C) 2018 - 2022 Dusan Jocic <dusanjocic@msn.com>
 //
 // This file is part of OpenWolf.
 //
@@ -21,13 +21,14 @@
 // File name:   cgame_main.hpp
 // Created:
 // Compilers:   Microsoft (R) C/C++ Optimizing Compiler Version 19.26.28806 for x64,
-//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0
+//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0,
+//              AppleClang 9.0.0.9000039
 // Description:
 // -------------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __CGAME_MAIN_H__
-#define __CGAME_MAIN_H__
+#ifndef __CGAME_MAIN_HPP__
+#define __CGAME_MAIN_HPP__
 
 class idCGameLocal;
 
@@ -83,4 +84,4 @@ public:
     static void AssetCache(void);
 };
 
-#endif //!__CGAME_MAIN_H__
+#endif //!__CGAME_MAIN_HPP__

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 // Copyright(C) 1999 - 2005 Id Software, Inc.
-// Copyright(C) 2011 - 2021 Dusan Jocic <dusanjocic@msn.com>
+// Copyright(C) 2011 - 2022 Dusan Jocic <dusanjocic@msn.com>
 //
 // This file is part of OpenWolf.
 //
@@ -22,13 +22,14 @@
 // File name:   menudef.hpp
 // Created:
 // Compilers:   Microsoft (R) C/C++ Optimizing Compiler Version 19.26.28806 for x64,
-//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0
+//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0,
+//              AppleClang 9.0.0.9000039
 // Description:
 // -------------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __MENUDEF_H__
-#define __MENUDEF_H__
+#ifndef __MENUDEF_HPP__
+#define __MENUDEF_HPP__
 
 #define ITEM_TYPE_TEXT                    0     // simple text
 #define ITEM_TYPE_BUTTON                  1     // button, basically text with a border
@@ -222,4 +223,4 @@
 #define UI_CREDITS                        83
 #define UI_SCREEN                         84
 
-#endif //!__MENUDEF_H__
+#endif //!__MENUDEF_HPP__

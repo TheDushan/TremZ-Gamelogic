@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 // Copyright(C) 2004 - 2006 Tony J.White
-// Copyright(C) 2011 - 2021 Dusan Jocic <dusanjocic@msn.com>
+// Copyright(C) 2011 - 2022 Dusan Jocic <dusanjocic@msn.com>
 //
 // This file is part of OpenWolf.
 //
@@ -31,13 +31,14 @@
 // File name:   sgame_admin.hpp
 // Created:
 // Compilers:   Microsoft (R) C/C++ Optimizing Compiler Version 19.26.28806 for x64,
-//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0
+//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0,
+//              AppleClang 9.0.0.9000039
 // Description:
 // -------------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __G_ADMIN_H__
-#define __G_ADMIN_H__
+#ifndef __G_ADMIN_HPP__
+#define __G_ADMIN_HPP__
 
 #define MAX_ADMIN_LEVELS 32
 #define MAX_ADMIN_ADMINS 1024
@@ -217,7 +218,6 @@ public:
 #define ADMBP_end() AdminBufferEnd(ent)
 };
 
-
 extern idAdminLocal adminLocal;
 
-#endif //!_G_ADMIN_H__ 
+#endif //!_G_ADMIN_HPP__ 

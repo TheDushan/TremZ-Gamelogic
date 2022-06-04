@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 // Copyright(C) 1999 - 2005 Id Software, Inc.
 // Copyright(C) 2000 - 2006 Tim Angus
-// Copyright(C) 2011 - 2021 Dusan Jocic <dusanjocic@msn.com>
+// Copyright(C) 2011 - 2022 Dusan Jocic <dusanjocic@msn.com>
 //
 // This file is part of OpenWolf.
 //
@@ -23,7 +23,8 @@
 // File name:   sgame_main.cpp
 // Created:
 // Compilers:   Microsoft (R) C/C++ Optimizing Compiler Version 19.26.28806 for x64,
-//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0
+//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0,
+//              AppleClang 9.0.0.9000039
 // Description:
 // -------------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -2159,6 +2160,8 @@ void idSGameMain::CheckExitRules(void) {
         }
     }
 
+#if 0
+
     if(level.uncondHumanWin || ((level.time > level.startTime + 1000) &&
                                 (level.numAlienSpawns == 0) && (level.numLiveAlienClients == 0))) {
         //humans win
@@ -2178,6 +2181,8 @@ void idSGameMain::CheckExitRules(void) {
 
         idSGameMain::LogExit("Aliens win.");
     }
+
+#endif
 }
 
 /*

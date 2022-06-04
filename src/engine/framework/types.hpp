@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////
-// Copyright(C) 2011 - 2021 Dusan Jocic <dusanjocic@msn.com>
+// Copyright(C) 2011 - 2022 Dusan Jocic <dusanjocic@msn.com>
 //
 // This file is part of OpenWolf.
 //
@@ -21,13 +21,14 @@
 // File name:   types.hpp
 // Created:
 // Compilers:   Microsoft (R) C/C++ Optimizing Compiler Version 19.26.28806 for x64,
-//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0
+//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0,
+//              AppleClang 9.0.0.9000039
 // Description:
 // -------------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __TYPES_H__
-#define __TYPES_H__
+#ifndef __TYPES_HPP__
+#define __TYPES_HPP__
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------Basic Types--------------------------------------------------//
@@ -48,10 +49,17 @@ sint;     ///< Compiler independent Signed 32-bit integer
 typedef unsigned int
 uint;     ///< Compiler independent Unsigned 32-bit integer
 
+#if defined (__MACOSX__)
+typedef signed int
+sint32;     ///< Compiler independent Signed 64-bit integer
+typedef unsigned int
+uint32;     ///< Compiler independent Unsigned 64-bit integer
+#else
 typedef signed long
 sint32;     ///< Compiler independent Signed 64-bit integer
 typedef unsigned long
 uint32;     ///< Compiler independent Unsigned 64-bit integer
+#endif
 
 #ifdef _WIN32
 typedef signed __int64     sint64;
@@ -76,4 +84,4 @@ typedef const char *pointer;
 typedef const char &reference;
 
 
-#endif //__TYPES_H__
+#endif //__TYPES_HPP__

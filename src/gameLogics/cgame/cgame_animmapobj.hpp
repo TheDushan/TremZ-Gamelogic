@@ -21,13 +21,14 @@
 // File name:   cgame_animmapobj.hpp
 // Created:
 // Compilers:   Microsoft (R) C/C++ Optimizing Compiler Version 19.26.28806 for x64,
-//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0
+//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0,
+//              AppleClang 9.0.0.9000039
 // Description:
 // -------------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __CGAME_ANIMMAPOBJ_H__
-#define __CGAME_ANIMMAPOBJ_H__
+#ifndef __CGAME_ANIMMAPOBJ_HPP__
+#define __CGAME_ANIMMAPOBJ_HPP__
 
 class idCGameLocal;
 
@@ -46,4 +47,4 @@ public:
     friend class idCGameAnimation;
 };
 
-#endif //!__CGAME_ANIMMAPOBJ_H__
+#endif //!__CGAME_ANIMMAPOBJ_HPP__

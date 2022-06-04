@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////
-// Copyright(C) 2018 - 2021 Dusan Jocic <dusanjocic@msn.com>
+// Copyright(C) 2018 - 2022 Dusan Jocic <dusanjocic@msn.com>
 //
 // This file is part of OpenWolf.
 //
@@ -21,13 +21,14 @@
 // File name:   sgame_ptr.hpp
 // Created:
 // Compilers:   Microsoft (R) C/C++ Optimizing Compiler Version 19.26.28806 for x64,
-//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0
+//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0,
+//              AppleClang 9.0.0.9000039
 // Description:
 // -------------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __SGAME_PTR_H__
-#define __SGAME_PTR_H__
+#ifndef __SGAME_PTR_HPP__
+#define __SGAME_PTR_HPP__
 
 static connectionRecord_t connections[MAX_CLIENTS];
 
@@ -43,7 +44,6 @@ public:
     static connectionRecord_t *GenerateNewConnection(gclient_t *client);
     static connectionRecord_t *FindConnectionForCode(sint code);
     static void ResetPTRConnections(void);
-
 };
 
-#endif // !__SGAME_PTR_H__
+#endif // !__SGAME_PTR_HPP__

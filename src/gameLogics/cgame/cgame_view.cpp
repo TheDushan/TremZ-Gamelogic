@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 // Copyright(C) 1999 - 2005 Id Software, Inc.
 // Copyright(C) 2000 - 2006 Tim Angus
-// Copyright(C) 2011 - 2021 Dusan Jocic <dusanjocic@msn.com>
+// Copyright(C) 2011 - 2022 Dusan Jocic <dusanjocic@msn.com>
 //
 // This file is part of OpenWolf.
 //
@@ -23,7 +23,8 @@
 // File name:   cgame_weapons.cpp
 // Created:
 // Compilers:   Microsoft (R) C/C++ Optimizing Compiler Version 19.26.28806 for x64,
-//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0
+//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0,
+//              AppleClang 9.0.0.9000039
 // Description: setup all the parameters (position, angle, etc) for a 3D rendering
 // -------------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -95,6 +96,7 @@ void idCGameView::TestModel_f(void) {
     ::memset(&cg.testModelEntity, 0, sizeof(cg.testModelEntity));
 
     if(trap_Argc() < 2) {
+        Printf("usage: testModel <modelname> [lerp]\n");
         return;
     }
 
@@ -102,7 +104,7 @@ void idCGameView::TestModel_f(void) {
     cg.testModelEntity.hModel = trap_R_RegisterModel(cg.testModelName);
 
     if(trap_Argc() == 3) {
-        cg.testModelEntity.backlerp = atof(idCGameMain::Argv(2));
+        cg.testModelEntity.backlerp = 1.0f - ::atof(idCGameMain::Argv(2));
         cg.testModelEntity.frame = 1;
         cg.testModelEntity.oldframe = 0;
     }

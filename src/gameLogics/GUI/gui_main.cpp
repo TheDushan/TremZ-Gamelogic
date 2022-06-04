@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 // Copyright(C) 2000 - 2006 Tim Angus
-// Copyright(C) 2011 - 2021 Dusan Jocic <dusanjocic@msn.com>
+// Copyright(C) 2011 - 2022 Dusan Jocic <dusanjocic@msn.com>
 //
 // This file is part of OpenWolf.
 //
@@ -22,7 +22,8 @@
 // File name:   gui_main.cpp
 // Created:
 // Compilers:   Microsoft (R) C/C++ Optimizing Compiler Version 19.26.28806 for x64,
-//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0
+//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0,
+//              AppleClang 9.0.0.9000039
 // Description:
 // -------------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -129,7 +130,7 @@ static cvarTable_t    cvarTable[ ] = {
     { &ui_findPlayer, "ui_findPlayer", "", CVAR_ARCHIVE},
     { &ui_serverStatusTimeOut, "ui_serverStatusTimeOut", "7000", CVAR_ARCHIVE},
     { &ui_textWrapCache, "ui_textWrapCache", "1", CVAR_ARCHIVE },
-    { &ui_developer, "ui_developer", "0", CVAR_ARCHIVE | CVAR_CHEAT },
+    { &ui_developer, "ui_developer", "0", CVAR_ARCHIVE },
     { &ui_emoticons, "cg_emoticons", "0", CVAR_LATCH | CVAR_ARCHIVE },
     { &ui_screen, "ui_screen", "0", CVAR_ROM },
     { &ui_screens, "ui_screens", "0", CVAR_ROM },

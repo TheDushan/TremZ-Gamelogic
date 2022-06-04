@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 // Copyright(C) 1999 - 2005 Id Software, Inc.
 // Copyright(C) 2000 - 2006 Tim Angus
-// Copyright(C) 2011 - 2021 Dusan Jocic <dusanjocic@msn.com>
+// Copyright(C) 2011 - 2022 Dusan Jocic <dusanjocic@msn.com>
 //
 // This file is part of OpenWolf.
 //
@@ -23,7 +23,8 @@
 // File name:   tremulous.hpp
 // Created:
 // Compilers:   Microsoft (R) C/C++ Optimizing Compiler Version 19.26.28806 for x64,
-//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0
+//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0,
+//              AppleClang 9.0.0.9000039
 // Description:
 // -------------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -38,8 +39,8 @@
  *
  */
 
-#ifndef __TREMULOUS_H__
-#define __TREMULOUS_H__
+#ifndef __TREMULOUS_HPP__
+#define __TREMULOUS_HPP__
 
 #define ALIEN_WDMG_MODIFIER         1.0f
 #define ADM(d)                      ((sint)((float32)d*ALIEN_WDMG_MODIFIER))
@@ -702,4 +703,4 @@
 
 #define MAXIMUM_BUILD_TIME          20000 // used for pie timer
 
-#endif //!__TREMULOUS_H__
+#endif //!__TREMULOUS_HPP__

@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////
-// Copyright(C) 2018 - 2021 Dusan Jocic <dusanjocic@msn.com>
+// Copyright(C) 2018 - 2022 Dusan Jocic <dusanjocic@msn.com>
 //
 // This file is part of OpenWolf.
 //
@@ -21,13 +21,14 @@
 // File name:   sgame_svcmds.hpp
 // Created:
 // Compilers:   Microsoft (R) C/C++ Optimizing Compiler Version 19.26.28806 for x64,
-//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0
+//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0,
+//              AppleClang 9.0.0.9000039
 // Description:
 // -------------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __SGAME_SVCMDS_H__
-#define __SGAME_SVCMDS_H__
+#ifndef __SGAME_SVCMDS_HPP__
+#define __SGAME_SVCMDS_HPP__
 
 class idSGameLocal;
 
@@ -55,4 +56,4 @@ public:
     static void Svcmd_MessageWrapper(void);
 };
 
-#endif //!__SGAME_SVCMDS_H__
+#endif //!__SGAME_SVCMDS_HPP__

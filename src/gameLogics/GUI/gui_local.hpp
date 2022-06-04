@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 // Copyright(C) 1999 - 2005 Id Software, Inc.
 // Copyright(C) 2000 - 2006 Tim Angus
-// Copyright(C) 2011 - 2021 Dusan Jocic <dusanjocic@msn.com>
+// Copyright(C) 2011 - 2022 Dusan Jocic <dusanjocic@msn.com>
 //
 // This file is part of OpenWolf.
 //
@@ -23,13 +23,14 @@
 // File name:   gui_local.hpp
 // Created:
 // Compilers:   Microsoft (R) C/C++ Optimizing Compiler Version 19.26.28806 for x64,
-//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0
+//              gcc (Ubuntu 9.3.0-10ubuntu2) 9.3.0,
+//              AppleClang 9.0.0.9000039
 // Description:
 // -------------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GUI_LOCAL_H__
-#define __GUI_LOCAL_H__
+#ifndef __GUI_LOCAL_HPP__
+#define __GUI_LOCAL_HPP__
 
 void UI_Report(void);
 void UI_Load(void);
@@ -329,5 +330,4 @@ public:
 
 extern idUserInterfaceManagerLocal uiManagerLocal;
 
-#endif //!__GUI_LOCAL_H__
-
+#endif //!__GUI_LOCAL_HPP__
