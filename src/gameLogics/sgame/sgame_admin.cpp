@@ -1742,10 +1742,11 @@ bool idAdminLocal::AdminKick(gentity_t *ent, sint skiparg) {
         return false;
     }
 
-    adminLocal.AdminCreateBan(ent, vic->client->pers.netname,
-                              vic->client->pers.guid, vic->client->pers.ip,
-                              adminLocal.AdminParseTime(va("1s%s", g_adminTempBan.string)),
-                              (*reason) ? reason : "kicked by admin");
+    // Dushan - fix me
+    //adminLocal.AdminCreateBan(ent, vic->client->pers.netname,
+    //                          vic->client->pers.guid, vic->client->pers.ip,
+    //                          adminLocal.AdminParseTime(va("1s%s", g_adminTempBan.string)),
+    //                          (*reason) ? reason : "kicked by admin");
 
     if(g_admin.string[0]) {
         adminLocal.AdminWriteConfig();
