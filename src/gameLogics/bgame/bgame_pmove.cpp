@@ -1497,12 +1497,18 @@ void idBothGamesLocal::LadderMove(void) {
 
     scale = CmdScale(&pm->cmd);
 
-    for(i = 0; i < 3; i++) {
-        wishvel[i] = scale * pml.forward[i] * pm->cmd.forwardmove + scale *
-                     pml.right[i] * pm->cmd.rightmove;
-    }
+    // user intentions [what the user is attempting to do]
+    if(!scale) {
+        wishvel[0] = 0;
+        wishvel[1] = 0;
+        wishvel[2] = 0;
+    } else { // if they're trying to move... lets calculate it
+        for(i = 0; i < 3; i++) {
+            wishvel[i] = pml.right[i] * pm->cmd.rightmove;
+        }
 
-    wishvel[2] += scale * pm->cmd.upmove;
+        wishvel[2] += scale * pm->cmd.upmove;
+    }
 
     VectorCopy(wishvel, wishdir);
     wishspeed = VectorNormalize(wishdir);

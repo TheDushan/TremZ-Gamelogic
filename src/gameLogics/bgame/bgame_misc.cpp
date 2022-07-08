@@ -2647,6 +2647,21 @@ void idBothGamesLocal::EvaluateTrajectory(const trajectory_t *tr,
             VectorMA(tr->trBase, deltaTime, tr->trDelta, result);
             break;
 
+        case TR_NONLINEAR_STOP:
+            if(atTime > tr->trTime + tr->trDuration) {
+                atTime = tr->trTime + tr->trDuration;
+            }
+
+            if(atTime - tr->trTime > tr->trDuration || atTime - tr->trTime <= 0) {
+                deltaTime = 0;
+            } else {
+                deltaTime = tr->trDuration * 0.001f * ((float32)cos(DEG2RAD(90.0f -
+                                                       (90.0f * ((float32)(atTime - tr->trTime)) / (float32)tr->trDuration))));
+            }
+
+            VectorMA(tr->trBase, deltaTime, tr->trDelta, result);
+            break;
+
         case TR_GRAVITY:
             deltaTime = (atTime - tr->trTime) * 0.001;   // milliseconds to seconds
             VectorMA(tr->trBase, deltaTime, tr->trDelta, result);
@@ -2663,7 +2678,7 @@ void idBothGamesLocal::EvaluateTrajectory(const trajectory_t *tr,
 
         default:
             Com_Error(ERR_DROP,
-                      "idBothGamesLocal::EvaluateTrajectory: unknown trType: %i", tr->trTime);
+                      "idBothGamesLocal::EvaluateTrajectory: unknown trType: %i", tr->trType);
             break;
     }
 }
@@ -2691,13 +2706,13 @@ void idBothGamesLocal::EvaluateTrajectoryDelta(const trajectory_t *tr,
 
         case TR_SINE:
             deltaTime = (atTime - tr->trTime) / (float32)tr->trDuration;
-            phase = cos(deltaTime * M_PI * 2);    // derivative of sin = cos
-            phase *= 0.5;
+            phase = cos(deltaTime * M_PI * 2);     // derivative of sin = cos
+            phase *= M_PI * 2 * 1000 / (float32)tr->trDuration;
             VectorScale(tr->trDelta, phase, result);
             break;
 
         case TR_LINEAR_STOP:
-            if(atTime > tr->trTime + tr->trDuration) {
+            if(atTime > tr->trTime + tr->trDuration || atTime < tr->trTime) {
                 VectorClear(result);
                 return;
             }
@@ -2717,13 +2732,13 @@ void idBothGamesLocal::EvaluateTrajectoryDelta(const trajectory_t *tr,
             break;
 
         case TR_GRAVITY:
-            deltaTime = (atTime - tr->trTime) * 0.001;    // milliseconds to seconds
+            deltaTime = (atTime - tr->trTime) * 0.001f;    // milliseconds to seconds
             VectorCopy(tr->trDelta, result);
             result[ 2 ] -= DEFAULT_GRAVITY * deltaTime;   // FIXME: local gravity...
             break;
 
         case TR_BUOYANCY:
-            deltaTime = (atTime - tr->trTime) * 0.001;    // milliseconds to seconds
+            deltaTime = (atTime - tr->trTime) * 0.001f;    // milliseconds to seconds
             VectorCopy(tr->trDelta, result);
             result[ 2 ] += DEFAULT_GRAVITY * deltaTime;   // FIXME: local gravity...
             break;

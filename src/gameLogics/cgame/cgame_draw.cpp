@@ -1992,7 +1992,7 @@ void idCGameDraw::DrawStageReport(rectDef_t *rect, float32 text_x,
 DrawFPS
 ==================
 */
-#define FPS_FRAMES  20
+#define FPS_FRAMES  40
 #define FPS_STRING  "fps"
 void idCGameDraw::DrawFPS(rectDef_t *rect, float32 text_x, float32 text_y,
                           float32 scale, vec4_t color, sint textalign, sint textvalign,
