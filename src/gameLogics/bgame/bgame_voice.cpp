@@ -2,7 +2,7 @@
 // Copyright(C) 1999 - 2005 Id Software, Inc.
 // Copyright(C) 2000 - 2006 Tim Angus
 // Copyright(C) 2008 Tony J. White
-// Copyright(C) 2018 - 2022 Dusan Jocic <dusanjocic@msn.com>
+// Copyright(C) 2018 - 2023 Dusan Jocic <dusanjocic@msn.com>
 //
 // This file is part of OpenWolf.
 //
