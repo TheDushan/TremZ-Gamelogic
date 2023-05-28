@@ -120,7 +120,8 @@ voice_t *idBothGamesLocal::VoiceList(void) {
         }
 
         // trap_FS_GetFileList() buffer has overflowed
-        if(!trap_FS_FOpenFile(va("voice/%s", filePtr), nullptr, FS_READ)) {
+        if(!trap_FS_FOpenFile(va(nullptr, "voice/%s", filePtr), nullptr,
+                              FS_READ)) {
             Com_Printf(S_COLOR_YELLOW "WARNING: BG_VoiceList(): detected "
                        " an invalid .voice file \"%s\" in directory listing.  You have"
                        "probably named one or more .voice files with outrageously long "
@@ -251,7 +252,7 @@ bool idBothGamesLocal::VoiceParseTrack(sint handle,
             foundText = true;
 
             if(strlen(token.string) >= MAX_SAY_TEXT) {
-                VoiceParseError(handle, va("idBothGamesLocal::VoiceParseTrack(): "
+                VoiceParseError(handle, va(nullptr, "idBothGamesLocal::VoiceParseTrack(): "
                                            "\"text\" value " "\"%s\" exceeds MAX_SAY_TEXT length", token.string));
             }
 
@@ -273,7 +274,7 @@ bool idBothGamesLocal::VoiceParseTrack(sint handle,
             continue;
         } else {
             VoiceParseError(handle,
-                            va("idBothGamesLocal::VoiceParseTrack(): unknown token \"%s\"",
+                            va(nullptr, "idBothGamesLocal::VoiceParseTrack(): unknown token \"%s\"",
                                token.string));
         }
     }
@@ -304,7 +305,8 @@ voiceTrack_t *idBothGamesLocal::VoiceParseCommand(sint handle) {
                 continue;
 
             } else {
-                VoiceParseError(handle, va("BG_VoiceParseCommand(): parse error at \"%s\"",
+                VoiceParseError(handle, va(nullptr,
+                                           "BG_VoiceParseCommand(): parse error at \"%s\"",
                                            token.string));
             }
         }
@@ -359,7 +361,7 @@ voiceCmd_t *idBothGamesLocal::VoiceParse(valueType *name) {
     bool parsingCmd = false;
     sint handle;
 
-    handle = trap_PC_LoadSource(va("voice/%s.voice", name));
+    handle = trap_PC_LoadSource(va(nullptr, "voice/%s.voice", name));
 
     if(!handle) {
         return nullptr;

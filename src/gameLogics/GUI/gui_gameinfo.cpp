@@ -94,7 +94,7 @@ sint UI_ParseInfos(valueType *buf, sint max, valueType *infos[]) {
 
         //NOTE: extra space for arena number
         infos[count] = (valueType *)UI_Alloc(strlen(info) + strlen("\\num\\") +
-                                             strlen(va("%d", MAX_ARENAS)) + 1);
+                                             strlen(va(nullptr, "%d", MAX_ARENAS)) + 1);
 
         if(infos[count]) {
             strcpy(infos[count], info);
@@ -118,12 +118,13 @@ static void UI_LoadArenasFromFile(valueType *filename) {
     len = trap_FS_FOpenFile(filename, &f, FS_READ);
 
     if(!f) {
-        trap_Print(va(S_COLOR_RED "file not found: %s\n", filename));
+        trap_Print(va(nullptr, S_COLOR_RED "file not found: %s\n", filename));
         return;
     }
 
     if(len >= MAX_ARENAS_TEXT) {
-        trap_Print(va(S_COLOR_RED "file too large: %s is %i, max allowed is %i",
+        trap_Print(va(nullptr, S_COLOR_RED
+                      "file too large: %s is %i, max allowed is %i",
                       filename, len, MAX_ARENAS_TEXT));
         trap_FS_FCloseFile(f);
         return;
@@ -177,7 +178,7 @@ void UI_LoadArenas(void) {
         UI_LoadArenasFromFile(filename);
     }
 
-    trap_Print(va("[skipnotify]%i arenas parsed\n", ui_numArenas));
+    trap_Print(va(nullptr, "[skipnotify]%i arenas parsed\n", ui_numArenas));
 
     if(UI_OutOfMemory()) {
         trap_Print(
@@ -196,7 +197,7 @@ void UI_LoadArenas(void) {
                     ui_arenaInfos[n], "longname"));
         uiInfo.mapList[uiInfo.mapCount].levelShot = -1;
         uiInfo.mapList[uiInfo.mapCount].imageName = String_Alloc(
-                    va("levelshots/%s", uiInfo.mapList[uiInfo.mapCount].mapLoadName));
+                    va(nullptr, "levelshots/%s", uiInfo.mapList[uiInfo.mapCount].mapLoadName));
 
         uiInfo.mapCount++;
 
@@ -222,12 +223,13 @@ static void UI_LoadBotsFromFile(valueType *filename) {
     len = trap_FS_FOpenFile(filename, &f, FS_READ);
 
     if(!f) {
-        trap_Print(va(S_COLOR_RED "file not found: %s\n", filename));
+        trap_Print(va(nullptr, S_COLOR_RED "file not found: %s\n", filename));
         return;
     }
 
     if(len >= MAX_BOTS_TEXT) {
-        trap_Print(va(S_COLOR_RED "file too large: %s is %i, max allowed is %i",
+        trap_Print(va(nullptr, S_COLOR_RED
+                      "file too large: %s is %i, max allowed is %i",
                       filename, len, MAX_BOTS_TEXT));
         trap_FS_FCloseFile(f);
         return;
@@ -280,7 +282,7 @@ void UI_LoadBots(void) {
         UI_LoadBotsFromFile(filename);
     }
 
-    trap_Print(va("%i bots parsed\n", ui_numBots));
+    trap_Print(va(nullptr, "%i bots parsed\n", ui_numBots));
 }
 
 
@@ -291,7 +293,7 @@ UI_GetBotInfoByNumber
 */
 valueType *UI_GetBotInfoByNumber(sint num) {
     if(num < 0 || num >= ui_numBots) {
-        trap_Print(va(S_COLOR_RED "Invalid bot number: %i\n", num));
+        trap_Print(va(nullptr, S_COLOR_RED "Invalid bot number: %i\n", num));
         return nullptr;
     }
 

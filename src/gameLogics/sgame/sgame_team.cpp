@@ -74,7 +74,7 @@ void idSGameTeam::PrintMsg(gentity_t *ent, pointer fmt, ...) {
     }
 
     trap_SendServerCommand(((ent == nullptr) ? -1 : ent - g_entities),
-                           va("print \"%s\"", msg));
+                           va(nullptr, "print \"%s\"", msg));
 }
 
 /*
@@ -391,7 +391,8 @@ void idSGameTeam::TeamplayInfoMessage(gentity_t *ent) {
         }
     }
 
-    trap_SendServerCommand(ent - g_entities, va("tinfo %i %s", cnt, string));
+    trap_SendServerCommand(ent - g_entities, va(nullptr, "tinfo %i %s", cnt,
+                           string));
 }
 
 /*

@@ -59,7 +59,7 @@ void idSGameSession::WriteClientSessionData(gclient_t *client) {
     pointer  s;
     pointer  var;
 
-    s = va("%i %i %i %i %s",
+    s = va(nullptr, "%i %i %i %i %s",
            client->sess.spectatorTime,
            client->sess.spectatorState,
            client->sess.spectatorClient,
@@ -67,7 +67,7 @@ void idSGameSession::WriteClientSessionData(gclient_t *client) {
            Com_ClientListString(&client->sess.ignoreList)
           );
 
-    var = va("session%i", (sint)(client - level.clients));
+    var = va(nullptr, "session%i", (sint)(client - level.clients));
 
     trap_Cvar_Set(var, s);
 }
@@ -86,7 +86,7 @@ void idSGameSession::ReadSessionData(gclient_t *client) {
     sint         restartTeam;
     valueType        ignorelist[17];
 
-    var = va("session%i", (sint)(client - level.clients));
+    var = va(nullptr, "session%i", (sint)(client - level.clients));
     trap_Cvar_VariableStringBuffer(var, s, sizeof(s));
 
     sscanf(s, "%i %i %i %i %16s",
@@ -157,7 +157,7 @@ void idSGameSession::WriteSessionData(void) {
     }
 
     // write values for sv_maxclients and sv_democlients because they invalidate session data
-    trap_Cvar_Set("session", va("%i %i",
+    trap_Cvar_Set("session", va(nullptr, "%i %i",
                                 trap_Cvar_VariableIntegerValue("sv_maxclients"),
                                 trap_Cvar_VariableIntegerValue("sv_democlients")));
 }

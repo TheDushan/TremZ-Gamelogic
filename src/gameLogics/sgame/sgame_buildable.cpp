@@ -3690,7 +3690,7 @@ void idSGameBuildable::LayoutSave(valueType *name) {
             continue;
         }
 
-        s = va("%i %f %f %f %f %f %f %f %f %f %f %f %f\n",
+        s = va(nullptr, "%i %f %f %f %f %f %f %f %f %f %f %f %f\n",
                ent->s.modelindex,
                ent->s.pos.trBase[ 0 ],
                ent->s.pos.trBase[ 1 ],
@@ -3724,7 +3724,7 @@ sint idSGameBuildable::LayoutList(pointer map, valueType *list, sint len) {
     valueType *filePtr;
 
     Q_strcat(layouts, sizeof(layouts), "*BUILTIN* ");
-    numFiles = trap_FS_GetFileList(va("layouts/%s", map), ".dat",
+    numFiles = trap_FS_GetFileList(va(nullptr, "layouts/%s", map), ".dat",
                                    fileList, sizeof(fileList));
     filePtr = fileList;
 
@@ -3901,7 +3901,8 @@ void idSGameBuildable::LayoutLoad(void) {
     }
 
     trap_Cvar_VariableStringBuffer("mapname", map, sizeof(map));
-    len = trap_FS_FOpenFile(va("layouts/%s/%s.dat", map, level.layout),
+    len = trap_FS_FOpenFile(va(nullptr, "layouts/%s/%s.dat", map,
+                               level.layout),
                             &f, FS_READ);
 
     if(len < 0) {
@@ -3919,7 +3920,7 @@ void idSGameBuildable::LayoutLoad(void) {
         if(i >= sizeof(line) - 1) {
             idSGameMain::Printf(S_COLOR_RED
                                 "ERROR: line overflow in %s before \"%s\"\n",
-                                va("layouts/%s/%s.dat", map, level.layout), line);
+                                va(nullptr, "layouts/%s/%s.dat", map, level.layout), line);
             return;
         }
 

@@ -321,7 +321,8 @@ void idSGameCmds::ScoreboardMessage(gentity_t *ent) {
         stringlength += j;
     }
 
-    trap_SendServerCommand(ent - g_entities, va("scores %i %i %i%s", i,
+    trap_SendServerCommand(ent - g_entities, va(nullptr, "scores %i %i %i%s",
+                           i,
                            level.alienKills, level.humanKills, string));
 }
 
@@ -457,7 +458,7 @@ void idSGameCmds::Cmd_God_f(gentity_t *ent) {
         msg = "godmode ON\n";
     }
 
-    trap_SendServerCommand(ent - g_entities, va("print \"%s\"", msg));
+    trap_SendServerCommand(ent - g_entities, va(nullptr, "print \"%s\"", msg));
 }
 
 
@@ -481,7 +482,7 @@ void idSGameCmds::Cmd_Notarget_f(gentity_t *ent) {
         msg = "notarget ON\n";
     }
 
-    trap_SendServerCommand(ent - g_entities, va("print \"%s\"", msg));
+    trap_SendServerCommand(ent - g_entities, va(nullptr, "print \"%s\"", msg));
 }
 
 
@@ -503,7 +504,7 @@ void idSGameCmds::Cmd_Noclip_f(gentity_t *ent) {
 
     ent->client->noclip = !ent->client->noclip;
 
-    trap_SendServerCommand(ent - g_entities, va("print \"%s\"", msg));
+    trap_SendServerCommand(ent - g_entities, va(nullptr, "print \"%s\"", msg));
 }
 
 
@@ -576,7 +577,8 @@ void idSGameCmds::Cmd_Team_f(gentity_t *ent) {
     trap_Argv(1, s, sizeof(s));
 
     if(!s[ 0 ]) {
-        trap_SendServerCommand(ent - g_entities, va("print \"team: %i\n\"",
+        trap_SendServerCommand(ent - g_entities, va(nullptr,
+                               "print \"team: %i\n\"",
                                oldteam));
         return;
     }
@@ -636,7 +638,7 @@ void idSGameCmds::Cmd_Team_f(gentity_t *ent) {
 
             default:
                 trap_SendServerCommand(ent - g_entities,
-                                       va("print \"Unknown team: %s\n\"", s));
+                                       va(nullptr, "print \"Unknown team: %s\n\"", s));
                 return;
         }
 
@@ -648,7 +650,7 @@ void idSGameCmds::Cmd_Team_f(gentity_t *ent) {
     if(team != TEAM_NONE && g_maxGameClients.integer &&
             level.numPlayingClients >= g_maxGameClients.integer) {
         trap_SendServerCommand(ent - g_entities,
-                               va("print \"The maximum number of "
+                               va(nullptr, "print \"The maximum number of "
                                   "playing clients has been reached (g_maxGameClients = %d)\n\"",
                                   g_maxGameClients.integer));
         return;
@@ -719,7 +721,8 @@ void idSGameCmds::SayTo(gentity_t *ent, gentity_t *other, sint mode,
         ignore = true;
     }
 
-    trap_SendServerCommand(other - g_entities, va("%s \"%s%s%c%c%s%s\"",
+    trap_SendServerCommand(other - g_entities, va(nullptr,
+                           "%s \"%s%s%c%c%s%s\"",
                            mode == SAY_TEAM ? "tchat" : "chat",
                            (ignore) ? "[skipnotify]" : "",
                            name, Q_COLOR_ESCAPE, color, message, S_COLOR_WHITE));
@@ -738,7 +741,7 @@ void idSGameCmds::Say(gentity_t *ent, gentity_t *target, sint mode,
 
     if(g_chatTeamPrefix.integer) {
         prefix = bggame->TeamName(ent->client->pers.teamSelection);
-        prefix = va("[%c] ", toupper(*prefix));
+        prefix = va(nullptr, "[%c] ", toupper(*prefix));
     } else {
         prefix = "";
     }
@@ -819,7 +822,7 @@ void idSGameCmds::Cmd_SayArea_f(gentity_t *ent) {
 
     if(g_chatTeamPrefix.integer) {
         prefix = bggame->TeamName(ent->client->pers.teamSelection);
-        prefix = va("[%c] ", toupper(*prefix));
+        prefix = va(nullptr, "[%c] ", toupper(*prefix));
     } else {
         prefix = "";
     }
@@ -967,19 +970,21 @@ void idSGameCmds::Cmd_VSay_f(gentity_t *ent) {
 
     if(trap_Argc() < 2) {
         trap_SendServerCommand(ent - g_entities,
-                               va("print \"usage: %s command [text] \n\"", arg));
+                               va(nullptr, "print \"usage: %s command [text] \n\"", arg));
         return;
     }
 
     if(!level.voices) {
         trap_SendServerCommand(ent - g_entities,
-                               va("print \"%s: voice system is not installed on this server\n\"", arg));
+                               va(nullptr, "print \"%s: voice system is not installed on this server\n\"",
+                                  arg));
         return;
     }
 
     if(!g_voiceChats.integer) {
         trap_SendServerCommand(ent - g_entities,
-                               va("print \"%s: voice system administratively disabled on this server\n\"",
+                               va(nullptr,
+                                  "print \"%s: voice system administratively disabled on this server\n\"",
                                   arg));
         return;
     }
@@ -1003,8 +1008,8 @@ void idSGameCmds::Cmd_VSay_f(gentity_t *ent) {
     voice = bggame->VoiceByName(level.voices, voiceName);
 
     if(!voice) {
-        trap_SendServerCommand(ent - g_entities, va(
-                                   "print \"%s: voice '%s' not found\n\"", vsay, voiceName));
+        trap_SendServerCommand(ent - g_entities, va(nullptr,
+                               "print \"%s: voice '%s' not found\n\"", vsay, voiceName));
         return;
     }
 
@@ -1012,9 +1017,9 @@ void idSGameCmds::Cmd_VSay_f(gentity_t *ent) {
     cmd = bggame->VoiceCmdFind(voice->cmds, voiceCmd, &cmdNum);
 
     if(!cmd) {
-        trap_SendServerCommand(ent - g_entities, va(
-                                   "print \"%s: command '%s' not found in voice '%s'\n\"",
-                                   vsay, voiceCmd, voiceName));
+        trap_SendServerCommand(ent - g_entities, va(nullptr,
+                               "print \"%s: command '%s' not found in voice '%s'\n\"",
+                               vsay, voiceCmd, voiceName));
         return;
     }
 
@@ -1032,12 +1037,12 @@ void idSGameCmds::Cmd_VSay_f(gentity_t *ent) {
                                    &trackNum);
 
     if(!track) {
-        trap_SendServerCommand(ent - g_entities, va(
-                                   "print \"%s: no available track for command '%s', team %d, "
-                                   "class %d, weapon %d, and enthusiasm %d in voice '%s'\n\"",
-                                   vsay, voiceCmd, ent->client->pers.teamSelection,
-                                   ent->client->pers.classSelection, weapon,
-                                   (sint)ent->client->voiceEnthusiasm, voiceName));
+        trap_SendServerCommand(ent - g_entities, va(nullptr,
+                               "print \"%s: no available track for command '%s', team %d, "
+                               "class %d, weapon %d, and enthusiasm %d in voice '%s'\n\"",
+                               vsay, voiceCmd, ent->client->pers.teamSelection,
+                               ent->client->pers.classSelection, weapon,
+                               (sint)ent->client->voiceEnthusiasm, voiceName));
         return;
     }
 
@@ -1054,15 +1059,15 @@ void idSGameCmds::Cmd_VSay_f(gentity_t *ent) {
     switch(vchan) {
         case VOICE_CHAN_ALL:
         case VOICE_CHAN_LOCAL:
-            trap_SendServerCommand(-1, va(
-                                       "voice %d %d %d %d \"%s\"\n",
-                                       (sint)(ent - g_entities), vchan, cmdNum, trackNum, arg));
+            trap_SendServerCommand(-1, va(nullptr,
+                                          "voice %d %d %d %d \"%s\"\n",
+                                          (sint)(ent - g_entities), vchan, cmdNum, trackNum, arg));
             break;
 
         case VOICE_CHAN_TEAM:
-            idSGameUtils::TeamCommand(ent->client->pers.teamSelection, va(
-                                          "voice %d %d %d %d \"%s\"\n",
-                                          (sint)(ent - g_entities), vchan, cmdNum, trackNum, arg));
+            idSGameUtils::TeamCommand(ent->client->pers.teamSelection, va(nullptr,
+                                      "voice %d %d %d %d \"%s\"\n",
+                                      (sint)(ent - g_entities), vchan, cmdNum, trackNum, arg));
             break;
 
         default:
@@ -1080,7 +1085,8 @@ void idSGameCmds::Cmd_Where_f(gentity_t *ent) {
         return;
     }
 
-    trap_SendServerCommand(ent - g_entities, va("print \"origin: %f %f %f\n\"",
+    trap_SendServerCommand(ent - g_entities, va(nullptr,
+                           "print \"origin: %f %f %f\n\"",
                            ent->s.origin[ 0 ], ent->s.origin[ 1 ], ent->s.origin[ 2 ]));
 }
 
@@ -1112,7 +1118,8 @@ void idSGameCmds::Cmd_CallVote_f(gentity_t *ent) {
             ent->client->pers.voteCount >= g_voteLimit.integer &&
             !adminLocal.AdminPermission(ent, ADMF_NO_VOTE_LIMIT)) {
         trap_SendServerCommand(ent - g_entities,
-                               va("print \"You have already called the maximum number of votes (%d)\n\"",
+                               va(nullptr,
+                                  "print \"You have already called the maximum number of votes (%d)\n\"",
                                   g_voteLimit.integer));
         return;
     }
@@ -1130,7 +1137,8 @@ void idSGameCmds::Cmd_CallVote_f(gentity_t *ent) {
     // if there is still a vote to be executed
     if(level.voteExecuteTime) {
         level.voteExecuteTime = 0;
-        trap_SendConsoleCommand(EXEC_APPEND, va("%s\n", level.voteString));
+        trap_SendConsoleCommand(EXEC_APPEND, va(nullptr, "%s\n",
+                                                level.voteString));
     }
 
     level.votePassThreshold = 50;
@@ -1225,8 +1233,9 @@ void idSGameCmds::Cmd_CallVote_f(gentity_t *ent) {
         Q_vsprintf_s(level.voteDisplayString, sizeof(level.voteDisplayString),
                      sizeof(level.voteDisplayString), "Restart current map");
     } else if(!Q_stricmp(arg1, "map")) {
-        if(!trap_FS_FOpenFile(va("maps/%s.bsp", arg2), nullptr, FS_READ)) {
-            trap_SendServerCommand(ent - g_entities, va("print \"callvote: "
+        if(!trap_FS_FOpenFile(va(nullptr, "maps/%s.bsp", arg2), nullptr,
+                              FS_READ)) {
+            trap_SendServerCommand(ent - g_entities, va(nullptr, "print \"callvote: "
                                    "'maps/%s.bsp' could not be found on the server\n\"", arg2));
             return;
         }
@@ -1249,12 +1258,12 @@ void idSGameCmds::Cmd_CallVote_f(gentity_t *ent) {
             return;
         } else if(g_suddenDeath.integer) {
             trap_SendServerCommand(ent - g_entities,
-                                   va("print \"callvote: Sudden Death has already begun\n\""));
+                                   va(nullptr, "print \"callvote: Sudden Death has already begun\n\""));
             return;
         } else if(idSGameMain::TimeTilSuddenDeath() <=
                   g_suddenDeathVoteDelay.integer * 1000) {
             trap_SendServerCommand(ent - g_entities,
-                                   va("print \"callvote: Sudden Death is already immenent\n\""));
+                                   va(nullptr, "print \"callvote: Sudden Death is already immenent\n\""));
             return;
         } else {
             level.votePassThreshold = g_suddenDeathVotePercent.integer;
@@ -1265,7 +1274,7 @@ void idSGameCmds::Cmd_CallVote_f(gentity_t *ent) {
 
             if(g_suddenDeathVoteDelay.integer)
                 Q_strcat(level.voteDisplayString, sizeof(level.voteDisplayString),
-                         va(" in %d seconds", g_suddenDeathVoteDelay.integer));
+                         va(nullptr, " in %d seconds", g_suddenDeathVoteDelay.integer));
 
         }
     } else {
@@ -1279,10 +1288,10 @@ void idSGameCmds::Cmd_CallVote_f(gentity_t *ent) {
 
     if(level.votePassThreshold != 50) {
         Q_strcat(level.voteDisplayString, sizeof(level.voteDisplayString),
-                 va(" (Needs > %d percent)", level.votePassThreshold));
+                 va(nullptr, " (Needs > %d percent)", level.votePassThreshold));
     }
 
-    trap_SendServerCommand(-1, va("print \"%s" S_COLOR_WHITE
+    trap_SendServerCommand(-1, va(nullptr, "print \"%s" S_COLOR_WHITE
                                   " called a vote\n\"", ent->client->pers.netname));
     idSGameMain::Printf("'%s' called a vote for '%s'\n",
                         ent->client->pers.netname,
@@ -1302,7 +1311,7 @@ void idSGameCmds::Cmd_CallVote_f(gentity_t *ent) {
 
     ent->client->ps.eFlags |= EF_VOTED;
 
-    trap_SetConfigstring(CS_VOTE_TIME, va("%i", level.voteTime));
+    trap_SetConfigstring(CS_VOTE_TIME, va(nullptr, "%i", level.voteTime));
     trap_SetConfigstring(CS_VOTE_STRING, level.voteDisplayString);
     trap_SetConfigstring(CS_VOTE_YES, "1");
     trap_SetConfigstring(CS_VOTE_NO, "0");
@@ -1371,7 +1380,8 @@ void idSGameCmds::Cmd_CallTeamVote_f(gentity_t *ent) {
             ent->client->pers.voteCount >= g_voteLimit.integer &&
             !adminLocal.AdminPermission(ent, ADMF_NO_VOTE_LIMIT)) {
         trap_SendServerCommand(ent - g_entities,
-                               va("print \"You have already called the maximum number of votes (%d)\n\"",
+                               va(nullptr,
+                                  "print \"You have already called the maximum number of votes (%d)\n\"",
                                   g_voteLimit.integer));
         return;
     }
@@ -1506,7 +1516,7 @@ void idSGameCmds::Cmd_CallTeamVote_f(gentity_t *ent) {
     ent->client->pers.voteCount++;
 
     idSGameUtils::TeamCommand((team_t)team,
-                              va("print \"%s " S_COLOR_WHITE "called a team vote\n\"",
+                              va(nullptr, "print \"%s " S_COLOR_WHITE "called a team vote\n\"",
                                  ent->client->pers.netname));
 
     idSGameMain::Printf("'%s' called a teamvote for '%s'\n",
@@ -1527,7 +1537,7 @@ void idSGameCmds::Cmd_CallTeamVote_f(gentity_t *ent) {
     ent->client->ps.eFlags |= EF_TEAMVOTED;
 
     trap_SetConfigstring(CS_TEAMVOTE_TIME + cs_offset,
-                         va("%i", level.teamVoteTime[ cs_offset ]));
+                         va(nullptr, "%i", level.teamVoteTime[ cs_offset ]));
     trap_SetConfigstring(CS_TEAMVOTE_STRING + cs_offset,
                          level.teamVoteDisplayString[ cs_offset ]);
     trap_SetConfigstring(CS_TEAMVOTE_YES + cs_offset, "1");
@@ -2001,7 +2011,7 @@ void idSGameCmds::Cmd_ActivateItem_f(gentity_t *ent) {
         }
     } else {
         trap_SendServerCommand(ent - g_entities,
-                               va("print \"You don't have the %s\n\"", s));
+                               va(nullptr, "print \"You don't have the %s\n\"", s));
     }
 }
 
@@ -2024,7 +2034,7 @@ void idSGameCmds::Cmd_DeActivateItem_f(gentity_t *ent) {
         bggame->DeactivateUpgrade(upgrade, ent->client->ps.stats);
     } else {
         trap_SendServerCommand(ent - g_entities,
-                               va("print \"You don't have the %s\n\"", s));
+                               va(nullptr, "print \"You don't have the %s\n\"", s));
     }
 }
 
@@ -2065,7 +2075,7 @@ void idSGameCmds::Cmd_ToggleItem_f(gentity_t *ent) {
         }
     } else {
         trap_SendServerCommand(ent - g_entities,
-                               va("print \"You don't have the %s\n\"", s));
+                               va(nullptr, "print \"You don't have the %s\n\"", s));
     }
 }
 
@@ -2198,14 +2208,14 @@ void idSGameCmds::Cmd_Buy_f(gentity_t *ent) {
         // Only humans can buy stuff
         if(bggame->Upgrade(upgrade)->team != TEAM_HUMANS) {
             trap_SendServerCommand(ent - g_entities,
-                                   va("print \"You can't buy alien items\n\""));
+                                   va(nullptr, "print \"You can't buy alien items\n\""));
             return;
         }
 
         //are we /allowed/ to buy this?
         if(!bggame->Upgrade(upgrade)->purchasable) {
             trap_SendServerCommand(ent - g_entities,
-                                   va("print \"You can't buy this item\n\""));
+                                   va(nullptr, "print \"You can't buy this item\n\""));
             return;
         }
 
@@ -2213,7 +2223,7 @@ void idSGameCmds::Cmd_Buy_f(gentity_t *ent) {
         if(!bggame->UpgradeAllowedInStage(upgrade,
                                           (stage_t)g_humanStage.integer) || !bggame->UpgradeIsAllowed(upgrade)) {
             trap_SendServerCommand(ent - g_entities,
-                                   va("print \"You can't buy this item\n\""));
+                                   va(nullptr, "print \"You can't buy this item\n\""));
             return;
         }
 
@@ -2879,7 +2889,8 @@ void idSGameCmds::Cmd_PTRCVerify_f(gentity_t *ent) {
         connection = idSGamePtr::GenerateNewConnection(ent->client);
 
         if(connection) {
-            trap_SendServerCommand(ent->client->ps.clientNum, va("ptrcissue %d",
+            trap_SendServerCommand(ent->client->ps.clientNum, va(nullptr,
+                                   "ptrcissue %d",
                                    connection->ptrCode));
         }
     }
@@ -2930,7 +2941,7 @@ void idSGameCmds::Cmd_PTRCRestore_f(gentity_t *ent) {
         connection->oldClient = ent - g_entities;
     } else {
         trap_SendServerCommand(ent - g_entities,
-                               va("print \"'%d' is not a valid PTR code\n\"", code));
+                               va(nullptr, "print \"'%d' is not a valid PTR code\n\"", code));
     }
 }
 
@@ -2949,7 +2960,7 @@ void idSGameCmds::Cmd_Ignore_f(gentity_t *ent) {
     }
 
     if(trap_Argc() < 2) {
-        trap_SendServerCommand(ent - g_entities, va("print \"[skipnotify]"
+        trap_SendServerCommand(ent - g_entities, va(nullptr, "print \"[skipnotify]"
                                "usage: %s [clientNum | partial name match]\n\"", cmd));
         return;
     }
@@ -2958,7 +2969,7 @@ void idSGameCmds::Cmd_Ignore_f(gentity_t *ent) {
     matches = ClientNumbersFromString(name, pids, MAX_CLIENTS);
 
     if(matches < 1) {
-        trap_SendServerCommand(ent - g_entities, va("print \"[skipnotify]"
+        trap_SendServerCommand(ent - g_entities, va(nullptr, "print \"[skipnotify]"
                                "%s: no clients match the name '%s'\n\"", cmd, name));
         return;
     }
@@ -2968,11 +2979,11 @@ void idSGameCmds::Cmd_Ignore_f(gentity_t *ent) {
             if(!bggame->ClientListTest(&ent->client->sess.ignoreList, pids[ i ])) {
                 bggame->ClientListAdd(&ent->client->sess.ignoreList, pids[ i ]);
                 sgameLocal.ClientUserinfoChanged(ent->client->ps.clientNum);
-                trap_SendServerCommand(ent - g_entities, va("print \"[skipnotify]"
+                trap_SendServerCommand(ent - g_entities, va(nullptr, "print \"[skipnotify]"
                                        "ignore: added %s^7 to your ignore list\n\"",
                                        level.clients[ pids[ i ] ].pers.netname));
             } else {
-                trap_SendServerCommand(ent - g_entities, va("print \"[skipnotify]"
+                trap_SendServerCommand(ent - g_entities, va(nullptr, "print \"[skipnotify]"
                                        "ignore: %s^7 is already on your ignore list\n\"",
                                        level.clients[ pids[ i ] ].pers.netname));
             }
@@ -2980,11 +2991,11 @@ void idSGameCmds::Cmd_Ignore_f(gentity_t *ent) {
             if(bggame->ClientListTest(&ent->client->sess.ignoreList, pids[ i ])) {
                 bggame->ClientListRemove(&ent->client->sess.ignoreList, pids[ i ]);
                 sgameLocal.ClientUserinfoChanged(ent->client->ps.clientNum);
-                trap_SendServerCommand(ent - g_entities, va("print \"[skipnotify]"
+                trap_SendServerCommand(ent - g_entities, va(nullptr, "print \"[skipnotify]"
                                        "unignore: removed %s^7 from your ignore list\n\"",
                                        level.clients[ pids[ i ] ].pers.netname));
             } else {
-                trap_SendServerCommand(ent - g_entities, va("print \"[skipnotify]"
+                trap_SendServerCommand(ent - g_entities, va(nullptr, "print \"[skipnotify]"
                                        "unignore: %s^7 is not on your ignore list\n\"",
                                        level.clients[ pids[ i ] ].pers.netname));
             }
@@ -3000,7 +3011,7 @@ Hopefully will be able to catch that bizarro turret bug with this one
 =================
 */
 void idSGameCmds::Cmd_Test_f(gentity_t *ent) {
-    trap_SendServerCommand(ent - g_entities, va("print \""
+    trap_SendServerCommand(ent - g_entities, va(nullptr, "print \""
                            "  pointcontents = %x\n  r.contents = %x\n  targeted = %d\n\"",
                            trap_PointContents(ent->s.origin, ent - g_entities),
                            ent->r.contents, (ent->targeted) ? (sint)(ent->targeted - g_entities) :
@@ -3066,7 +3077,7 @@ void idSGameCmds::EditPlayerInventory(gentity_t *ent) {
         }
     } else {
         trap_SendServerCommand(ent - g_entities,
-                               va("print \"unknown parameter\n\""));
+                               va(nullptr, "print \"unknown parameter\n\""));
     }
 }
 
@@ -3107,7 +3118,8 @@ sint idSGameCmds::FloodLimited(gentity_t *ent) {
         return 0;
     }
 
-    trap_SendServerCommand(ent - g_entities, va("print \"You are flooding: "
+    trap_SendServerCommand(ent - g_entities, va(nullptr,
+                           "print \"You are flooding: "
                            "please wait %d second%s before trying again\n",
                            (ms + 999) / 1000, (ms > 1000) ? "s" : ""));
     return ms;
@@ -3195,7 +3207,7 @@ void idSGameCmds::Share_f(gentity_t *ent) {
             clientNum = traceEnt - g_entities;
         } else {
             trap_SendServerCommand(ent - g_entities,
-                                   va("print \"share: aim at a teammate to share %s.\n\"",
+                                   va(nullptr, "print \"share: aim at a teammate to share %s.\n\"",
                                       (team == TEAM_HUMANS) ? "credits" : "evolvepoints"));
             return;
         }
@@ -3265,7 +3277,7 @@ void idSGameCmds::Share_f(gentity_t *ent) {
     // target cannot take any more credits
     if(creds <= 0) {
         trap_SendServerCommand(ent - g_entities,
-                               va("print \"share: player cannot receive any more %s.\n\"",
+                               va(nullptr, "print \"share: player cannot receive any more %s.\n\"",
                                   (team == TEAM_HUMANS) ? "credits" : "evolvepoints"));
         return;
     }
@@ -3273,12 +3285,12 @@ void idSGameCmds::Share_f(gentity_t *ent) {
     // transfer credits
     ent->client->ps.persistant[PERS_CREDIT] -= creds;
     trap_SendServerCommand(ent - g_entities,
-                           va("print \"share: transferred %d %s to %s^7.\n\"", creds,
+                           va(nullptr, "print \"share: transferred %d %s to %s^7.\n\"", creds,
                               (team == TEAM_HUMANS) ? "credits" : "evolvepoints",
                               level.clients[clientNum].pers.netname));
     level.clients[clientNum].ps.persistant[PERS_CREDIT] += creds;
     trap_SendServerCommand(clientNum,
-                           va("print \"You have received %d %s from %s^7.\n\"", creds,
+                           va(nullptr, "print \"You have received %d %s from %s^7.\n\"", creds,
                               (team == TEAM_HUMANS) ? "credits" : "evolvepoints",
                               ent->client->pers.netname));
 
@@ -3380,7 +3392,8 @@ void idSGameLocal::ClientCommand(sint clientNum) {
 
     if(i == numCmds) {
         if(!adminLocal.AdminCmdCheck(ent, false)) {
-            trap_SendServerCommand(clientNum, va("print \"Unknown command %s\n\"",
+            trap_SendServerCommand(clientNum, va(nullptr,
+                                                 "print \"Unknown command %s\n\"",
                                                  cmd));
         }
 
@@ -3608,7 +3621,7 @@ void idSGameCmds::PrivateMessage_f(gentity_t *ent) {
     }
 
     if(SayArgc() < 3 + skipargs) {
-        adminLocal.ADMP(va("usage: %s [name|slot#] [message]\n", cmd));
+        adminLocal.ADMP(va(nullptr, "usage: %s [name|slot#] [message]\n", cmd));
         return;
     }
 
@@ -3658,35 +3671,35 @@ void idSGameCmds::PrivateMessage_f(gentity_t *ent) {
         }
 
         Q_strcat(str, sizeof(str), tmpent->client->pers.netname);
-        trap_SendServerCommand(pids[ i ], va(
-                                   "chat \"%s^%c -> ^7%s^7: (%d recipient%s): ^%c%s^7\" %i",
-                                   (ent) ? ent->client->pers.netname : "console",
-                                   color,
-                                   name,
-                                   matches,
-                                   (matches == 1) ? "" : "s",
-                                   color,
-                                   msg,
-                                   ent ? (sint)(ent - g_entities) : -1));
+        trap_SendServerCommand(pids[ i ], va(nullptr,
+                                             "chat \"%s^%c -> ^7%s^7: (%d recipient%s): ^%c%s^7\" %i",
+                                             (ent) ? ent->client->pers.netname : "console",
+                                             color,
+                                             name,
+                                             matches,
+                                             (matches == 1) ? "" : "s",
+                                             color,
+                                             msg,
+                                             ent ? (sint)(ent - g_entities) : -1));
 
         if(ent) {
-            trap_SendServerCommand(pids[ i ], va(
-                                       "print \">> to reply, say: /m %d [your message] <<\n\"",
-                                       (sint)(ent - g_entities)));
+            trap_SendServerCommand(pids[ i ], va(nullptr,
+                                                 "print \">> to reply, say: /m %d [your message] <<\n\"",
+                                                 (sint)(ent - g_entities)));
         }
 
-        trap_SendServerCommand(pids[ i ], va(
-                                   "cp \"^%cprivate message from ^7%s^7\"", color,
-                                   (ent) ? ent->client->pers.netname : "console"));
+        trap_SendServerCommand(pids[ i ], va(nullptr,
+                                             "cp \"^%cprivate message from ^7%s^7\"", color,
+                                             (ent) ? ent->client->pers.netname : "console"));
     }
 
     if(!matches)
         adminLocal.ADMP(
-            va("^3No player matching ^7\'%s^7\' ^3to send message to.\n",
+            va(nullptr, "^3No player matching ^7\'%s^7\' ^3to send message to.\n",
                name));
     else {
-        adminLocal.ADMP(va("^%cPrivate message: ^7%s\n", color, msg));
-        adminLocal.ADMP(va("%s\n", str));
+        adminLocal.ADMP(va(nullptr, "^%cPrivate message: ^7%s\n", color, msg));
+        adminLocal.ADMP(va(nullptr, "%s\n", str));
 
         idSGameMain::LogPrintf("%s: %s^7: %s^7: %s\n",
                                (teamonly) ? "tprivmsg" : "privmsg",
@@ -3709,7 +3722,7 @@ void idSGameCmds::PrivateMessage_f(gentity_t *ent) {
             Q_strcat(str, sizeof(str), tmpent->client->pers.netname);
         }
 
-        adminLocal.ADMP(va("%s\n", str));
+        adminLocal.ADMP(va(nullptr, "%s\n", str));
     }
 }
 
@@ -3754,7 +3767,7 @@ void idSGameCmds::AdminMessage_f(gentity_t *ent) {
     }
 
     if(SayArgc() < 2 + skiparg) {
-        adminLocal.ADMP(va("usage: %s [message]\n", cmd));
+        adminLocal.ADMP(va(nullptr, "usage: %s [message]\n", cmd));
         return;
     }
 

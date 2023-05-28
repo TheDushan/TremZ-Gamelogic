@@ -1064,22 +1064,23 @@ void idSGameLocal::ClientUserinfoChanged(sint clientNum) {
         if(client->pers.nameChangeTime &&
                 (level.time - client->pers.nameChangeTime)
                 <= (g_minNameChangePeriod.value * 1000)) {
-            trap_SendServerCommand(ent - g_entities, va(
-                                       "print \"Name change spam protection (g_minNameChangePeriod = %d)\n\"",
-                                       g_minNameChangePeriod.integer));
+            trap_SendServerCommand(ent - g_entities, va(nullptr,
+                                   "print \"Name change spam protection (g_minNameChangePeriod = %d)\n\"",
+                                   g_minNameChangePeriod.integer));
             revertName = true;
         } else if(g_maxNameChanges.integer > 0
                   && client->pers.nameChanges >= g_maxNameChanges.integer) {
-            trap_SendServerCommand(ent - g_entities, va(
-                                       "print \"Maximum name changes reached (g_maxNameChanges = %d)\n\"",
-                                       g_maxNameChanges.integer));
+            trap_SendServerCommand(ent - g_entities, va(nullptr,
+                                   "print \"Maximum name changes reached (g_maxNameChanges = %d)\n\"",
+                                   g_maxNameChanges.integer));
             revertName = true;
         } else if(client->pers.muted) {
             trap_SendServerCommand(ent - g_entities,
                                    "print \"You cannot change your name while you are muted\n\"");
             revertName = true;
         } else if(!adminLocal.AdminNameCheck(ent, newname, err, sizeof(err))) {
-            trap_SendServerCommand(ent - g_entities, va("print \"%s\n\"", err));
+            trap_SendServerCommand(ent - g_entities, va(nullptr, "print \"%s\n\"",
+                                   err));
             revertName = true;
         }
 
@@ -1106,7 +1107,7 @@ void idSGameLocal::ClientUserinfoChanged(sint clientNum) {
 
     if(*oldname) {
         if(strcmp(oldname, client->pers.netname)) {
-            trap_SendServerCommand(-1, va("print \"%s" S_COLOR_WHITE
+            trap_SendServerCommand(-1, va(nullptr, "print \"%s" S_COLOR_WHITE
                                           " renamed to %s\n\"", oldname, client->pers.netname));
             idSGameMain::LogPrintf("ClientRename: %i [%s] (%s) \"%s^7\" -> \"%s^7\"\n",
                                    clientNum,
@@ -1274,7 +1275,7 @@ valueType *idSGameLocal::ClientConnect(sint clientNum, bool firstTime) {
 
     // check for admin ban
     if(adminLocal.AdminBanCheck(userinfo, reason, sizeof(reason))) {
-        return va("%s", reason);
+        return va(nullptr, "%s", reason);
     }
 
     // check for a password
@@ -1321,7 +1322,8 @@ valueType *idSGameLocal::ClientConnect(sint clientNum, bool firstTime) {
 
     // don't do the "xxx connected" messages if they were caried over from previous level
     if(firstTime) {
-        trap_SendServerCommand(-1, va("print \"%s" S_COLOR_WHITE " connected\n\"",
+        trap_SendServerCommand(-1, va(nullptr,
+                                      "print \"%s" S_COLOR_WHITE " connected\n\"",
                                       client->pers.netname));
     }
 
@@ -1398,7 +1400,7 @@ void idSGameLocal::ClientBegin(sint clientNum) {
     idSGameClient::ClientSpawn(ent, nullptr, nullptr, nullptr);
 
     trap_SendServerCommand(-1,
-                           va("print \"%s" S_COLOR_WHITE " entered the game\n\"",
+                           va(nullptr, "print \"%s" S_COLOR_WHITE " entered the game\n\"",
                               client->pers.netname));
 
     // name can change between ClientConnect() and ClientBegin()

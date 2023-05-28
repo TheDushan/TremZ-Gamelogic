@@ -213,28 +213,32 @@ void idCGameTutorial::AlienBuilderText(valueType *text,
     entityState_t *es;
 
     if(buildable > BA_NONE) {
-        Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to place the %s\n",
+        Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr, "Press %s to place the %s\n",
                                              KeyNameForCommand("+attack"), bggame->Buildable(buildable)->humanName));
 
-        Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to cancel placing the %s\n",
+        Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr,
+                                             "Press %s to cancel placing the %s\n",
                                              KeyNameForCommand("+button5"), bggame->Buildable(buildable)->humanName));
     } else {
-        Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to build a structure\n",
+        Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr,
+                                             "Press %s to build a structure\n",
                                              KeyNameForCommand("+attack")));
     }
 
     if((es = BuildableInRange(ps, nullptr))) {
         if(cgs.markDeconstruct) {
             if(es->eFlags & EF_B_MARKED) {
-                Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to unmark this structure\n",
+                Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr,
+                                                     "Press %s to unmark this structure\n",
                                                      KeyNameForCommand("deconstruct")));
             } else {
-                Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to mark this structure\n",
+                Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr,
+                                                     "Press %s to mark this structure\n",
                                                      KeyNameForCommand("deconstruct")));
             }
         } else {
             Q_strcat(text, MAX_TUTORIAL_TEXT,
-                     va("Press %s to destroy this structure\n",
+                     va(nullptr, "Press %s to destroy this structure\n",
                         KeyNameForCommand("deconstruct")));
         }
     }
@@ -242,14 +246,16 @@ void idCGameTutorial::AlienBuilderText(valueType *text,
     if(ps->stats[ STAT_CLASS ] == PCL_ALIEN_BUILDER0 ||
             ps->stats[ STAT_CLASS ] == PCL_ALIEN_BUILDER0_UPG) {
         if((ps->stats[ STAT_BUILDABLE ] & ~SB_VALID_TOGGLEBIT) == BA_NONE) {
-            Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to swipe\n",
+            Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr, "Press %s to swipe\n",
                                                  KeyNameForCommand("+button5")));
         }
 
-        Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to launch a projectile\n",
+        Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr,
+                                             "Press %s to launch a projectile\n",
                                              KeyNameForCommand("+button2")));
 
-        Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to walk on walls\n",
+        Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr,
+                                             "Press %s to walk on walls\n",
                                              KeyNameForCommand("+movedown")));
     }
 }
@@ -262,7 +268,8 @@ idCGameTutorial::AlienLevel0Text
 void idCGameTutorial::AlienLevel0Text(valueType *text, playerState_t *ps) {
     Q_strcat(text, MAX_TUTORIAL_TEXT, "Touch a human to damage it\n");
 
-    Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to walk on walls\n",
+    Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr,
+                                         "Press %s to walk on walls\n",
                                          KeyNameForCommand("+movedown")));
 }
 
@@ -274,15 +281,17 @@ idCGameTutorial::AlienLevel1Text
 void idCGameTutorial::AlienLevel1Text(valueType *text, playerState_t *ps) {
     Q_strcat(text, MAX_TUTORIAL_TEXT, "Touch a human to grab it\n");
 
-    Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to swipe\n",
+    Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr, "Press %s to swipe\n",
                                          KeyNameForCommand("+attack")));
 
     if(ps->stats[ STAT_CLASS ] == PCL_ALIEN_LEVEL1_UPG) {
-        Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to spray poisonous gas\n",
+        Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr,
+                                             "Press %s to spray poisonous gas\n",
                                              KeyNameForCommand("+button5")));
     }
 
-    Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to walk on walls\n",
+    Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr,
+                                         "Press %s to walk on walls\n",
                                          KeyNameForCommand("+movedown")));
 }
 
@@ -292,17 +301,17 @@ idCGameTutorial::AlienLevel2Text
 ===============
 */
 void idCGameTutorial::AlienLevel2Text(valueType *text, playerState_t *ps) {
-    Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to bite\n",
+    Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr, "Press %s to bite\n",
                                          KeyNameForCommand("+attack")));
 
     if(ps->stats[ STAT_CLASS ] == PCL_ALIEN_LEVEL2_UPG) {
         Q_strcat(text, MAX_TUTORIAL_TEXT,
-                 va("Press %s to invoke an electrical attack\n",
+                 va(nullptr, "Press %s to invoke an electrical attack\n",
                     KeyNameForCommand("+button5")));
     }
 
     Q_strcat(text, MAX_TUTORIAL_TEXT,
-             va("Hold down %s then touch a wall to wall jump\n",
+             va(nullptr, "Hold down %s then touch a wall to wall jump\n",
                 KeyNameForCommand("+moveup")));
 }
 
@@ -312,16 +321,18 @@ idCGameTutorial::AlienLevel3Text
 ===============
 */
 void idCGameTutorial::AlienLevel3Text(valueType *text, playerState_t *ps) {
-    Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to bite\n",
+    Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr, "Press %s to bite\n",
                                          KeyNameForCommand("+attack")));
 
     if(ps->stats[ STAT_CLASS ] == PCL_ALIEN_LEVEL3_UPG) {
-        Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to launch a projectile\n",
+        Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr,
+                                             "Press %s to launch a projectile\n",
                                              KeyNameForCommand("+button2")));
     }
 
     Q_strcat(text, MAX_TUTORIAL_TEXT,
-             va("Hold down and release %s to pounce\n", KeyNameForCommand("+button5")));
+             va(nullptr, "Hold down and release %s to pounce\n",
+                KeyNameForCommand("+button5")));
 }
 
 /*
@@ -330,11 +341,11 @@ idCGameTutorial::AlienLevel4Text
 ===============
 */
 void idCGameTutorial::AlienLevel4Text(valueType *text, playerState_t *ps) {
-    Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to swipe\n",
+    Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr, "Press %s to swipe\n",
                                          KeyNameForCommand("+attack")));
 
     Q_strcat(text, MAX_TUTORIAL_TEXT,
-             va("Hold down and release %s to trample\n",
+             va(nullptr, "Hold down and release %s to trample\n",
                 KeyNameForCommand("+button5")));
 }
 
@@ -349,28 +360,32 @@ void idCGameTutorial::HumanCkitText(valueType *text, playerState_t *ps) {
     entityState_t *es;
 
     if(buildable > BA_NONE) {
-        Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to place the %s\n",
+        Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr, "Press %s to place the %s\n",
                                              KeyNameForCommand("+attack"), bggame->Buildable(buildable)->humanName));
 
-        Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to cancel placing the %s\n",
+        Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr,
+                                             "Press %s to cancel placing the %s\n",
                                              KeyNameForCommand("+button5"), bggame->Buildable(buildable)->humanName));
     } else {
-        Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to build a structure\n",
+        Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr,
+                                             "Press %s to build a structure\n",
                                              KeyNameForCommand("+attack")));
     }
 
     if((es = BuildableInRange(ps, nullptr))) {
         if(cgs.markDeconstruct) {
             if(es->eFlags & EF_B_MARKED) {
-                Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to unmark this structure\n",
+                Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr,
+                                                     "Press %s to unmark this structure\n",
                                                      KeyNameForCommand("deconstruct")));
             } else {
-                Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to mark this structure\n",
+                Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr,
+                                                     "Press %s to mark this structure\n",
                                                      KeyNameForCommand("deconstruct")));
             }
         } else {
             Q_strcat(text, MAX_TUTORIAL_TEXT,
-                     va("Press %s to destroy this structure\n",
+                     va(nullptr, "Press %s to destroy this structure\n",
                         KeyNameForCommand("deconstruct")));
         }
     }
@@ -401,7 +416,7 @@ void idCGameTutorial::HumanText(valueType *text, playerState_t *ps) {
             case WP_SHOTGUN:
             case WP_FLAMER:
                 Q_strcat(text, MAX_TUTORIAL_TEXT,
-                         va("Find an Armoury and press %s for more ammo\n",
+                         va(nullptr, "Find an Armoury and press %s for more ammo\n",
                             KeyNameForCommand("buy ammo")));
                 break;
 
@@ -410,7 +425,7 @@ void idCGameTutorial::HumanText(valueType *text, playerState_t *ps) {
             case WP_MASS_DRIVER:
             case WP_LUCIFER_CANNON:
                 Q_strcat(text, MAX_TUTORIAL_TEXT,
-                         va("Find a Reactor or Repeater and press %s for more ammo\n",
+                         va(nullptr, "Find a Reactor or Repeater and press %s for more ammo\n",
                             KeyNameForCommand("buy ammo")));
                 break;
 
@@ -426,32 +441,33 @@ void idCGameTutorial::HumanText(valueType *text, playerState_t *ps) {
             case WP_CHAINGUN:
             case WP_PULSE_RIFLE:
             case WP_FLAMER:
-                Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to fire the %s\n",
+                Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr, "Press %s to fire the %s\n",
                                                      KeyNameForCommand("+attack"),
                                                      bggame->Weapon((weapon_t)ps->weapon)->humanName));
                 break;
 
             case WP_MASS_DRIVER:
-                Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to fire the %s\n",
+                Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr, "Press %s to fire the %s\n",
                                                      KeyNameForCommand("+attack"),
                                                      bggame->Weapon((weapon_t)ps->weapon)->humanName));
 
-                Q_strcat(text, MAX_TUTORIAL_TEXT, va("Hold %s to zoom\n",
+                Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr, "Hold %s to zoom\n",
                                                      KeyNameForCommand("+button5")));
                 break;
 
             case WP_PAIN_SAW:
-                Q_strcat(text, MAX_TUTORIAL_TEXT, va("Hold %s to activate the %s\n",
+                Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr,
+                                                     "Hold %s to activate the %s\n",
                                                      KeyNameForCommand("+attack"),
                                                      bggame->Weapon((weapon_t)ps->weapon)->humanName));
                 break;
 
             case WP_LUCIFER_CANNON:
                 Q_strcat(text, MAX_TUTORIAL_TEXT,
-                         va("Hold and release %s to fire a charged shot\n",
+                         va(nullptr, "Hold and release %s to fire a charged shot\n",
                             KeyNameForCommand("+attack")));
 
-                Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to fire the %s\n",
+                Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr, "Press %s to fire the %s\n",
                                                      KeyNameForCommand("+button5"),
                                                      bggame->Weapon((weapon_t)ps->weapon)->humanName));
                 break;
@@ -465,32 +481,34 @@ void idCGameTutorial::HumanText(valueType *text, playerState_t *ps) {
         }
     }
 
-    Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s and ",
+    Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr, "Press %s and ",
                                          KeyNameForCommand("weapprev")));
-    Q_strcat(text, MAX_TUTORIAL_TEXT, va("%s to select an upgrade\n",
+    Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr, "%s to select an upgrade\n",
                                          KeyNameForCommand("weapnext")));
 
     if(upgrade == UP_NONE || (upgrade > UP_NONE &&
                               bggame->Upgrade(upgrade)->usable)) {
-        Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to use the %s\n",
+        Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr, "Press %s to use the %s\n",
                                              KeyNameForCommand("+button2"), name));
     }
 
     if(ps->stats[ STAT_HEALTH ] <= 35 &&
             bggame->InventoryContainsUpgrade(UP_MEDKIT, ps->stats)) {
-        Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to use your %s\n",
+        Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr, "Press %s to use your %s\n",
                                              KeyNameForCommand("itemact medkit"),
                                              bggame->Upgrade(UP_MEDKIT)->humanName));
     }
 
-    Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to use a structure\n",
+    Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr,
+                                         "Press %s to use a structure\n",
                                          KeyNameForCommand("+button7")));
 
-    Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s and forward to sprint\n",
+    Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr,
+                                         "Press %s and forward to sprint\n",
                                          KeyNameForCommand("+button6")));
 
     Q_strcat(text, MAX_TUTORIAL_TEXT,
-             va("Press %s and another direction to dodge\n",
+             va(nullptr, "Press %s and another direction to dodge\n",
                 KeyNameForCommand("+button6")));
 }
 
@@ -502,34 +520,36 @@ idCGameTutorial::SpectatorText
 void idCGameTutorial::SpectatorText(valueType *text, playerState_t *ps) {
     if(cgs.clientinfo[ cg.clientNum ].team != TEAM_NONE) {
         if(ps->pm_flags & PMF_QUEUED) {
-            Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to leave spawn queue\n",
+            Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr,
+                                                 "Press %s to leave spawn queue\n",
                                                  KeyNameForCommand("+attack")));
         } else {
-            Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to spawn\n",
+            Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr, "Press %s to spawn\n",
                                                  KeyNameForCommand("+attack")));
         }
     } else {
-        Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to join a team\n",
+        Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr, "Press %s to join a team\n",
                                              KeyNameForCommand("+attack")));
     }
 
     if(ps->pm_flags & PMF_FOLLOW) {
         if(!cg.chaseFollow) {
             Q_strcat(text, MAX_TUTORIAL_TEXT,
-                     va("Press %s to switch to chase-cam spectator mode\n",
+                     va(nullptr, "Press %s to switch to chase-cam spectator mode\n",
                         KeyNameForCommand("+button2")));
         } else {
             Q_strcat(text, MAX_TUTORIAL_TEXT,
-                     va("Press %s to return to free spectator mode\n",
+                     va(nullptr, "Press %s to return to free spectator mode\n",
                         KeyNameForCommand("+button2")));
         }
 
-        Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s or ",
+        Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr, "Press %s or ",
                                              KeyNameForCommand("weapprev")));
-        Q_strcat(text, MAX_TUTORIAL_TEXT, va("%s to change player\n",
+        Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr, "%s to change player\n",
                                              KeyNameForCommand("weapnext")));
     } else {
-        Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to follow a player\n",
+        Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr,
+                                             "Press %s to follow a player\n",
                                              KeyNameForCommand("+button2")));
     }
 }
@@ -598,17 +618,19 @@ pointer idCGameTutorial::TutorialText(void) {
                 entityState_t *es = BuildableInRange(ps, nullptr);
 
                 if(ps->stats[ STAT_STATE ] & SS_HOVELING) {
-                    Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to exit the hovel\n",
+                    Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr,
+                                                         "Press %s to exit the hovel\n",
                                                          KeyNameForCommand("+button7")));
                 } else if(es && es->modelindex == BA_A_HOVEL &&
                           (es->eFlags & EF_B_SPAWNED) &&
                           (ps->stats[ STAT_CLASS ] == PCL_ALIEN_BUILDER0 ||
                            ps->stats[ STAT_CLASS ] == PCL_ALIEN_BUILDER0_UPG)) {
-                    Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to enter the hovel\n",
+                    Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr,
+                                                         "Press %s to enter the hovel\n",
                                                          KeyNameForCommand("+button7")));
                 } else if(bggame->AlienCanEvolve((class_t)ps->stats[ STAT_CLASS ],
                                                  ps->persistant[ PERS_CREDIT ], cgs.alienStage)) {
-                    Q_strcat(text, MAX_TUTORIAL_TEXT, va("Press %s to evolve\n",
+                    Q_strcat(text, MAX_TUTORIAL_TEXT, va(nullptr, "Press %s to evolve\n",
                                                          KeyNameForCommand("+button7")));
                 }
             }

@@ -583,7 +583,8 @@ void idCGamePlayers::LoadClientInfo(clientInfo_t *ci) {
         }
 
         // fanny about a bit with sounds that are missing
-        if(!idCGameMain::FileExists(va("sound/player/%s/%s", dir, s + 1))) {
+        if(!idCGameMain::FileExists(va(nullptr, "sound/player/%s/%s", dir,
+                                       s + 1))) {
             //file doesn't exist
 
             if(i == 11 || i == 8) {  //fall or falling
@@ -595,11 +596,13 @@ void idCGamePlayers::LoadClientInfo(clientInfo_t *ci) {
                     s = cg_customSoundNames[0]; //death1
                 }
 
-                ci->sounds[ i ] = trap_S_RegisterSound(va("sound/player/%s/%s", dir,
+                ci->sounds[ i ] = trap_S_RegisterSound(va(nullptr, "sound/player/%s/%s",
+                                                       dir,
                                                        s + 1));
             }
         } else {
-            ci->sounds[ i ] = trap_S_RegisterSound(va("sound/player/%s/%s", dir,
+            ci->sounds[ i ] = trap_S_RegisterSound(va(nullptr, "sound/player/%s/%s",
+                                                   dir,
                                                    s + 1));
         }
     }
@@ -607,19 +610,19 @@ void idCGamePlayers::LoadClientInfo(clientInfo_t *ci) {
     if(ci->footsteps == FOOTSTEP_CUSTOM) {
         for(i = 0; i < 4; i++) {
             ci->customFootsteps[ i ] = trap_S_RegisterSound(
-                                           va("sound/player/%s/step%d.ogg", dir, i + 1));
+                                           va(nullptr, "sound/player/%s/step%d.ogg", dir, i + 1));
 
             if(!ci->customFootsteps[i]) {
                 ci->customFootsteps[i] = trap_S_RegisterSound(
-                                             va("sound/player/footsteps/step%d.ogg", i + 1));
+                                             va(nullptr, "sound/player/footsteps/step%d.ogg", i + 1));
             }
 
             ci->customMetalFootsteps[ i ] = trap_S_RegisterSound(
-                                                va("sound/player/%s/clank%d.ogg", dir, i + 1));
+                                                va(nullptr, "sound/player/%s/clank%d.ogg", dir, i + 1));
 
             if(!ci->customMetalFootsteps[i]) {
                 ci->customMetalFootsteps[i] = trap_S_RegisterSound(
-                                                  va("sound/player/footsteps/clank%d.ogg", i + 1));
+                                                  va(nullptr, "sound/player/footsteps/clank%d.ogg", i + 1));
             }
         }
     }
@@ -861,11 +864,11 @@ void idCGamePlayers::NewClientInfo(sint clientNum) {
     if(clientNum == cg.clientNum && (!ci->infoValid ||
                                      ci->team != newInfo.team)) {
         valueType config[ MAX_STRING_CHARS ];
-        trap_Cvar_VariableStringBuffer(va("cg_%sConfig",
+        trap_Cvar_VariableStringBuffer(va(nullptr, "cg_%sConfig",
                                           bggame->TeamName(newInfo.team)), config, sizeof(config));
 
         if(config[0]) {
-            trap_SendConsoleCommand(va("exec %s\n", config));
+            trap_SendConsoleCommand(va(nullptr, "exec %s\n", config));
         }
     }
 

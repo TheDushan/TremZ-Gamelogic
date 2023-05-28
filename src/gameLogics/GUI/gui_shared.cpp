@@ -931,7 +931,7 @@ bool PC_Script_Parse(sint handle, pointer *out) {
         }
 
         if(token.string[1] != '\0') {
-            Q_strcat(script, 1024, va("\"%s\"", token.string));
+            Q_strcat(script, 1024, va(nullptr, "\"%s\"", token.string));
         } else {
             Q_strcat(script, 1024, token.string);
         }
@@ -1730,7 +1730,8 @@ void Script_ConditionalScript(itemDef_t *item, valueType **args) {
                     Q_CleanStr(ui_profileCleanedStr);
                     Q_CleanDirName(ui_profileCleanedStr);
 
-                    if(trap_FS_FOpenFile(va("profiles/%s/profile.dat", ui_profileCleanedStr),
+                    if(trap_FS_FOpenFile(va(nullptr, "profiles/%s/profile.dat",
+                                            ui_profileCleanedStr),
                                          &f, FS_READ) >= 0) {
                         alreadyExists = true;
                         trap_FS_FCloseFile(f);
@@ -1751,7 +1752,8 @@ void Script_ConditionalScript(itemDef_t *item, valueType **args) {
                     Q_CleanStr(ui_profileCleanedStr);
                     Q_CleanDirName(ui_profileCleanedStr);
 
-                    if(trap_FS_FOpenFile(va("profiles/%s/profile.dat", ui_profileCleanedStr),
+                    if(trap_FS_FOpenFile(va(nullptr, "profiles/%s/profile.dat",
+                                            ui_profileCleanedStr),
                                          &f, FS_READ) >= 0) {
                         alreadyExists = true;
                         trap_FS_FCloseFile(f);
@@ -1775,7 +1777,8 @@ void Script_ConditionalScript(itemDef_t *item, valueType **args) {
                     Q_CleanStr(ui_profileCleanedStr);
                     Q_CleanDirName(ui_profileCleanedStr);
 
-                    if(trap_FS_FOpenFile(va("profiles/%s/profile.dat", ui_profileCleanedStr),
+                    if(trap_FS_FOpenFile(va(nullptr, "profiles/%s/profile.dat",
+                                            ui_profileCleanedStr),
                                          &f, FS_READ) >= 0) {
                         alreadyExists = true;
                         trap_FS_FCloseFile(f);
@@ -2085,7 +2088,7 @@ void Script_Exec(itemDef_t *item, valueType **args) {
     pointer val = nullptr;
 
     if(String_Parse(args, &val)) {
-        DC->executeText(EXEC_APPEND, va("%s ; ", val));
+        DC->executeText(EXEC_APPEND, va(nullptr, "%s ; ", val));
     }
 }
 
@@ -2193,25 +2196,29 @@ void Script_ExecConfig(itemDef_t *item, valueType **args) {
         DC->getCVarString("cl_profile", cl_profileStr, sizeof(cl_profileStr));
 
         if(useprofile && cl_profileStr[0]) {
-            if(!Script_CheckProfile(va("profiles/%s/profile.pid", cl_profileStr))) {
+            if(!Script_CheckProfile(va(nullptr, "profiles/%s/profile.pid",
+                                       cl_profileStr))) {
 #ifndef _DEBUG
                 Com_Printf("^3WARNING: profile.pid found for profile '%s' - not executing %s\n",
                            cl_profileStr, CONFIG_NAME);
 #else
-                DC->executeText(EXEC_NOW, va("exec profiles/%s/%s\n", cl_profileStr,
+                DC->executeText(EXEC_NOW, va(nullptr, "exec profiles/%s/%s\n",
+                                             cl_profileStr,
                                              CONFIG_NAME));
 #endif                          // _DEBUG
             } else {
-                DC->executeText(EXEC_NOW, va("exec profiles/%s/%s\n", cl_profileStr,
+                DC->executeText(EXEC_NOW, va(nullptr, "exec profiles/%s/%s\n",
+                                             cl_profileStr,
                                              CONFIG_NAME));
 
-                if(!Script_WriteProfile(va("profiles/%s/profile.pid", cl_profileStr))) {
+                if(!Script_WriteProfile(va(nullptr, "profiles/%s/profile.pid",
+                                           cl_profileStr))) {
                     Com_Printf("^3WARNING: couldn't write profiles/%s/profile.pid\n",
                                cl_profileStr);
                 }
             }
         } else {
-            DC->executeText(EXEC_NOW, va("exec %s\n", CONFIG_NAME));
+            DC->executeText(EXEC_NOW, va(nullptr, "exec %s\n", CONFIG_NAME));
         }
     }
 }
@@ -3770,7 +3777,7 @@ bool Item_YesNo_HandleKey(itemDef_t *item, sint key) {
             item->window.flags & WINDOW_HASFOCUS && item->cvar) {
         if(key == K_MOUSE1 || key == K_ENTER || key == K_MOUSE2 ||
                 key == K_MOUSE3) {
-            DC->setCVar(item->cvar, va("%i", !DC->getCVarValue(item->cvar)));
+            DC->setCVar(item->cvar, va(nullptr, "%i", !DC->getCVarValue(item->cvar)));
             return true;
         }
     }
@@ -3908,9 +3915,9 @@ bool Item_Multi_HandleKey(itemDef_t *item, sint key) {
                     float32 value = multiPtr->cvarValue[current];
 
                     if(((float32)((sint)value)) == value) {
-                        DC->setCVar(item->cvar, va("%i", (sint)value));
+                        DC->setCVar(item->cvar, va(nullptr, "%i", (sint)value));
                     } else {
-                        DC->setCVar(item->cvar, va("%f", value));
+                        DC->setCVar(item->cvar, va(nullptr, "%f", value));
                     }
                 }
 
@@ -4226,7 +4233,7 @@ static void Scroll_Slider_ThumbFunc(void *p) {
     value /= SLIDER_WIDTH;
     value *= (editDef->maxVal - editDef->minVal);
     value += editDef->minVal;
-    DC->setCVar(si->item->cvar, va("%f", value));
+    DC->setCVar(si->item->cvar, va(nullptr, "%f", value));
 }
 
 void Item_StartCapture(itemDef_t *item, sint key) {
@@ -4317,7 +4324,7 @@ bool Item_Slider_HandleKey(itemDef_t *item, sint key, bool down) {
                     // vm fuckage
                     // value = (((float32)(DC->cursorx - x)/ SLIDER_WIDTH) * (editDef->maxVal - editDef->minVal));
                     value += editDef->minVal;
-                    DC->setCVar(item->cvar, va("%f", value));
+                    DC->setCVar(item->cvar, va(nullptr, "%f", value));
                     return true;
                 }
             }
@@ -8752,7 +8759,7 @@ void Menu_PaintAll(void) {
 
     if(DC->getCVarValue("ui_developer")) {
         vec4_t v = { 1, 1, 1, 1 };
-        UI_Text_Paint(5, 25, .5, v, va("fps: %f", DC->FPS), 0, 0, 0);
+        UI_Text_Paint(5, 25, .5, v, va(nullptr, "fps: %f", DC->FPS), 0, 0, 0);
     }
 }
 

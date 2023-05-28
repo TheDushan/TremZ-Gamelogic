@@ -56,7 +56,8 @@ Keybinding command
 =================
 */
 void idCGameConsoleCmds::SizeUp_f(void) {
-    trap_Cvar_Set("cg_viewsize", va("%i", (sint)(cg_viewsize.integer + 10)));
+    trap_Cvar_Set("cg_viewsize", va(nullptr, "%i",
+                                    (sint)(cg_viewsize.integer + 10)));
 }
 
 
@@ -68,7 +69,8 @@ Keybinding command
 =================
 */
 void idCGameConsoleCmds::SizeDown_f(void) {
-    trap_Cvar_Set("cg_viewsize", va("%i", (sint)(cg_viewsize.integer - 10)));
+    trap_Cvar_Set("cg_viewsize", va(nullptr, "%i",
+                                    (sint)(cg_viewsize.integer - 10)));
 }
 
 /*

@@ -382,7 +382,7 @@ void idSGameSvcmds::Svcmd_TeamMessage_f(void) {
         return;
     }
 
-    idSGameUtils::TeamCommand(team, va("tchat \"console: ^5%s\"",
+    idSGameUtils::TeamCommand(team, va(nullptr, "tchat \"console: ^5%s\"",
                                        idSGameCmds::ConcatArgs(2)));
 }
 
@@ -395,7 +395,7 @@ void idSGameSvcmds::Svcmd_SendMessage(void) {
         return;
     }
 
-    trap_SendServerCommand(-1, va("chat \"console: ^2%s\"",
+    trap_SendServerCommand(-1, va(nullptr, "chat \"console: ^2%s\"",
                                   idSGameCmds::ConcatArgs(1)));
 }
 
@@ -405,7 +405,8 @@ void idSGameSvcmds::Svcmd_CenterPrint_f(void) {
         return;
     }
 
-    trap_SendServerCommand(-1, va("cp \"%s\"", idSGameCmds::ConcatArgs(1)));
+    trap_SendServerCommand(-1, va(nullptr, "cp \"%s\"",
+                                  idSGameCmds::ConcatArgs(1)));
 }
 
 void idSGameSvcmds::Svcmd_EjectClient_f(void) {

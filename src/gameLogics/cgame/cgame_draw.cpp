@@ -1586,7 +1586,8 @@ void idCGameDraw::DrawLevelShot(rectDef_t *rect) {
 
     info = idCGameMain::ConfigString(CS_SERVERINFO);
     s = Info_ValueForKey(info, "mapname");
-    levelshot = trap_R_RegisterShaderNoMip(va("levelshots/%s.tga", s));
+    levelshot = trap_R_RegisterShaderNoMip(va(nullptr, "levelshots/%s.tga",
+                                           s));
 
     if(!levelshot) {
         levelshot = trap_R_RegisterShaderNoMip("gfx/2d/load_screen");
@@ -1755,7 +1756,7 @@ pointer idCGameDraw::GetKillerText(void) {
     pointer s = "";
 
     if(cg.killerName[0]) {
-        s = va("Fragged by %s", cg.killerName);
+        s = va(nullptr, "Fragged by %s", cg.killerName);
     }
 
     return s;
@@ -1901,11 +1902,11 @@ void idCGameDraw::DrawTeamLabel(rectDef_t *rect, team_t team,
     switch(textalign) {
         default:
         case ALIGN_LEFT:
-            s = va("%s %s", t, stage);
+            s = va(nullptr, "%s %s", t, stage);
             break;
 
         case ALIGN_RIGHT:
-            s = va("%s %s", stage, t);
+            s = va(nullptr, "%s %s", stage, t);
             break;
     }
 
@@ -2033,7 +2034,7 @@ void idCGameDraw::DrawFPS(rectDef_t *rect, float32 text_x, float32 text_y,
 
         fps = 1000 * FPS_FRAMES / total;
 
-        s = va("%d", fps);
+        s = va(nullptr, "%d", fps);
         w = UI_Text_Width("0", scale, 0);
         h = UI_Text_Height("0", scale, 0);
         strLength = idCGameDrawTools::DrawStrlen(s);
@@ -2122,7 +2123,7 @@ void idCGameDraw::DrawSpeed(rectDef_t *rect, float32 text_x,
 
     previousSpeed = speed;
 
-    s = va("Speed: %.0f/%.0f", speed, speedRecord);
+    s = va(nullptr, "Speed: %.0f/%.0f", speed, speedRecord);
     w = UI_Text_Width("0", scale, 0);
     h = UI_Text_Height("0", scale, 0);
     strLength = idCGameDrawTools::DrawStrlen(s);
@@ -2211,7 +2212,7 @@ void idCGameDraw::DrawTimer(rectDef_t *rect, float32 text_x,
     tens = seconds / 10;
     seconds -= tens * 10;
 
-    s = va("%d:%d%d", mins, tens, seconds);
+    s = va(nullptr, "%d:%d%d", mins, tens, seconds);
     w = UI_Text_Width("0", scale, 0);
     h = UI_Text_Height("0", scale, 0);
     strLength = idCGameDrawTools::DrawStrlen(s);
@@ -2250,7 +2251,8 @@ void idCGameDraw::DrawClock(rectDef_t *rect, float32 text_x,
     t = trap_RealTime(&qt);
 
     if(cg_drawClock.integer == 2) {
-        s = va("%02d%s%02d", qt.tm_hour, (qt.tm_sec % 2) ? ":" : " ", qt.tm_min);
+        s = va(nullptr, "%02d%s%02d", qt.tm_hour, (qt.tm_sec % 2) ? ":" : " ",
+               qt.tm_min);
     } else {
         valueType *pm = "am";
         sint h = qt.tm_hour;
@@ -2264,7 +2266,8 @@ void idCGameDraw::DrawClock(rectDef_t *rect, float32 text_x,
             pm = "pm";
         }
 
-        s = va("%d%s%02d%s", h, (qt.tm_sec % 2) ? ":" : " ", qt.tm_min, pm);
+        s = va(nullptr, "%d%s%02d%s", h, (qt.tm_sec % 2) ? ":" : " ", qt.tm_min,
+               pm);
     }
 
     w = UI_Text_Width("0", scale, 0);
@@ -2300,7 +2303,8 @@ void idCGameDraw::DrawSnapshot(rectDef_t *rect, float32 text_x,
         return;
     }
 
-    s = va("time:%d snap:%d cmd:%d", cg.snap->serverTime, cg.latestSnapshotNum,
+    s = va(nullptr, "time:%d snap:%d cmd:%d", cg.snap->serverTime,
+           cg.latestSnapshotNum,
            cgs.serverCommandSequence);
 
     AlignText(rect, s, scale, 0.0f, 0.0f, textalign, textvalign, &tx, &ty);
@@ -2567,7 +2571,7 @@ void idCGameDraw::DrawLagometer(rectDef_t *rect, float32 text_x,
     } else {
         valueType *s;
 
-        s = va("%d", cg.ping);
+        s = va(nullptr, "%d", cg.ping);
         ax = rect->x + (rect->w / 2.0f) - (UI_Text_Width(s, scale,
                                            0) / 2.0f) + text_x;
         ay = rect->y + (rect->h / 2.0f) + (UI_Text_Height(s, scale,
@@ -3568,7 +3572,8 @@ void idCGameDraw::DrawVote(void) {
                sizeof(yeskey));
     Q_strncpyz(nokey, idCGameDrawTools::KeyBinding("vote no"), sizeof(nokey));
 
-    s = va("VOTE(%i): \"%s\"  [%s]Yes:%i [%s]No:%i", sec, cgs.voteString,
+    s = va(nullptr, "VOTE(%i): \"%s\"  [%s]Yes:%i [%s]No:%i", sec,
+           cgs.voteString,
            yeskey, cgs.voteYes, nokey, cgs.voteNo);
 
     UI_Text_Paint(8, 340, 0.3f, white, s, 0, 0, ITEM_TEXTSTYLE_NORMAL);
@@ -3614,7 +3619,7 @@ void idCGameDraw::DrawTeamVote(void) {
     Q_strncpyz(nokey, idCGameDrawTools::KeyBinding("teamvote no"),
                sizeof(nokey));
 
-    s = va("TEAMVOTE(%i): \"%s\"  [%s]Yes:%i   [%s]No:%i", sec,
+    s = va(nullptr, "TEAMVOTE(%i): \"%s\"  [%s]Yes:%i   [%s]No:%i", sec,
            cgs.teamVoteString[ cs_offset ], yeskey, cgs.teamVoteYes[cs_offset], nokey,
            cgs.teamVoteNo[ cs_offset ]);
 
@@ -3821,7 +3826,8 @@ void idCGameDraw::DrawBotInfo(void) {
             break;
         }
 
-        Q_vsprintf_s(buffer, MAX_STRING_CHARS, MAX_STRING_CHARS, va("%s: %s", key,
+        Q_vsprintf_s(buffer, MAX_STRING_CHARS, MAX_STRING_CHARS, va(nullptr,
+                     "%s: %s", key,
                      value));
 
         y += UI_Text_Height(buffer, scale, 0) + 5;

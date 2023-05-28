@@ -833,14 +833,14 @@ void idCGameServerCmds::Menu(sint menu, sint arg) {
             break;
 
         case MN_A_INFEST:
-            trap_Cvar_Set("ui_currentClass", va("%d %d",
+            trap_Cvar_Set("ui_currentClass", va(nullptr, "%d %d",
                                                 cg.snap->ps.stats[ STAT_CLASS ], cg.snap->ps.persistant[ PERS_CREDIT ]));
             cmd = "menu tremulous_alienupgrade\n";
             type = DT_INTERACTIVE;
             break;
 
         case MN_A_CANTEVOLVE:
-            shortMsg = va("You cannot evolve into a %s",
+            shortMsg = va(nullptr, "You cannot evolve into a %s",
                           bggame->ClassConfig((class_t)arg)->humanName);
             type = DT_ARMOURYEVOLVE;
             break;
@@ -856,19 +856,19 @@ void idCGameServerCmds::Menu(sint menu, sint arg) {
             break;
 
         case MN_A_CLASSNOTSPAWN:
-            shortMsg = va("You cannot spawn as a %s",
+            shortMsg = va(nullptr, "You cannot spawn as a %s",
                           bggame->ClassConfig((class_t)arg)->humanName);
             type = DT_ARMOURYEVOLVE;
             break;
 
         case MN_A_CLASSNOTALLOWED:
-            shortMsg = va("The %s is not allowed",
+            shortMsg = va(nullptr, "The %s is not allowed",
                           bggame->ClassConfig((class_t)arg)->humanName);
             type = DT_ARMOURYEVOLVE;
             break;
 
         case MN_A_CLASSNOTATSTAGE:
-            shortMsg = va("The %s is not allowed at Stage %d",
+            shortMsg = va(nullptr, "The %s is not allowed at Stage %d",
                           bggame->ClassConfig((class_t)arg)->humanName, cgs.alienStage + 1);
             type = DT_ARMOURYEVOLVE;
             break;
@@ -1205,7 +1205,8 @@ idCGameServerCmds::PTRRequest_f
 =================
 */
 void idCGameServerCmds::PTRRequest_f(void) {
-    trap_SendClientCommand(va("ptrcverify %d", idCGamePtr::ReadPTRCode()));
+    trap_SendClientCommand(va(nullptr, "ptrcverify %d",
+                              idCGamePtr::ReadPTRCode()));
 }
 
 /*

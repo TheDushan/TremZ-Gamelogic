@@ -539,7 +539,8 @@ void idSGameSpawn::SP_worldspawn(void) {
     // make some data visible to connecting client
     trap_SetConfigstring(CS_GAME_VERSION, GAME_VERSION);
 
-    trap_SetConfigstring(CS_LEVEL_START_TIME, va("%i", level.startTime));
+    trap_SetConfigstring(CS_LEVEL_START_TIME, va(nullptr, "%i",
+                         level.startTime));
 
     SpawnString("music", "", &s);
     trap_SetConfigstring(CS_MUSIC, s);
@@ -607,7 +608,7 @@ void idSGameSpawn::SP_worldspawn(void) {
     } else if(g_doWarmup.integer) {
         // Turn it on
         level.warmupTime = -1;
-        trap_SetConfigstring(CS_WARMUP, va("%i", level.warmupTime));
+        trap_SetConfigstring(CS_WARMUP, va(nullptr, "%i", level.warmupTime));
         idSGameMain::LogPrintf("Warmup:\n");
     }
 
@@ -752,7 +753,7 @@ void idSGameSpawn::SpawnEntitiesFromString(void) {
     }
 
     //Dushan - overwrite default map "worldspawn" flag with new settings/name
-    SpawnEntitiesFromFile(va("maps/%s.ent", mapname.string), true);
+    SpawnEntitiesFromFile(va(nullptr, "maps/%s.ent", mapname.string), true);
 
     level.spawning =
         false;      // any future calls to G_Spawn*() will be errors

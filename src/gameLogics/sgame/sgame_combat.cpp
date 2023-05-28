@@ -211,10 +211,10 @@ float32 idSGameCombat::RewardAttackers(gentity_t *self) {
 
             // add to stage counters
             if(player->client->ps.stats[STAT_TEAM] == TEAM_ALIENS) {
-                trap_Cvar_Set("g_alienCredits", va("%d",
+                trap_Cvar_Set("g_alienCredits", va(nullptr, "%d",
                                                    g_alienCredits.integer + stageValue));
             } else if(player->client->ps.stats[STAT_TEAM] == TEAM_HUMANS) {
-                trap_Cvar_Set("g_humanCredits", va("%d",
+                trap_Cvar_Set("g_humanCredits", va(nullptr, "%d",
                                                    g_humanCredits.integer + stageValue));
             }
         }
@@ -1501,7 +1501,7 @@ void idSGameCombat::LogDestruction(gentity_t *self, gentity_t *actor,
     if(actor->client->ps.stats[ STAT_TEAM ] ==
             bggame->Buildable((buildable_t)self->s.modelindex)->team) {
         idSGameUtils::TeamCommand((team_t)actor->client->ps.stats[ STAT_TEAM ],
-                                  va("print \"%s ^3%s^7 by %s\n\"",
+                                  va(nullptr, "print \"%s ^3%s^7 by %s\n\"",
                                      bggame->Buildable((buildable_t)self->s.modelindex)->humanName,
                                      mod == MOD_DECONSTRUCT ? "DECONSTRUCTED" : "DESTROYED",
                                      actor->client->pers.netname));

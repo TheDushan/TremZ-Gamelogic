@@ -889,7 +889,7 @@ void idBothGamesLocal::InitBuildableConfigs(void) {
         bc = BuildableConfig((buildable_t)i);
         ::memset(bc, 0, sizeof(buildableConfig_t));
 
-        ParseBuildableFile(va("configs/buildables/%s.cfg",
+        ParseBuildableFile(va(nullptr, "configs/buildables/%s.cfg",
                               Buildable((buildable_t)i)->name), bc);
     }
 }
@@ -1730,7 +1730,8 @@ void idBothGamesLocal::InitClassConfigs(void) {
     for(i = PCL_NONE; i < PCL_NUM_CLASSES; i++) {
         cc = ClassConfig((class_t)i);
 
-        ParseClassFile(va("configs/classes/%s.cfg", Class((class_t)i)->name), cc);
+        ParseClassFile(va(nullptr, "configs/classes/%s.cfg",
+                          Class((class_t)i)->name), cc);
     }
 }
 
@@ -3966,7 +3967,8 @@ sint idBothGamesLocal::LoadEmoticons(valueType
             continue;
         }
 
-        if(!trap_FS_FOpenFile(va("emoticons/%s", filePtr), nullptr, FS_READ)) {
+        if(!trap_FS_FOpenFile(va(nullptr, "emoticons/%s", filePtr), nullptr,
+                              FS_READ)) {
             Com_Printf(S_COLOR_YELLOW
                        "WARNING: BG_LoadEmoticons(): detected an unreadable .tga file name \"emoticons/%s\" in emoticon detection",
                        filePtr);

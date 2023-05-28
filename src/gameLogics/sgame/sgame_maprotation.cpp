@@ -55,7 +55,8 @@ Check if a map exists
 ===============
 */
 bool idSGameMaprotation::MapExists(valueType *name) {
-    return trap_FS_FOpenFile(va("maps/%s.world", name), nullptr, FS_READ);
+    return trap_FS_FOpenFile(va(nullptr, "maps/%s.bsp", name), nullptr,
+                             FS_READ);
 }
 
 /*
@@ -514,7 +515,7 @@ void idSGameMaprotation::SetCurrentMap(sint currentMap, sint rotation) {
     p[ rotation ] = currentMap;
 
     for(i = 0; i < mapRotations.numRotations; i++) {
-        Q_strcat(text, sizeof(text), va("%d ", p[ i ]));
+        Q_strcat(text, sizeof(text), va(nullptr, "%d ", p[ i ]));
     }
 
     trap_Cvar_Set("g_currentMap", text);
@@ -553,7 +554,7 @@ void idSGameMaprotation::IssueMapChange(sint rotation) {
                       mapRotations.rotations[ rotation ].maps[ map ].layouts);
     }
 
-    trap_SendConsoleCommand(EXEC_APPEND, va("map %s\n",
+    trap_SendConsoleCommand(EXEC_APPEND, va(nullptr, "map %s\n",
                                             mapRotations.rotations[ rotation ].maps[ map ].name));
 
     // load up map defaults if g_mapConfigs is set
@@ -714,7 +715,7 @@ bool idSGameMaprotation::StartMapRotation(valueType *name,
 
     for(i = 0; i < mapRotations.numRotations; i++) {
         if(!Q_stricmp(mapRotations.rotations[ i ].name, name)) {
-            trap_Cvar_Set("g_currentMapRotation", va("%d", i));
+            trap_Cvar_Set("g_currentMapRotation", va(nullptr, "%d", i));
             trap_Cvar_Update(&g_currentMapRotation);
 
             if(changeMap) {
@@ -740,7 +741,7 @@ Stop the current map rotation
 ===============
 */
 void idSGameMaprotation::StopMapRotation(void) {
-    trap_Cvar_Set("g_currentMapRotation", va("%d", NOT_ROTATING));
+    trap_Cvar_Set("g_currentMapRotation", va(nullptr, "%d", NOT_ROTATING));
     trap_Cvar_Update(&g_currentMapRotation);
 }
 

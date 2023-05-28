@@ -108,24 +108,26 @@ If "private", only the activator gets the message.  If no checks, all clients ge
 void idSGameTarget::Use_Target_Print(gentity_t *ent, gentity_t *other,
                                      gentity_t *activator) {
     if(activator->client && (ent->spawnflags & 4)) {
-        trap_SendServerCommand(activator - g_entities, va("cp \"%s\"",
+        trap_SendServerCommand(activator - g_entities, va(nullptr, "cp \"%s\"",
                                ent->message));
         return;
     }
 
     if(ent->spawnflags & 3) {
         if(ent->spawnflags & 1) {
-            idSGameUtils::TeamCommand(TEAM_HUMANS, va("cp \"%s\"", ent->message));
+            idSGameUtils::TeamCommand(TEAM_HUMANS, va(nullptr, "cp \"%s\"",
+                                      ent->message));
         }
 
         if(ent->spawnflags & 2) {
-            idSGameUtils::TeamCommand(TEAM_ALIENS, va("cp \"%s\"", ent->message));
+            idSGameUtils::TeamCommand(TEAM_ALIENS, va(nullptr, "cp \"%s\"",
+                                      ent->message));
         }
 
         return;
     }
 
-    trap_SendServerCommand(-1, va("cp \"%s\"", ent->message));
+    trap_SendServerCommand(-1, va(nullptr, "cp \"%s\"", ent->message));
 }
 
 void idSGameTarget::SP_target_print(gentity_t *ent) {

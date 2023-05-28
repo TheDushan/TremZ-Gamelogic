@@ -403,7 +403,8 @@ bool idAdminLocal::AdminHigherGuid(valueType *admin_guid,
                 return false;
             }
 
-            return !strstr(g_admin_admins[ i ]->flags, va("%c", ADMF_IMMUTABLE));
+            return !strstr(g_admin_admins[ i ]->flags, va(nullptr, "%c",
+                           ADMF_IMMUTABLE));
         }
     }
 
@@ -557,7 +558,7 @@ void idAdminLocal::AdminWriteConfig(void) {
         trap_FS_Write("levels  = ", 10, f);
 
         for(j = 0; g_admin_commands[ i ]->levels[ j ] != -1; j++) {
-            Q_strcat(levels, sizeof(levels), va("%i ",
+            Q_strcat(levels, sizeof(levels), va(nullptr, "%i ",
                                                 g_admin_commands[ i ]->levels[ j ]));
         }
 
@@ -875,7 +876,8 @@ sint idAdminLocal::AdminListAdmins(gentity_t *ent, sint start,
             }
         }
 
-        adminLocal.ADMBP(va("%4i %4i %s^7 (*%s) %s^7\n", i, l, lname, guid_stub,
+        adminLocal.ADMBP(va(nullptr, "%4i %4i %s^7 (*%s) %s^7\n", i, l, lname,
+                            guid_stub,
                             vic->client->pers.netname));
         drawn++;
     }
@@ -939,7 +941,7 @@ sint idAdminLocal::AdminListAdmins(gentity_t *ent, sint start,
             }
         }
 
-        adminLocal.ADMBP(va("%4i %4i %s^7 (*%s) %s^7\n",
+        adminLocal.ADMBP(va(nullptr, "%4i %4i %s^7 (*%s) %s^7\n",
                             (i + MAX_CLIENTS),
                             g_admin_admins[ i ]->level,
                             lname,
@@ -1084,7 +1086,8 @@ bool idAdminLocal::AdminCmdCheck(gentity_t *ent, bool say) {
             trap_SendConsoleCommand(EXEC_APPEND, g_admin_commands[ i ]->exec);
             AdminLog(ent, cmd, skip);
         } else {
-            ADMP(va("^3!%s: ^7permission denied\n", g_admin_commands[ i ]->command));
+            ADMP(va(nullptr, "^3!%s: ^7permission denied\n",
+                    g_admin_commands[ i ]->command));
             AdminLog(ent, "attempted", skip - 1);
         }
 
@@ -1105,7 +1108,8 @@ bool idAdminLocal::AdminCmdCheck(gentity_t *ent, bool say) {
             g_admin_cmds[ i ].handler(ent, skip);
             AdminLog(ent, cmd, skip);
         } else {
-            ADMP(va("^3!%s: ^7permission denied\n", g_admin_cmds[ i ].keyword));
+            ADMP(va(nullptr, "^3!%s: ^7permission denied\n",
+                    g_admin_cmds[ i ].keyword));
             AdminLog(ent, "attempted", skip - 1);
         }
 
@@ -1371,7 +1375,8 @@ bool idAdminLocal::AdminReadconfig(gentity_t *ent, sint skiparg) {
 
     bggame->Free(cnf2);
     adminLocal.ADMP(
-        va("^3!readconfig: ^7loaded %d levels, %d admins, %d bans, %d commands\n",
+        va(nullptr,
+           "^3!readconfig: ^7loaded %d levels, %d admins, %d bans, %d commands\n",
            lc, ac, bc, cc));
 
     if(lc == 0) {
@@ -1406,7 +1411,8 @@ bool idAdminLocal::AdminTime(gentity_t *ent, sint skiparg) {
     qtime_t qt;
 
     trap_RealTime(&qt);
-    adminLocal.ADMP(va("^3!time: ^7local time is %02i:%02i:%02i\n", qt.tm_hour,
+    adminLocal.ADMP(va(nullptr, "^3!time: ^7local time is %02i:%02i:%02i\n",
+                       qt.tm_hour,
                        qt.tm_min, qt.tm_sec));
     return true;
 }
@@ -1539,7 +1545,8 @@ bool idAdminLocal::AdminSetlevel(gentity_t *ent, sint skiparg) {
     }
 
     if(!Q_stricmp(guid, "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")) {
-        adminLocal.ADMP(va("^3!setlevel: ^7%s does not have a valid GUID\n",
+        adminLocal.ADMP(va(nullptr,
+                           "^3!setlevel: ^7%s does not have a valid GUID\n",
                            adminname));
         return false;
     }
@@ -1573,7 +1580,8 @@ bool idAdminLocal::AdminSetlevel(gentity_t *ent, sint skiparg) {
         g_admin_admins[ i ] = a;
     }
 
-    AP(va("print \"^3!setlevel: ^7%s^7 was given level %d admin rights by %s\n\"",
+    AP(va(nullptr,
+          "print \"^3!setlevel: ^7%s^7 was given level %d admin rights by %s\n\"",
           adminname, l, (ent) ? ent->client->pers.netname : "console"));
 
     if(vic) {
@@ -1727,7 +1735,7 @@ bool idAdminLocal::AdminKick(gentity_t *ent, sint skiparg) {
     if((found = idSGameCmds::ClientNumbersFromString(name, pids,
                 MAX_CLIENTS)) != 1) {
         idSGameCmds::MatchOnePlayer(pids, found, err, sizeof(err));
-        adminLocal.ADMP(va("^3!kick: ^7%s\n", err));
+        adminLocal.ADMP(va(nullptr, "^3!kick: ^7%s\n", err));
         return false;
     }
 
@@ -1746,7 +1754,7 @@ bool idAdminLocal::AdminKick(gentity_t *ent, sint skiparg) {
     // Dushan - fix me
     //adminLocal.AdminCreateBan(ent, vic->client->pers.netname,
     //                          vic->client->pers.guid, vic->client->pers.ip,
-    //                          adminLocal.AdminParseTime(va("1s%s", g_adminTempBan.string)),
+    //                          adminLocal.AdminParseTime(va(nullptr, "1s%s", g_adminTempBan.string)),
     //                          (*reason) ? reason : "kicked by admin");
 
     if(g_admin.string[0]) {
@@ -1754,12 +1762,12 @@ bool idAdminLocal::AdminKick(gentity_t *ent, sint skiparg) {
     }
 
     trap_SendServerCommand(pids[ 0 ],
-                           va("disconnect \"You have been kicked.\n%s^7\nreason:\n%s\"",
-                              (ent) ? va("admin:\n%s", ent->client->pers.netname) : "",
+                           va(nullptr, "disconnect \"You have been kicked.\n%s^7\nreason:\n%s\"",
+                              (ent) ? va(nullptr, "admin:\n%s", ent->client->pers.netname) : "",
                               (*reason) ? reason : "kicked by admin"));
 
-    trap_DropClient(pids[ 0 ], va("has been kicked%s^7. reason: %s",
-                                  (ent) ? va(" by %s", ent->client->pers.netname) : "",
+    trap_DropClient(pids[ 0 ], va(nullptr, "has been kicked%s^7. reason: %s",
+                                  (ent) ? va(nullptr, " by %s", ent->client->pers.netname) : "",
                                   (*reason) ? reason : "kicked by admin"), 0);
 
     return true;
@@ -1829,7 +1837,7 @@ bool idAdminLocal::AdminBan(gentity_t *ent, sint skiparg) {
             continue;
         }
 
-        if(!Q_stricmp(va("%d", g_admin_namelog[ i ]->slot), search)) {
+        if(!Q_stricmp(va(nullptr, "%d", g_admin_namelog[ i ]->slot), search)) {
             logmatches = 1;
             logmatch = i;
             exactmatch = true;
@@ -1892,8 +1900,8 @@ bool idAdminLocal::AdminBan(gentity_t *ent, sint skiparg) {
                         adminLocal.ADMBP("^3");
                     }
 
-                    adminLocal.ADMBP(va("%-2s (*%s) %15s ^7'%s^7'\n",
-                                        (g_admin_namelog[ i ]->slot > -1) ? va("%d",
+                    adminLocal.ADMBP(va(nullptr, "%-2s (*%s) %15s ^7'%s^7'\n",
+                                        (g_admin_namelog[ i ]->slot > -1) ? va(nullptr, "%d",
                                                 g_admin_namelog[ i ]->slot) : "-",
                                         guid_stub, g_admin_namelog[ i ]->ip, g_admin_namelog[ i ]->name[ j ]));
                 }
@@ -1931,7 +1939,8 @@ bool idAdminLocal::AdminBan(gentity_t *ent, sint skiparg) {
 
     if(g_admin_namelog[ logmatch ]->slot == -1) {
         // client is already disconnected so stop here
-        AP(va("print \"^3!ban:^7 %s^7 has been banned by %s^7, duration: %s, reason: %s\n\"",
+        AP(va(nullptr,
+              "print \"^3!ban:^7 %s^7 has been banned by %s^7, duration: %s, reason: %s\n\"",
               g_admin_namelog[ logmatch ]->name[ 0 ],
               (ent) ? ent->client->pers.netname : "console", duration,
               (*reason) ? reason : "banned by admin"));
@@ -1939,12 +1948,13 @@ bool idAdminLocal::AdminBan(gentity_t *ent, sint skiparg) {
     }
 
     trap_SendServerCommand(g_admin_namelog[ logmatch ]->slot,
-                           va("disconnect \"You have been banned.\n admin:\n%s^7\nduration:\n%s\nreason:\n%s\"",
+                           va(nullptr,
+                              "disconnect \"You have been banned.\n admin:\n%s^7\nduration:\n%s\nreason:\n%s\"",
                               (ent) ? ent->client->pers.netname : "console", duration,
                               (*reason) ? reason : "banned by admin"));
 
     trap_DropClient(g_admin_namelog[ logmatch ]->slot,
-                    va("has been banned by %s^7, duration: %s, reason: %s",
+                    va(nullptr, "has been banned by %s^7, duration: %s, reason: %s",
                        (ent) ? ent->client->pers.netname : "console",
                        duration, (*reason) ? reason : "banned by admin"), 0);
     return true;
@@ -1981,7 +1991,8 @@ bool idAdminLocal::AdminUnBan(gentity_t *ent, sint skiparg) {
 
     g_admin_bans[ bnum - 1 ]->expires = trap_RealTime(nullptr);
 
-    AP(va("print \"^3!unban: ^7ban #%d for %s^7 has been removed by %s\n\"",
+    AP(va(nullptr,
+          "print \"^3!unban: ^7ban #%d for %s^7 has been removed by %s\n\"",
           bnum, g_admin_bans[ bnum - 1 ]->name,
           (ent) ? ent->client->pers.netname : "console"));
 
@@ -2075,7 +2086,8 @@ bool idAdminLocal::AdminAdjustBan(gentity_t *ent, sint skiparg) {
         Q_strncpyz(ban->reason, reason, sizeof(ban->reason));
     }
 
-    AP(va("print \"^3!adjustban: ^7ban #%d for %s^7 has been updated by %s^7 %s%s%s%s%s\n\"",
+    AP(va(nullptr,
+          "print \"^3!adjustban: ^7ban #%d for %s^7 has been updated by %s^7 %s%s%s%s%s\n\"",
           bnum, ban->name,
           (ent) ? ent->client->pers.netname : "console",
           (length >= 0) ? "duration: " : "",
@@ -2115,7 +2127,7 @@ bool idAdminLocal::AdminPutTeam(gentity_t *ent, sint skiparg) {
     if((found = idSGameCmds::ClientNumbersFromString(name, pids,
                 MAX_CLIENTS)) != 1) {
         idSGameCmds::MatchOnePlayer(pids, found, err, sizeof(err));
-        adminLocal.ADMP(va("^3!putteam: ^7%s\n", err));
+        adminLocal.ADMP(va(nullptr, "^3!putteam: ^7%s\n", err));
         return false;
 
     }
@@ -2129,7 +2141,7 @@ bool idAdminLocal::AdminPutTeam(gentity_t *ent, sint skiparg) {
     teamnum = idSGameTeam::TeamFromString(team);
 
     if(teamnum == NUM_TEAMS) {
-        adminLocal.ADMP(va("^3!putteam: ^7unknown team %s\n", team));
+        adminLocal.ADMP(va(nullptr, "^3!putteam: ^7unknown team %s\n", team));
         return false;
     }
 
@@ -2139,7 +2151,7 @@ bool idAdminLocal::AdminPutTeam(gentity_t *ent, sint skiparg) {
 
     idSGameTeam::ChangeTeam(vic, teamnum);
 
-    AP(va("print \"^3!putteam: ^7%s^7 put %s^7 on to the %s team\n\"",
+    AP(va(nullptr, "print \"^3!putteam: ^7%s^7 put %s^7 on to the %s team\n\"",
           (ent) ? ent->client->pers.netname : "console", vic->client->pers.netname,
           bggame->TeamName(teamnum)));
     return true;
@@ -2161,8 +2173,8 @@ bool idAdminLocal::AdminMap(gentity_t *ent, sint skiparg) {
 
     idSGameCmds::SayArgv(skiparg + 1, map, sizeof(map));
 
-    if(!trap_FS_FOpenFile(va("maps/%s.bsp", map), nullptr, FS_READ)) {
-        adminLocal.ADMP(va("^3!map: ^7invalid map name '%s'\n", map));
+    if(!trap_FS_FOpenFile(va(nullptr, "maps/%s.bsp", map), nullptr, FS_READ)) {
+        adminLocal.ADMP(va(nullptr, "^3!map: ^7invalid map name '%s'\n", map));
         return false;
     }
 
@@ -2170,22 +2182,23 @@ bool idAdminLocal::AdminMap(gentity_t *ent, sint skiparg) {
         idSGameCmds::SayArgv(skiparg + 2, layout, sizeof(layout));
 
         if(!Q_stricmp(layout, "*BUILTIN*") ||
-                trap_FS_FOpenFile(va("layouts/%s/%s.dat", map, layout), nullptr,
+                trap_FS_FOpenFile(va(nullptr, "layouts/%s/%s.dat", map, layout), nullptr,
                                   FS_READ) > 0) {
             trap_Cvar_Set("g_layouts", layout);
         } else {
-            adminLocal.ADMP(va("^3!map: ^7invalid layout name '%s'\n", layout));
+            adminLocal.ADMP(va(nullptr, "^3!map: ^7invalid layout name '%s'\n",
+                               layout));
             return false;
         }
     }
 
-    trap_SendConsoleCommand(EXEC_APPEND, va("map %s", map));
+    trap_SendConsoleCommand(EXEC_APPEND, va(nullptr, "map %s", map));
 
     level.restarted = true;
 
-    AP(va("print \"^3!map: ^7map '%s' started by %s %s\n\"", map,
+    AP(va(nullptr, "print \"^3!map: ^7map '%s' started by %s %s\n\"", map,
           (ent) ? ent->client->pers.netname : "console",
-          (layout[ 0 ]) ? va("(forcing layout '%s')", layout) : ""));
+          (layout[ 0 ]) ? va(nullptr, "(forcing layout '%s')", layout) : ""));
 
     return true;
 }
@@ -2210,7 +2223,8 @@ bool idAdminLocal::AdminMute(gentity_t *ent, sint skiparg) {
     }
 
     if(idSGameCmds::SayArgc() < 2 + skiparg) {
-        adminLocal.ADMP(va("^3!%s: ^7usage: !%s [name|slot#]\n", cmd, cmd));
+        adminLocal.ADMP(va(nullptr, "^3!%s: ^7usage: !%s [name|slot#]\n", cmd,
+                           cmd));
         return false;
     }
 
@@ -2219,13 +2233,14 @@ bool idAdminLocal::AdminMute(gentity_t *ent, sint skiparg) {
     if((found = idSGameCmds::ClientNumbersFromString(name, pids,
                 MAX_CLIENTS)) != 1) {
         idSGameCmds::MatchOnePlayer(pids, found, err, sizeof(err));
-        adminLocal.ADMP(va("^3!%s: ^7%s\n", cmd, err));
+        adminLocal.ADMP(va(nullptr, "^3!%s: ^7%s\n", cmd, err));
         return false;
     }
 
     if(!adminLocal.AdminHigher(ent, &g_entities[ pids[ 0 ] ])) {
         adminLocal.ADMP(
-            va("^3!%s: ^7sorry, but your intended victim has a higher admin level than you\n",
+            va(nullptr,
+               "^3!%s: ^7sorry, but your intended victim has a higher admin level than you\n",
                cmd));
         return false;
     }
@@ -2241,7 +2256,7 @@ bool idAdminLocal::AdminMute(gentity_t *ent, sint skiparg) {
         vic->client->pers.muted = false;
 
         CPx(pids[ 0 ], "cp \"^1You have been unmuted\"");
-        AP(va("print \"^3!unmute: ^7%s^7 has been unmuted by %s\n\"",
+        AP(va(nullptr, "print \"^3!unmute: ^7%s^7 has been unmuted by %s\n\"",
               vic->client->pers.netname, (ent) ? ent->client->pers.netname : "console"));
     } else {
         if(!Q_stricmp(cmd, "unmute")) {
@@ -2252,7 +2267,7 @@ bool idAdminLocal::AdminMute(gentity_t *ent, sint skiparg) {
         vic->client->pers.muted = true;
 
         CPx(pids[ 0 ], "cp \"^1You've been muted\"");
-        AP(va("print \"^3!mute: ^7%s^7 has been muted by ^7%s\n\"",
+        AP(va(nullptr, "print \"^3!mute: ^7%s^7 has been muted by ^7%s\n\"",
               vic->client->pers.netname, (ent) ? ent->client->pers.netname : "console"));
     }
 
@@ -2278,7 +2293,8 @@ bool idAdminLocal::AdminDenyBuild(gentity_t *ent, sint skiparg) {
     }
 
     if(idSGameCmds::SayArgc() < 2 + skiparg) {
-        adminLocal.ADMP(va("^3!%s: ^7usage: !%s [name|slot#]\n", cmd, cmd));
+        adminLocal.ADMP(va(nullptr, "^3!%s: ^7usage: !%s [name|slot#]\n", cmd,
+                           cmd));
         return false;
     }
 
@@ -2287,13 +2303,14 @@ bool idAdminLocal::AdminDenyBuild(gentity_t *ent, sint skiparg) {
     if((found = idSGameCmds::ClientNumbersFromString(name, pids,
                 MAX_CLIENTS)) != 1) {
         idSGameCmds::MatchOnePlayer(pids, found, err, sizeof(err));
-        adminLocal.ADMP(va("^3!%s: ^7%s\n", cmd, err));
+        adminLocal.ADMP(va(nullptr, "^3!%s: ^7%s\n", cmd, err));
         return false;
     }
 
     if(!adminLocal.AdminHigher(ent, &g_entities[ pids[ 0 ] ])) {
         adminLocal.ADMP(
-            va("^3!%s: ^7sorry, but your intended victim has a higher admin level than you\n",
+            va(nullptr,
+               "^3!%s: ^7sorry, but your intended victim has a higher admin level than you\n",
                cmd));
         return false;
     }
@@ -2309,7 +2326,8 @@ bool idAdminLocal::AdminDenyBuild(gentity_t *ent, sint skiparg) {
         vic->client->pers.denyBuild = false;
 
         CPx(pids[ 0 ], "cp \"^1You've regained your building rights\"");
-        AP(va("print \"^3!allowbuild: ^7building rights for ^7%s^7 restored by %s\n\"",
+        AP(va(nullptr,
+              "print \"^3!allowbuild: ^7building rights for ^7%s^7 restored by %s\n\"",
               vic->client->pers.netname, (ent) ? ent->client->pers.netname : "console"));
     } else {
         if(!Q_stricmp(cmd, "allowbuild")) {
@@ -2320,7 +2338,8 @@ bool idAdminLocal::AdminDenyBuild(gentity_t *ent, sint skiparg) {
         vic->client->pers.denyBuild = true;
         vic->client->ps.stats[ STAT_BUILDABLE ] = BA_NONE;
         CPx(pids[ 0 ], "cp \"^1You've lost your building rights\"");
-        AP(va("print \"^3!denybuild: ^7building rights for ^7%s^7 revoked by ^7%s\n\"",
+        AP(va(nullptr,
+              "print \"^3!denybuild: ^7building rights for ^7%s^7 revoked by ^7%s\n\"",
               vic->client->pers.netname, (ent) ? ent->client->pers.netname : "console"));
     }
 
@@ -2382,23 +2401,26 @@ bool idAdminLocal::AdminListAdmins(gentity_t *ent, sint skiparg) {
     }
 
     if(start >= found) {
-        adminLocal.ADMP(va("^3!listadmins: ^7listing %d admins\n", found));
+        adminLocal.ADMP(va(nullptr, "^3!listadmins: ^7listing %d admins\n",
+                           found));
         return false;
     }
 
     drawn = adminLocal.AdminListAdmins(ent, start, search);
 
     if(search[ 0 ]) {
-        adminLocal.ADMP(va("^3!listadmins:^7 found %d admins matching '%s^7'\n",
+        adminLocal.ADMP(va(nullptr,
+                           "^3!listadmins:^7 found %d admins matching '%s^7'\n",
                            drawn, search));
     } else {
         adminLocal.ADMBP_begin();
-        adminLocal.ADMBP(va("^3!listadmins:^7 showing admin %d - %d of %d.  ",
+        adminLocal.ADMBP(va(nullptr,
+                            "^3!listadmins:^7 showing admin %d - %d of %d.  ",
                             (found) ? (start + 1) : 0, ((start + MAX_ADMIN_LISTITEMS) > found) ?
                             found : (start + MAX_ADMIN_LISTITEMS), found));
 
         if((start + MAX_ADMIN_LISTITEMS) < found) {
-            adminLocal.ADMBP(va("run '!listadmins %d' to see more",
+            adminLocal.ADMBP(va(nullptr, "run '!listadmins %d' to see more",
                                 (start + MAX_ADMIN_LISTITEMS + 1)));
         }
 
@@ -2430,13 +2452,14 @@ bool idAdminLocal::AdminListLayouts(gentity_t *ent, sint skiparg) {
     count = idSGameBuildable::LayoutList(map, list, sizeof(list));
 
     adminLocal.ADMBP_begin();
-    adminLocal.ADMBP(va("^3!listlayouts:^7 %d layouts found for '%s':\n",
+    adminLocal.ADMBP(va(nullptr,
+                        "^3!listlayouts:^7 %d layouts found for '%s':\n",
                         count, map));
     s = &list[ 0 ];
 
     while(*s) {
         if(*s == ' ') {
-            adminLocal.ADMBP(va(" %s\n", layout));
+            adminLocal.ADMBP(va(nullptr, " %s\n", layout));
             layout[ 0 ] = '\0';
             i = 0;
         } else if(i < sizeof(layout) - 2) {
@@ -2448,7 +2471,7 @@ bool idAdminLocal::AdminListLayouts(gentity_t *ent, sint skiparg) {
     }
 
     if(layout[0]) {
-        adminLocal.ADMBP(va(" %s\n", layout));
+        adminLocal.ADMBP(va(nullptr, " %s\n", layout));
     }
 
     adminLocal.ADMBP_end();
@@ -2472,7 +2495,7 @@ bool idAdminLocal::AdminListPlayers(gentity_t *ent, sint skiparg) {
     valueType muted[ 2 ], denied[ 2 ];
 
     adminLocal.ADMBP_begin();
-    adminLocal.ADMBP(va("^3!listplayers: ^7%d players connected:\n",
+    adminLocal.ADMBP(va(nullptr, "^3!listplayers: ^7%d players connected:\n",
                         level.numConnectedClients));
 
     for(i = 0; i < level.maxclients; i++) {
@@ -2559,11 +2582,13 @@ bool idAdminLocal::AdminListPlayers(gentity_t *ent, sint skiparg) {
 
         if(adminLocal.AdminPermission(ent, ADMF_SEESFULLLISTPLAYERS)) {
             adminLocal.ADMBP(
-                va("%2i %s%s^7 %-2i %s^7 (*%s) ^1%1s%1s^7 %s^7 %s%s^7%s\n", i, c, t, l,
+                va(nullptr, "%2i %s%s^7 %-2i %s^7 (*%s) ^1%1s%1s^7 %s^7 %s%s^7%s\n", i, c,
+                   t, l,
                    lname, guid_stub, muted, denied, p->pers.netname,
                    (*n) ? "(a.k.a. " : "", n, (*n) ? ")" : ""));
         } else {
-            adminLocal.ADMBP(va("%2i %s%s^7 ^1%1s%1s^7 %s^7\n", i, c, t, muted, denied,
+            adminLocal.ADMBP(va(nullptr, "%2i %s%s^7 ^1%1s%1s^7 %s^7\n", i, c, t,
+                                muted, denied,
                                 p->pers.netname));
         }
     }
@@ -2629,7 +2654,8 @@ bool idAdminLocal::AdminShowBans(gentity_t *ent, sint skiparg) {
     }
 
     if(start > max) {
-        adminLocal.ADMP(va("^3!showbans: ^7%d is the last valid ban\n", max + 1));
+        adminLocal.ADMP(va(nullptr, "^3!showbans: ^7%d is the last valid ban\n",
+                           max + 1));
         return false;
     }
 
@@ -2701,17 +2727,18 @@ bool idAdminLocal::AdminShowBans(gentity_t *ent, sint skiparg) {
         Q_vsprintf_s(n2, sizeof(n2), sizeof(n2), "%*s", max_banner + colorlen,
                      g_admin_bans[ i ]->banner);
 
-        adminLocal.ADMBP(va("%4i %s^7 %-15s %-8s %s^7 %-10s\n     \\__ %s\n",
+        adminLocal.ADMBP(va(nullptr,
+                            "%4i %s^7 %-15s %-8s %s^7 %-10s\n     \\__ %s\n",
                             (i + 1), n1, g_admin_bans[ i ]->ip, date, n2, duration,
                             g_admin_bans[ i ]->reason));
     }
 
     adminLocal.ADMBP(
-        va("^3!showbans:^7 showing bans %d - %d of %d (%d total).",
+        va(nullptr, "^3!showbans:^7 showing bans %d - %d of %d (%d total).",
            (found) ? (start + 1) : 0, i, max + 1, found));
 
     if(i <= max) {
-        adminLocal.ADMBP(va("  run !showbans %d to see more", i + 1));
+        adminLocal.ADMBP(va(nullptr, "  run !showbans %d to see more", i + 1));
     }
 
     adminLocal.ADMBP("\n");
@@ -2736,7 +2763,7 @@ bool idAdminLocal::AdminHelp(gentity_t *ent, sint skiparg) {
 
         for(i = 0; i < adminNumCmds; i++) {
             if(adminLocal.AdminPermission(ent, g_admin_cmds[ i ].flag[ 0 ])) {
-                adminLocal.ADMBP(va("^3!%-12s", g_admin_cmds[ i ].keyword));
+                adminLocal.ADMBP(va(nullptr, "^3!%-12s", g_admin_cmds[ i ].keyword));
                 j++;
                 count++;
             }
@@ -2753,7 +2780,7 @@ bool idAdminLocal::AdminHelp(gentity_t *ent, sint skiparg) {
                 continue;
             }
 
-            adminLocal.ADMBP(va("^3!%-12s", g_admin_commands[ i ]->command));
+            adminLocal.ADMBP(va(nullptr, "^3!%-12s", g_admin_commands[ i ]->command));
 
             j++;
             count++;
@@ -2769,7 +2796,7 @@ bool idAdminLocal::AdminHelp(gentity_t *ent, sint skiparg) {
             adminLocal.ADMBP("\n");
         }
 
-        adminLocal.ADMBP(va("^3!help: ^7%i available commands\n", count));
+        adminLocal.ADMBP(va(nullptr, "^3!help: ^7%i available commands\n", count));
         adminLocal.ADMBP("run !help [^3command^7] for help with a specific command.\n");
         adminLocal.ADMBP_end();
 
@@ -2786,18 +2813,22 @@ bool idAdminLocal::AdminHelp(gentity_t *ent, sint skiparg) {
         for(i = 0; i < adminNumCmds; i++) {
             if(!Q_stricmp(cmd, g_admin_cmds[ i ].keyword)) {
                 if(!adminLocal.AdminPermission(ent, g_admin_cmds[ i ].flag[ 0 ])) {
-                    adminLocal.ADMBP(va("^3!help: ^7you have no permission to use '%s'\n",
+                    adminLocal.ADMBP(va(nullptr,
+                                        "^3!help: ^7you have no permission to use '%s'\n",
                                         g_admin_cmds[ i ].keyword));
                     adminLocal.ADMBP_end();
                     return false;
                 }
 
-                adminLocal.ADMBP(va("^3!help: ^7help for '!%s':\n",
+                adminLocal.ADMBP(va(nullptr, "^3!help: ^7help for '!%s':\n",
                                     g_admin_cmds[ i ].keyword));
-                adminLocal.ADMBP(va(" ^3Function: ^7%s\n", g_admin_cmds[ i ].function));
-                adminLocal.ADMBP(va(" ^3Syntax: ^7!%s %s\n", g_admin_cmds[ i ].keyword,
+                adminLocal.ADMBP(va(nullptr, " ^3Function: ^7%s\n",
+                                    g_admin_cmds[ i ].function));
+                adminLocal.ADMBP(va(nullptr, " ^3Syntax: ^7!%s %s\n",
+                                    g_admin_cmds[ i ].keyword,
                                     g_admin_cmds[ i ].syntax));
-                adminLocal.ADMBP(va(" ^3Flag: ^7'%c'\n", g_admin_cmds[ i ].flag[ 0 ]));
+                adminLocal.ADMBP(va(nullptr, " ^3Flag: ^7'%c'\n",
+                                    g_admin_cmds[ i ].flag[ 0 ]));
                 adminLocal.ADMBP_end();
                 return true;
             }
@@ -2807,23 +2838,25 @@ bool idAdminLocal::AdminHelp(gentity_t *ent, sint skiparg) {
             if(!Q_stricmp(cmd, g_admin_commands[ i ]->command)) {
                 if(!adminLocal.AdminCommandPermission(ent,
                                                       g_admin_commands[ i ]->command)) {
-                    adminLocal.ADMBP(va("^3!help: ^7you have no permission to use '%s'\n",
+                    adminLocal.ADMBP(va(nullptr,
+                                        "^3!help: ^7you have no permission to use '%s'\n",
                                         g_admin_commands[ i ]->command));
                     adminLocal.ADMBP_end();
                     return false;
                 }
 
-                adminLocal.ADMBP(va("^3!help: ^7help for '%s':\n",
+                adminLocal.ADMBP(va(nullptr, "^3!help: ^7help for '%s':\n",
                                     g_admin_commands[ i ]->command));
-                adminLocal.ADMBP(va(" ^3Description: ^7%s\n",
+                adminLocal.ADMBP(va(nullptr, " ^3Description: ^7%s\n",
                                     g_admin_commands[ i ]->desc));
-                adminLocal.ADMBP(va(" ^3Syntax: ^7!%s\n", g_admin_commands[ i ]->command));
+                adminLocal.ADMBP(va(nullptr, " ^3Syntax: ^7!%s\n",
+                                    g_admin_commands[ i ]->command));
                 adminLocal.ADMBP_end();
                 return true;
             }
         }
 
-        adminLocal.ADMBP(va("^3!help: ^7no help found for '%s'\n", cmd));
+        adminLocal.ADMBP(va(nullptr, "^3!help: ^7no help found for '%s'\n", cmd));
         adminLocal.ADMBP_end();
         return false;
     }
@@ -2866,7 +2899,8 @@ bool idAdminLocal::AdminAdminTest(gentity_t *ent, sint skiparg) {
         }
     }
 
-    AP(va("print \"^3!admintest: ^7%s^7 is a level %d admin %s%s^7%s\n\"",
+    AP(va(nullptr,
+          "print \"^3!admintest: ^7%s^7 is a level %d admin %s%s^7%s\n\"",
           ent->client->pers.netname, l,
           (lname) ? "(" : "", (lname) ? g_admin_levels[ i ]->name : "",
           (lname) ? ")" : ""));
@@ -2902,7 +2936,8 @@ bool idAdminLocal::AdminAllReady(gentity_t *ent, sint skiparg) {
         cl->readyToExit = 1;
     }
 
-    AP(va("print \"^3!allready:^7 %s^7 says everyone is READY now\n\"",
+    AP(va(nullptr,
+          "print \"^3!allready:^7 %s^7 says everyone is READY now\n\"",
           (ent) ? ent->client->pers.netname : "console"));
 
     return true;
@@ -2936,7 +2971,8 @@ bool idAdminLocal::AdminCancelVote(gentity_t *ent, sint skiparg) {
 
     idSGameMain::CheckTeamVote(TEAM_ALIENS);
 
-    AP(va("print \"^3!cancelvote: ^7%s^7 decided that everyone voted No\n\"",
+    AP(va(nullptr,
+          "print \"^3!cancelvote: ^7%s^7 decided that everyone voted No\n\"",
           (ent) ? ent->client->pers.netname : "console"));
 
     return true;
@@ -2969,7 +3005,8 @@ bool idAdminLocal::AdminPassVote(gentity_t *ent, sint skiparg) {
 
     idSGameMain::CheckTeamVote(TEAM_ALIENS);
 
-    AP(va("print \"^3!passvote: ^7%s^7 decided that everyone voted Yes\n\"",
+    AP(va(nullptr,
+          "print \"^3!passvote: ^7%s^7 decided that everyone voted Yes\n\"",
           (ent) ? ent->client->pers.netname : "console"));
 
     return true;
@@ -3001,7 +3038,7 @@ bool idAdminLocal::AdminSpec999(gentity_t *ent, sint skiparg) {
 
         if(vic->client->ps.ping == 999) {
             idSGameTeam::ChangeTeam(vic, TEAM_NONE);
-            AP(va("print \"^3!spec999: ^7%s^7 moved ^7%s^7 to spectators\n\"",
+            AP(va(nullptr, "print \"^3!spec999: ^7%s^7 moved ^7%s^7 to spectators\n\"",
                   (ent) ? ent->client->pers.netname : "console", vic->client->pers.netname));
         }
     }
@@ -3037,7 +3074,7 @@ bool idAdminLocal::AdminRename(gentity_t *ent, sint skiparg) {
     if((found = idSGameCmds::ClientNumbersFromString(name, pids,
                 MAX_CLIENTS)) != 1) {
         idSGameCmds::MatchOnePlayer(pids, found, err, sizeof(err));
-        adminLocal.ADMP(va("^3!rename: ^7%s\n", err));
+        adminLocal.ADMP(va(nullptr, "^3!rename: ^7%s\n", err));
         return false;
     }
 
@@ -3049,7 +3086,7 @@ bool idAdminLocal::AdminRename(gentity_t *ent, sint skiparg) {
     }
 
     if(!adminLocal.AdminNameCheck(victim, newname, err, sizeof(err))) {
-        adminLocal.ADMP(va("^3!rename: ^7%s\n", err));
+        adminLocal.ADMP(va(nullptr, "^3!rename: ^7%s\n", err));
         return false;
     }
 
@@ -3066,7 +3103,8 @@ bool idAdminLocal::AdminRename(gentity_t *ent, sint skiparg) {
 
     sgameLocal.ClientUserinfoChanged(pids[ 0 ]);
 
-    AP(va("print \"^3!rename: ^7%s^7 has been renamed to %s^7 by %s\n\"",
+    AP(va(nullptr,
+          "print \"^3!rename: ^7%s^7 has been renamed to %s^7 by %s\n\"",
           oldname, newname, (ent) ? ent->client->pers.netname : "console"));
 
     return true;
@@ -3093,11 +3131,12 @@ bool idAdminLocal::AdminRestart(gentity_t *ent, sint skiparg) {
         if(Q_stricmp(layout, "keepteams") && Q_stricmp(layout, "keepteamslock") &&
                 Q_stricmp(layout, "switchteams") && Q_stricmp(layout, "switchteamslock")) {
             if(!Q_stricmp(layout, "*BUILTIN*") ||
-                    trap_FS_FOpenFile(va("layouts/%s/%s.dat", map, layout), nullptr,
+                    trap_FS_FOpenFile(va(nullptr, "layouts/%s/%s.dat", map, layout), nullptr,
                                       FS_READ) > 0) {
                 trap_Cvar_Set("g_layouts", layout);
             } else {
-                adminLocal.ADMP(va("^3restart: ^7layout '%s' does not exist\n", layout));
+                adminLocal.ADMP(va(nullptr, "^3restart: ^7layout '%s' does not exist\n",
+                                   layout));
                 return false;
             }
         } else {
@@ -3147,10 +3186,11 @@ bool idAdminLocal::AdminRestart(gentity_t *ent, sint skiparg) {
 
     trap_SendConsoleCommand(EXEC_APPEND, "map_restart");
 
-    AP(va("print \"^3restart: ^7map restarted by %s %s %s\n\"",
+    AP(va(nullptr, "print \"^3restart: ^7map restarted by %s %s %s\n\"",
           (ent) ? ent->client->pers.netname : "console",
-          (layout[0]) ? va("^7(forcing layout '%s^7')", layout) : "",
-          (teampref[0]) ? va("^7(with teams option: '%s^7')", teampref) : ""));
+          (layout[0]) ? va(nullptr, "^7(forcing layout '%s^7')", layout) : "",
+          (teampref[0]) ? va(nullptr, "^7(with teams option: '%s^7')",
+                             teampref) : ""));
 
     return true;
 }
@@ -3161,14 +3201,15 @@ idAdminLocal::AdminNextmap
 ===============
 */
 bool idAdminLocal::AdminNextmap(gentity_t *ent, sint skiparg) {
-    AP(va("print \"^3!nextmap: ^7%s^7 decided to load the next map\n\"",
+    AP(va(nullptr,
+          "print \"^3!nextmap: ^7%s^7 decided to load the next map\n\"",
           (ent) ? ent->client->pers.netname : "console"));
 
     level.lastWin = TEAM_NONE;
 
     trap_SetConfigstring(CS_WINNER, "Evacuation");
 
-    idSGameMain::LogExit(va("nextmap was run by %s",
+    idSGameMain::LogExit(va(nullptr, "nextmap was run by %s",
                             (ent) ? ent->client->pers.netname : "console"));
 
     return true;
@@ -3227,20 +3268,21 @@ bool idAdminLocal::AdminNameLog(gentity_t *ent, sint skiparg) {
             adminLocal.ADMBP("^3");
         }
 
-        adminLocal.ADMBP(va("%-2s (*%s) %15s^7",
+        adminLocal.ADMBP(va(nullptr, "%-2s (*%s) %15s^7",
                             (g_admin_namelog[ i ]->slot > -1) ?
-                            va("%d", g_admin_namelog[ i ]->slot) : "-", guid_stub,
+                            va(nullptr, "%d", g_admin_namelog[ i ]->slot) : "-", guid_stub,
                             g_admin_namelog[ i ]->ip));
 
         for(j = 0; j < MAX_ADMIN_NAMELOG_NAMES &&
                 g_admin_namelog[ i ]->name[ j ][ 0 ]; j++) {
-            adminLocal.ADMBP(va(" '%s^7'", g_admin_namelog[ i ]->name[ j ]));
+            adminLocal.ADMBP(va(nullptr, " '%s^7'", g_admin_namelog[ i ]->name[ j ]));
         }
 
         adminLocal.ADMBP("\n");
     }
 
-    adminLocal.ADMBP(va("^3!namelog:^7 %d recent clients found\n", printed));
+    adminLocal.ADMBP(va(nullptr, "^3!namelog:^7 %d recent clients found\n",
+                        printed));
     adminLocal.ADMBP_end();
 
     return true;
@@ -3278,11 +3320,12 @@ bool idAdminLocal::AdminLock(gentity_t *ent, sint skiparg) {
 
         level.humanTeamLocked = true;
     } else {
-        adminLocal.ADMP(va("^3!lock: ^7invalid team\"%c\"\n", teamName[0]));
+        adminLocal.ADMP(va(nullptr, "^3!lock: ^7invalid team\"%c\"\n",
+                           teamName[0]));
         return false;
     }
 
-    AP(va("print \"^3!lock: ^7the %s team has been locked by %s\n\"",
+    AP(va(nullptr, "print \"^3!lock: ^7the %s team has been locked by %s\n\"",
           bggame->TeamName(team), (ent) ? ent->client->pers.netname : "console"));
     return true;
 }
@@ -3319,11 +3362,13 @@ bool idAdminLocal::AdminUnlock(gentity_t *ent, sint skiparg) {
 
         level.humanTeamLocked = false;
     } else {
-        adminLocal.ADMP(va("^3!unlock: ^7invalid team\"%c\"\n", teamName[0]));
+        adminLocal.ADMP(va(nullptr, "^3!unlock: ^7invalid team\"%c\"\n",
+                           teamName[0]));
         return false;
     }
 
-    AP(va("print \"^3!unlock: ^7the %s team has been unlocked by %s\n\"",
+    AP(va(nullptr,
+          "print \"^3!unlock: ^7the %s team has been unlocked by %s\n\"",
           bggame->TeamName(team), (ent) ? ent->client->pers.netname : "console"));
 
     return true;
@@ -3339,7 +3384,8 @@ that it prints the message to the server console if ent is not defined.
 */
 void idAdminLocal::AdminPrint(gentity_t *ent, valueType *m) {
     if(ent) {
-        trap_SendServerCommand(ent - level.gentities, va("print \"%s\"", m));
+        trap_SendServerCommand(ent - level.gentities, va(nullptr, "print \"%s\"",
+                               m));
     } else {
         valueType m2[ MAX_STRING_CHARS ];
 

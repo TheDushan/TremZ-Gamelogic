@@ -434,7 +434,8 @@ void idSGameMain::UpdateCvars(void) {
 
             if(cv->modificationCount != cv->vmCvar->modificationCount) {
                 if(cv->trackChange) {
-                    trap_SendServerCommand(-1, va("print \"Server: %s changed to %s\n\"",
+                    trap_SendServerCommand(-1, va(nullptr,
+                                                  "print \"Server: %s changed to %s\n\"",
                                                   cv->cvarName, cv->vmCvar->string));
 
                     // update serverinfo in case this cvar is passed to clients indirectly
@@ -459,10 +460,11 @@ void idSGameMain::MapConfigs(pointer mapname) {
         return;
     }
 
-    trap_SendConsoleCommand(EXEC_APPEND, va("exec \"%s/default.cfg\"\n",
+    trap_SendConsoleCommand(EXEC_APPEND, va(nullptr,
+                                            "exec \"%s/default.cfg\"\n",
                                             g_mapConfigs.string));
 
-    trap_SendConsoleCommand(EXEC_APPEND, va("exec \"%s/%s.cfg\"\n",
+    trap_SendConsoleCommand(EXEC_APPEND, va(nullptr, "exec \"%s/%s.cfg\"\n",
                                             g_mapConfigs.string, mapname));
 
     trap_Cvar_Set("g_mapConfigsLoaded", "1");
@@ -623,10 +625,10 @@ void idSGameLocal::Init(sint levelTime, sint randomSeed, sint restart) {
     bggame->PrintVoices(level.voices, g_debugVoices.integer);
 
     //reset stages
-    trap_Cvar_Set("g_alienStage", va("%d", S1));
-    trap_Cvar_Set("g_humanStage", va("%d", S1));
-    trap_Cvar_Set("g_humanMaxReachedStage", va("%d", S1));
-    trap_Cvar_Set("g_alienMaxReachedStage", va("%d", S1));
+    trap_Cvar_Set("g_alienStage", va(nullptr, "%d", S1));
+    trap_Cvar_Set("g_humanStage", va(nullptr, "%d", S1));
+    trap_Cvar_Set("g_humanMaxReachedStage", va(nullptr, "%d", S1));
+    trap_Cvar_Set("g_alienMaxReachedStage", va(nullptr, "%d", S1));
     trap_Cvar_Set("g_alienCredits", 0);
     trap_Cvar_Set("g_humanCredits", 0);
     trap_Cvar_Set("g_suddenDeath", 0);
@@ -1107,7 +1109,8 @@ void idSGameMain::CalculateBuildPoints(void) {
             // warn about sudden death
             if(TimeTilSuddenDeath() <= 60000 &&
                     level.suddenDeathWarning < TW_IMMINENT) {
-                trap_SendServerCommand(-1, va("cp \"Sudden Death in %d seconds!\"",
+                trap_SendServerCommand(-1, va(nullptr,
+                                              "cp \"Sudden Death in %d seconds!\"",
                                               (sint)(TimeTilSuddenDeath() / 1000)));
                 level.suddenDeathWarning = TW_IMMINENT;
             }
@@ -1165,7 +1168,7 @@ void idSGameMain::CalculateBuildPoints(void) {
         level.alienBuildPoints = 0;
     }
 
-    trap_SetConfigstring(CS_BUILDPOINTS, va("%d %d %d %d",
+    trap_SetConfigstring(CS_BUILDPOINTS, va(nullptr, "%d %d %d %d",
                                             level.alienBuildPoints, localATP,
                                             level.humanBuildPoints, localHTP));
 
@@ -1220,7 +1223,7 @@ void idSGameMain::CalculateBuildPoints(void) {
                                       100;
         }
 
-        trap_SetConfigstring(CS_STAGES, va("%d %d %d %d %d %d",
+        trap_SetConfigstring(CS_STAGES, va(nullptr, "%d %d %d %d %d %d",
                                            g_alienStage.integer, g_humanStage.integer,
                                            g_alienCredits.integer, g_humanCredits.integer,
                                            alienNextStageThreshold, humanNextStageThreshold));
@@ -1255,7 +1258,7 @@ void idSGameMain::CalculateStages(void) {
             (sint)(ceil((float32)g_alienStageThreshold.integer * S2 *
                         alienPlayerCountMod)) &&
             g_alienStage.integer == S1 && g_alienMaxStage.integer > S1) {
-        trap_Cvar_Set("g_alienStage", va("%d", S2));
+        trap_Cvar_Set("g_alienStage", va(nullptr, "%d", S2));
         level.alienStage2Time = level.time;
         lastAlienStageModCount = g_alienMaxReachedStage.modificationCount;
 
@@ -1275,7 +1278,7 @@ void idSGameMain::CalculateStages(void) {
             (sint)(ceil((float32)g_alienStageThreshold.integer * S3 *
                         alienPlayerCountMod)) &&
             g_alienStage.integer == S2 && g_alienMaxStage.integer > S2) {
-        trap_Cvar_Set("g_alienStage", va("%d", S3));
+        trap_Cvar_Set("g_alienStage", va(nullptr, "%d", S3));
         level.alienStage3Time = level.time;
         lastAlienStageModCount = g_alienMaxReachedStage.modificationCount;
 
@@ -1295,7 +1298,7 @@ void idSGameMain::CalculateStages(void) {
             (sint)(ceil((float32)g_humanStageThreshold.integer * S2 *
                         humanPlayerCountMod)) &&
             g_humanStage.integer == S1 && g_humanMaxStage.integer > S1) {
-        trap_Cvar_Set("g_humanStage", va("%d", S2));
+        trap_Cvar_Set("g_humanStage", va(nullptr, "%d", S2));
 
         level.humanStage2Time = level.time;
         lastHumanStageModCount = g_humanMaxReachedStage.modificationCount;
@@ -1316,7 +1319,7 @@ void idSGameMain::CalculateStages(void) {
             (sint)(ceil((float32)g_humanStageThreshold.integer * S3 *
                         humanPlayerCountMod)) &&
             g_humanStage.integer == S2 && g_humanMaxStage.integer > S2) {
-        trap_Cvar_Set("g_humanStage", va("%d", S3));
+        trap_Cvar_Set("g_humanStage", va(nullptr, "%d", S3));
         level.humanStage3Time = level.time;
         lastHumanStageModCount = g_humanMaxReachedStage.modificationCount;
 
@@ -1354,11 +1357,11 @@ void idSGameMain::CalculateStages(void) {
         }
 
         lastAlienStageModCount = g_alienStage.modificationCount;
-        trap_Cvar_Set("g_alienStage", va("%d", g_alienStage.integer - 1));
-        trap_Cvar_Set("g_alienCredits", va("%d",
+        trap_Cvar_Set("g_alienStage", va(nullptr, "%d", g_alienStage.integer - 1));
+        trap_Cvar_Set("g_alienCredits", va(nullptr, "%d",
                                            (sint)ceil(g_alienCredits.integer - g_alienStageThreshold.integer *
                                                    alienPlayerCountMod)));
-        trap_Cvar_Set("g_humanCredits", va("%d",
+        trap_Cvar_Set("g_humanCredits", va(nullptr, "%d",
                                            (sint)ceil(g_humanCredits.integer - g_humanStageThreshold.integer *
                                                    humanPlayerCountMod)));
         LogPrintf("stagedownlog: after: %d %d %d %d %d %d\n",
@@ -1396,11 +1399,11 @@ void idSGameMain::CalculateStages(void) {
         }
 
         lastHumanStageModCount = g_humanStage.modificationCount;
-        trap_Cvar_Set("g_humanStage", va("%d", g_humanStage.integer - 1));
-        trap_Cvar_Set("g_humanCredits", va("%d",
+        trap_Cvar_Set("g_humanStage", va(nullptr, "%d", g_humanStage.integer - 1));
+        trap_Cvar_Set("g_humanCredits", va(nullptr, "%d",
                                            (sint)ceil(g_humanCredits.integer - g_humanStageThreshold.integer *
                                                    humanPlayerCountMod)));
-        trap_Cvar_Set("g_alienCredits", va("%d",
+        trap_Cvar_Set("g_alienCredits", va(nullptr, "%d",
                                            (sint)ceil(g_alienCredits.integer - g_alienStageThreshold.integer *
                                                    alienPlayerCountMod)));
         LogPrintf("stagedownlog: after: %d %d %d %d %d %d\n",
@@ -1560,7 +1563,7 @@ void idSGameMain::CalculateRanks(void) {
         ff |=  FFF_BUILDABLES;
     }
 
-    trap_Cvar_Set("ff", va("%i", ff));
+    trap_Cvar_Set("ff", va(nullptr, "%i", ff));
 
     qsort(level.sortedClients, level.numConnectedClients,
           sizeof(level.sortedClients[ 0 ]), &idSGameMain::SortRanks);
@@ -1787,7 +1790,7 @@ void idSGameMain::AdminMessage(pointer prefix, pointer fmt, ...) {
     // Send to all appropriate clients
     for(i = 0; i < level.maxclients; i++)
         if(adminLocal.AdminPermission(&g_entities[ i ], ADMF_ADMINCHAT)) {
-            trap_SendServerCommand(i, va("chat \"%s\"", outstring));
+            trap_SendServerCommand(i, va(nullptr, "chat \"%s\"", outstring));
         }
 
     // Send to the logfile and server console
@@ -2216,7 +2219,7 @@ void idSGameMain::Vote(gentity_t *ent, bool voting) {
             level.voteYes--;
         }
 
-        trap_SetConfigstring(CS_VOTE_YES, va("%d", level.voteYes));
+        trap_SetConfigstring(CS_VOTE_YES, va(nullptr, "%d", level.voteYes));
     } else {
         if(voting) {
             level.voteNo++;
@@ -2224,7 +2227,7 @@ void idSGameMain::Vote(gentity_t *ent, bool voting) {
             level.voteNo--;
         }
 
-        trap_SetConfigstring(CS_VOTE_NO, va("%d", level.voteNo));
+        trap_SetConfigstring(CS_VOTE_NO, va(nullptr, "%d", level.voteNo));
     }
 }
 
@@ -2269,7 +2272,7 @@ void idSGameMain::TeamVote(gentity_t *ent, bool voting) {
             level.teamVoteYes[ cs_offset ]--;
         }
 
-        trap_SetConfigstring(CS_TEAMVOTE_YES + cs_offset, va("%d",
+        trap_SetConfigstring(CS_TEAMVOTE_YES + cs_offset, va(nullptr, "%d",
                              level.teamVoteYes[ cs_offset ]));
     } else {
         if(voting) {
@@ -2278,7 +2281,7 @@ void idSGameMain::TeamVote(gentity_t *ent, bool voting) {
             level.teamVoteNo[ cs_offset ]--;
         }
 
-        trap_SetConfigstring(CS_TEAMVOTE_NO + cs_offset, va("%d",
+        trap_SetConfigstring(CS_TEAMVOTE_NO + cs_offset, va(nullptr, "%d",
                              level.teamVoteNo[ cs_offset ]));
     }
 }
@@ -2305,7 +2308,8 @@ void idSGameMain::CheckVote(void) {
     if(level.voteExecuteTime && level.voteExecuteTime < level.time) {
         level.voteExecuteTime = 0;
 
-        trap_SendConsoleCommand(EXEC_APPEND, va("%s\n", level.voteString));
+        trap_SendConsoleCommand(EXEC_APPEND, va(nullptr, "%s\n",
+                                                level.voteString));
 
         if(!Q_stricmp(level.voteString, "map_restart") ||
                 !Q_stricmpn(level.voteString, "map", 3)) {
@@ -2319,7 +2323,7 @@ void idSGameMain::CheckVote(void) {
 
             if(g_suddenDeathVoteDelay.integer) {
                 trap_SendServerCommand(-1,
-                                       va("cp \"Sudden Death will begin in %d seconds\n\"",
+                                       va(nullptr, nullptr, "cp \"Sudden Death will begin in %d seconds\n\"",
                                           g_suddenDeathVoteDelay.integer));
             }
         }
@@ -2340,13 +2344,13 @@ void idSGameMain::CheckVote(void) {
             (level.voteYes + level.voteNo == level.numConnectedClients)) {
         if(voteYesPercent > votePassThreshold || level.voteNo == 0) {
             // execute the command, then remove the vote
-            trap_SendServerCommand(-1, va("print \"Vote passed (%d - %d)\n\"",
+            trap_SendServerCommand(-1, va(nullptr, "print \"Vote passed (%d - %d)\n\"",
                                           level.voteYes, level.voteNo));
             LogPrintf("Vote: Vote passed (%d-%d)\n", level.voteYes, level.voteNo);
             level.voteExecuteTime = level.time + 3000;
         } else {
             // same behavior as a timeout
-            trap_SendServerCommand(-1, va("print \"Vote failed (%d - %d)\n\"",
+            trap_SendServerCommand(-1, va(nullptr, "print \"Vote failed (%d - %d)\n\"",
                                           level.voteYes, level.voteNo));
             LogPrintf("Vote: Vote failed (%d - %d)\n", level.voteYes, level.voteNo);
         }
@@ -2354,14 +2358,14 @@ void idSGameMain::CheckVote(void) {
         if(level.voteYes > (sint)((float64) level.numConnectedClients *
                                   ((float64) votePassThreshold / 100.0))) {
             // execute the command, then remove the vote
-            trap_SendServerCommand(-1, va("print \"Vote passed (%d - %d)\n\"",
+            trap_SendServerCommand(-1, va(nullptr, "print \"Vote passed (%d - %d)\n\"",
                                           level.voteYes, level.voteNo));
             LogPrintf("Vote: Vote passed (%d - %d)\n", level.voteYes, level.voteNo);
             level.voteExecuteTime = level.time + 3000;
         } else if(level.voteNo > (sint)((float64) level.numConnectedClients *
                                         ((float64)(100.0 - votePassThreshold) / 100.0))) {
             // same behavior as a timeout
-            trap_SendServerCommand(-1, va("print \"Vote failed (%d - %d)\n\"",
+            trap_SendServerCommand(-1, va(nullptr, "print \"Vote failed (%d - %d)\n\"",
                                           level.voteYes, level.voteNo));
             LogPrintf("Vote failed\n");
         } else {
@@ -2402,7 +2406,7 @@ void idSGameMain::CheckTeamVote(team_t team) {
                 level.numteamVotingClients[ cs_offset ] / 2) {
             // execute the command, then remove the vote
             idSGameUtils::TeamCommand(team, "print \"Team vote passed\n\"");
-            trap_SendConsoleCommand(EXEC_APPEND, va("%s\n",
+            trap_SendConsoleCommand(EXEC_APPEND, va(nullptr, "%s\n",
                                                     level.teamVoteString[ cs_offset ]));
         } else if(level.teamVoteNo[ cs_offset ] >=
                   level.numteamVotingClients[ cs_offset ] / 2) {

@@ -1561,7 +1561,7 @@ void idCGameLocal::DrawActiveFrame(sint serverTime,
         }
 
         if(cg_timescaleFadeSpeed.value) {
-            trap_Cvar_Set("timescale", va("%f", cg_timescale.value));
+            trap_Cvar_Set("timescale", va(nullptr, "%f", cg_timescale.value));
         }
     }
 

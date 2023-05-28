@@ -1474,16 +1474,6 @@ void idSGameWeapons::FireWeapon(gentity_t *ent) {
                         LEVEL1_CLAW_DMG, MOD_LEVEL1_CLAW);
             break;
 
-        case WP_ALEVEL3:
-            meleeAttack(ent, LEVEL3_CLAW_RANGE, LEVEL3_CLAW_WIDTH, LEVEL3_CLAW_WIDTH,
-                        LEVEL3_CLAW_DMG, MOD_LEVEL3_CLAW);
-            break;
-
-        case WP_ALEVEL3_UPG:
-            meleeAttack(ent, LEVEL3_CLAW_UPG_RANGE, LEVEL3_CLAW_WIDTH,
-                        LEVEL3_CLAW_WIDTH, LEVEL3_CLAW_DMG, MOD_LEVEL3_CLAW);
-            break;
-
         case WP_ALEVEL2:
             meleeAttack(ent, LEVEL2_CLAW_RANGE, LEVEL2_CLAW_WIDTH, LEVEL2_CLAW_WIDTH,
                         LEVEL2_CLAW_DMG, MOD_LEVEL2_CLAW);
@@ -1492,6 +1482,17 @@ void idSGameWeapons::FireWeapon(gentity_t *ent) {
         case WP_ALEVEL2_UPG:
             meleeAttack(ent, LEVEL2_CLAW_RANGE, LEVEL2_CLAW_WIDTH, LEVEL2_CLAW_WIDTH,
                         LEVEL2_CLAW_DMG, MOD_LEVEL2_CLAW);
+            break;
+
+
+        case WP_ALEVEL3:
+            meleeAttack(ent, LEVEL3_CLAW_RANGE, LEVEL3_CLAW_WIDTH, LEVEL3_CLAW_WIDTH,
+                        LEVEL3_CLAW_DMG, MOD_LEVEL3_CLAW);
+            break;
+
+        case WP_ALEVEL3_UPG:
+            meleeAttack(ent, LEVEL3_CLAW_UPG_RANGE, LEVEL3_CLAW_WIDTH,
+                        LEVEL3_CLAW_WIDTH, LEVEL3_CLAW_DMG, MOD_LEVEL3_CLAW);
             break;
 
         case WP_ALEVEL4:

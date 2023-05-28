@@ -178,7 +178,7 @@ void AssetCache(void) {
 
     for(i = 0; i < uiInfo.uiDC.Assets.emoticonCount; i++) {
         uiInfo.uiDC.Assets.emoticonShaders[ i ] = trap_R_RegisterShaderNoMip(
-                    va("emoticons/%s_%dx1.tga", uiInfo.uiDC.Assets.emoticons[ i ],
+                    va(nullptr, "emoticons/%s_%dx1.tga", uiInfo.uiDC.Assets.emoticons[ i ],
                        uiInfo.uiDC.Assets.emoticonWidths[ i ]));
     }
 }
@@ -645,7 +645,7 @@ static void UI_BuildFindPlayerList(bool force) {
             resend = 50;
         }
 
-        trap_Cvar_Set("cl_serverStatusResendTime", va("%d", resend));
+        trap_Cvar_Set("cl_serverStatusResendTime", va(nullptr, "%d", resend));
         // reset all server status requests
         trap_LAN_ServerStatus(nullptr, nullptr, 0);
         //
@@ -861,7 +861,8 @@ static void UI_BuildServerDisplayList(bool force) {
     len = strlen(uiInfo.serverStatus.motd);
 
     if(len == 0) {
-        strcpy(uiInfo.serverStatus.motd, va("Celestial Harvest - Version: %s",
+        strcpy(uiInfo.serverStatus.motd, va(nullptr,
+                                            "Celestial Harvest - Version: %s",
                                             Q3_VERSION));
         len = strlen(uiInfo.serverStatus.motd);
     }
@@ -944,7 +945,7 @@ static void UI_BuildServerDisplayList(bool force) {
 
                 if(s && *s) {
                     uiInfo.serverStatus.currentServerPreview = trap_R_RegisterShaderNoMip(
-                                va("levelshots/%s", Info_ValueForKey(info, "mapname")));
+                                va(nullptr, "levelshots/%s", Info_ValueForKey(info, "mapname")));
                 } else {
                     uiInfo.serverStatus.currentServerPreview =
                         trap_R_RegisterShaderNoMip("levelshots/unknownmap");
@@ -1068,10 +1069,11 @@ static void UI_StartServerRefresh(bool full) {
     qtime_t q;
 
     time = trap_RealTime(&q);
-    trap_Cvar_Set(va("ui_lastServerRefresh_%i_time", ui_netSource.integer),
-                  va("%i", time));
-    trap_Cvar_Set(va("ui_lastServerRefresh_%i", ui_netSource.integer),
-                  va("%s-%i, %i at %i:%02i", MonthAbbrev[q.tm_mon],
+    trap_Cvar_Set(va(nullptr, "ui_lastServerRefresh_%i_time",
+                     ui_netSource.integer),
+                  va(nullptr, "%i", time));
+    trap_Cvar_Set(va(nullptr, "ui_lastServerRefresh_%i", ui_netSource.integer),
+                  va(nullptr, "%s-%i, %i at %i:%02i", MonthAbbrev[q.tm_mon],
                      q.tm_mday, 1900 + q.tm_year, q.tm_hour, q.tm_min));
 
     if(!full) {
@@ -1108,10 +1110,12 @@ static void UI_StartServerRefresh(bool full) {
         ptr = UI_Cvar_VariableString("debug_protocol");
 
         if(strlen(ptr)) {
-            trap_Cmd_ExecuteText(EXEC_APPEND, va("globalservers %d %s full empty\n", i,
+            trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr,
+                                                 "globalservers %d %s full empty\n", i,
                                                  ptr));
         } else {
-            trap_Cmd_ExecuteText(EXEC_APPEND, va("globalservers %d %d full empty\n", i,
+            trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr,
+                                                 "globalservers %d %d full empty\n", i,
                                                  (sint)trap_Cvar_VariableValue("protocol")));
         }
     }
@@ -1451,7 +1455,7 @@ void UI_LoadMenus(pointer menuFile, bool reset) {
     handle = trap_PC_LoadSource(menuFile);
 
     if(!handle) {
-        trap_Error(va(S_COLOR_RED
+        trap_Error(va(nullptr, S_COLOR_RED
                       "menu list '%s' not found, unable to continue!\n", menuFile));
     }
 
@@ -1612,11 +1616,11 @@ static void UI_DrawInfoPane(menuItem_t *item, rectDef_t *rect,
                      ALIEN_CREDITS_PER_FRAG - 1) / ALIEN_CREDITS_PER_FRAG;
 
             if(value < 1) {
-                s = va("%s\n\n%s",
+                s = va(nullptr, "%s\n\n%s",
                        bggame->ClassConfig(item->v.pclass)->humanName,
                        bggame->Class(item->v.pclass)->info);
             } else {
-                s = va("%s\n\n%s\n\nFrags: %d",
+                s = va(nullptr, "%s\n\n%s\n\nFrags: %d",
                        bggame->ClassConfig(item->v.pclass)->humanName,
                        bggame->Class(item->v.pclass)->info,
                        value);
@@ -1628,11 +1632,11 @@ static void UI_DrawInfoPane(menuItem_t *item, rectDef_t *rect,
             value = bggame->Weapon(item->v.weapon)->price;
 
             if(value == 0) {
-                s = va("%s\n\n%s\n\nCredits: Free",
+                s = va(nullptr, "%s\n\n%s\n\nCredits: Free",
                        bggame->Weapon(item->v.weapon)->humanName,
                        bggame->Weapon(item->v.weapon)->info);
             } else {
-                s = va("%s\n\n%s\n\nCredits: %d",
+                s = va(nullptr, "%s\n\n%s\n\nCredits: %d",
                        bggame->Weapon(item->v.weapon)->humanName,
                        bggame->Weapon(item->v.weapon)->info,
                        value);
@@ -1644,11 +1648,11 @@ static void UI_DrawInfoPane(menuItem_t *item, rectDef_t *rect,
             value = bggame->Upgrade(item->v.upgrade)->price;
 
             if(value == 0) {
-                s = va("%s\n\n%s\n\nCredits: Free",
+                s = va(nullptr, "%s\n\n%s\n\nCredits: Free",
                        bggame->Upgrade(item->v.upgrade)->humanName,
                        bggame->Upgrade(item->v.upgrade)->info);
             } else {
-                s = va("%s\n\n%s\n\nCredits: %d",
+                s = va(nullptr, "%s\n\n%s\n\nCredits: %d",
                        bggame->Upgrade(item->v.upgrade)->humanName,
                        bggame->Upgrade(item->v.upgrade)->info,
                        value);
@@ -1673,11 +1677,11 @@ static void UI_DrawInfoPane(menuItem_t *item, rectDef_t *rect,
             }
 
             if(value == 0) {
-                s = va("%s\n\n%s",
+                s = va(nullptr, "%s\n\n%s",
                        bggame->Buildable(item->v.buildable)->humanName,
                        bggame->Buildable(item->v.buildable)->info);
             } else {
-                s = va("%s\n\n%s\n\n%s: %d",
+                s = va(nullptr, "%s\n\n%s\n\n%s: %d",
                        bggame->Buildable(item->v.buildable)->humanName,
                        bggame->Buildable(item->v.buildable)->info,
                        string, value);
@@ -1719,7 +1723,8 @@ static void UI_DrawSelectedMapPreview(rectDef_t *rect, float32 scale,
 
     if(uiInfo.mapList[map].cinematic >= -1) {
         if(uiInfo.mapList[map].cinematic == -1)
-            uiInfo.mapList[map].cinematic = trap_CIN_PlayCinematic(va("%s.roq",
+            uiInfo.mapList[map].cinematic = trap_CIN_PlayCinematic(va(nullptr,
+                                            "%s.roq",
                                             uiInfo.mapList[map].mapLoadName),
                                             0, 0, 0, 0, (CIN_loop | CIN_silent));
 
@@ -1792,11 +1797,12 @@ static pointer UI_OwnerDrawText(sint ownerDraw) {
 
                 dots[ i ] = '\0';
 
-                s = numServers < 0 ? va("Waiting for response%s", dots) :
-                    va("Getting info for %d servers (ESC to cancel)%s", numServers, dots);
+                s = numServers < 0 ? va(nullptr, "Waiting for response%s", dots) :
+                    va(nullptr, "Getting info for %d servers (ESC to cancel)%s", numServers,
+                       dots);
             } else {
-                s = va("Refresh Time: %s",
-                       UI_Cvar_VariableString(va("ui_lastServerRefresh_%i",
+                s = va(nullptr, "Refresh Time: %s",
+                       UI_Cvar_VariableString(va(nullptr, "ui_lastServerRefresh_%i",
                                                  ui_netSource.integer)));
             }
 
@@ -1929,7 +1935,7 @@ static void UI_DrawScreen(rectDef_t *rect, sint modifier) {
     }
 
     UI_DrawHandlePic(rect->x, rect->y, rect->w, rect->h,
-                     trap_R_RegisterShaderNoMip(va("screenshots/%s",
+                     trap_R_RegisterShaderNoMip(va(nullptr, "screenshots/%s",
                              screenshots[ shotNumber ])));
 }
 
@@ -2133,7 +2139,7 @@ static bool UI_NetSource_HandleKey(sint flags, float32 *special,
             UI_StartServerRefresh(true);
         }
 
-        trap_Cvar_Set("ui_netSource", va("%d", ui_netSource.integer));
+        trap_Cvar_Set("ui_netSource", va(nullptr, "%d", ui_netSource.integer));
         return true;
     }
 
@@ -2237,7 +2243,7 @@ static void UI_AddClass(class_t _class) {
         String_Alloc(bggame->ClassConfig(_class)->humanName);
     uiInfo.alienClassList[ uiInfo.alienClassCount ].cmd =
 
-        String_Alloc(va("cmd class %s\n", bggame->Class(_class)->name));
+        String_Alloc(va(nullptr, "cmd class %s\n", bggame->Class(_class)->name));
     uiInfo.alienClassList[ uiInfo.alienClassCount ].type = INFOTYPE_CLASS;
 
     uiInfo.alienClassList[ uiInfo.alienClassCount ].v.pclass = _class;
@@ -2275,7 +2281,7 @@ static void UI_AddItem(weapon_t weapon) {
     uiInfo.humanItemList[ uiInfo.humanItemCount ].text =
         String_Alloc(bggame->Weapon(weapon)->humanName);
     uiInfo.humanItemList[ uiInfo.humanItemCount ].cmd =
-        String_Alloc(va("cmd class %s\n", bggame->Weapon(weapon)->name));
+        String_Alloc(va(nullptr, "cmd class %s\n", bggame->Weapon(weapon)->name));
     uiInfo.humanItemList[ uiInfo.humanItemCount ].type = INFOTYPE_WEAPON;
     uiInfo.humanItemList[ uiInfo.humanItemCount ].v.weapon = weapon;
 
@@ -2350,7 +2356,7 @@ static void UI_LoadHumanArmouryBuys(void) {
 
             uiInfo.humanArmouryBuyList[ j ].text = String_Alloc(price <= uiInfo.credits
                                                    ?
-                                                   bggame->Weapon((weapon_t)i)->humanName : va("^1%s",
+                                                   bggame->Weapon((weapon_t)i)->humanName : va(nullptr, "^1%s",
                                                            bggame->Weapon((weapon_t)i)->humanName));
             Q_vsprintf_s(buffer, sizeof(buffer), sizeof(buffer), "%scmd buy %s\n",
                          buffer, bggame->Weapon((weapon_t)i)->name);
@@ -2385,7 +2391,7 @@ static void UI_LoadHumanArmouryBuys(void) {
 
             uiInfo.humanArmouryBuyList[ j ].text = String_Alloc(price <= uiInfo.credits
                                                    ?
-                                                   bggame->Upgrade((upgrade_t)i)->humanName : va("^1%s",
+                                                   bggame->Upgrade((upgrade_t)i)->humanName : va(nullptr, "^1%s",
                                                            bggame->Upgrade((upgrade_t)i)->humanName));
             Q_vsprintf_s(buffer, sizeof(buffer), sizeof(buffer), "%scmd buy %s\n",
                          buffer, bggame->Upgrade((upgrade_t)i)->name);
@@ -2415,7 +2421,7 @@ static void UI_LoadHumanArmourySells(void) {
         uiInfo.humanArmourySellList[ j ].text = String_Alloc(bggame->Weapon((
                 weapon_t)uiInfo.weapon)->humanName);
         uiInfo.humanArmourySellList[ j ].cmd =
-            String_Alloc(va("cmd sell %s\n",
+            String_Alloc(va(nullptr, "cmd sell %s\n",
                             bggame->Weapon((weapon_t)uiInfo.weapon)->name));
         uiInfo.humanArmourySellList[ j ].type = INFOTYPE_WEAPON;
         uiInfo.humanArmourySellList[ j ].v.weapon = (weapon_t)uiInfo.weapon;
@@ -2430,7 +2436,8 @@ static void UI_LoadHumanArmourySells(void) {
             uiInfo.humanArmourySellList[ j ].text = String_Alloc(bggame->Upgrade((
                     upgrade_t)i)->humanName);
             uiInfo.humanArmourySellList[ j ].cmd =
-                String_Alloc(va("cmd sell %s\n", bggame->Upgrade((upgrade_t)i)->name));
+                String_Alloc(va(nullptr, "cmd sell %s\n",
+                                bggame->Upgrade((upgrade_t)i)->name));
             uiInfo.humanArmourySellList[ j ].type = INFOTYPE_UPGRADE;
             uiInfo.humanArmourySellList[ j ].v.upgrade = (upgrade_t)i;
 
@@ -2484,7 +2491,8 @@ static void UI_LoadAlienUpgrades(void) {
             uiInfo.alienUpgradeList[ j ].text = String_Alloc(bggame->ClassConfig((
                                                     class_t)i)->humanName);
             uiInfo.alienUpgradeList[ j ].cmd =
-                String_Alloc(va("cmd class %s\n", bggame->Class((class_t)i)->name));
+                String_Alloc(va(nullptr, "cmd class %s\n",
+                                bggame->Class((class_t)i)->name));
             uiInfo.alienUpgradeList[ j ].type = INFOTYPE_CLASS;
             uiInfo.alienUpgradeList[ j ].v.pclass = (class_t)i;
 
@@ -2517,7 +2525,7 @@ static void UI_LoadAlienBuilds(void) {
             uiInfo.alienBuildList[ j ].text =
                 String_Alloc(bggame->Buildable((buildable_t)i)->humanName);
             uiInfo.alienBuildList[ j ].cmd =
-                String_Alloc(va("cmd build %s\n",
+                String_Alloc(va(nullptr, "cmd build %s\n",
                                 bggame->Buildable((buildable_t)i)->name));
             uiInfo.alienBuildList[ j ].type = INFOTYPE_BUILDABLE;
             uiInfo.alienBuildList[ j ].v.buildable = (buildable_t)i;
@@ -2551,7 +2559,7 @@ static void UI_LoadHumanBuilds(void) {
             uiInfo.humanBuildList[ j ].text =
                 String_Alloc(bggame->Buildable((buildable_t)i)->humanName);
             uiInfo.humanBuildList[ j ].cmd =
-                String_Alloc(va("cmd build %s\n",
+                String_Alloc(va(nullptr, "cmd build %s\n",
                                 bggame->Buildable((buildable_t)i)->name));
             uiInfo.humanBuildList[ j ].type = INFOTYPE_BUILDABLE;
             uiInfo.humanBuildList[ j ].v.buildable = (buildable_t)i;
@@ -2620,7 +2628,8 @@ static void UI_LoadProfiles(void) {
             sint handle;
             pc_token_t token;
 
-            if(!(handle = trap_PC_LoadSource(va("profiles/%s/profile.dat", dirptr)))) {
+            if(!(handle = trap_PC_LoadSource(va(nullptr, "profiles/%s/profile.dat",
+                                                dirptr)))) {
                 dirptr += dirlen;
                 continue;
             }
@@ -3001,7 +3010,7 @@ static void UI_RunMenuScript(valueType **args) {
     if(String_Parse(args, &name)) {
         if(Q_stricmp(name, "StartServer") == 0) {
             trap_Cvar_SetValue("dedicated", Com_Clamp(0, 2, ui_dedicated.integer));
-            trap_Cmd_ExecuteText(EXEC_APPEND, va("wait ; wait ; map %s\n",
+            trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr, "wait ; wait ; map %s\n",
                                                  uiInfo.mapList[ui_selectedMap.integer].mapLoadName));
         } else if(Q_stricmp(name, "resetDefaults") == 0) {
             trap_Cmd_ExecuteText(EXEC_APPEND, "exec default.cfg\n");
@@ -3022,11 +3031,11 @@ static void UI_RunMenuScript(valueType **args) {
             trap_Cvar_Set("com_errorMessage", "");
         }
         //else if( Q_stricmp( name, "downloadIgnore" ) == 0 )
-        //    trap_Cvar_Set( "cl_downloadPrompt", va( "%d", DLP_IGNORE ) );
+        //    trap_Cvar_Set( "cl_downloadPrompt", va(nullptr,  "%d", DLP_IGNORE ) );
         //else if( Q_stricmp( name, "downloadCURL" ) == 0 )
-        //    trap_Cvar_Set( "cl_downloadPrompt", va( "%d", DLP_CURL ) );
+        //    trap_Cvar_Set( "cl_downloadPrompt", va(nullptr,  "%d", DLP_CURL ) );
         //else if( Q_stricmp( name, "downloadUDP" ) == 0 )
-        //    trap_Cvar_Set( "cl_downloadPrompt", va( "%d", DLP_UDP ) );
+        //    trap_Cvar_Set( "cl_downloadPrompt", va(nullptr,  "%d", DLP_UDP ) );
         else if(Q_stricmp(name, "RefreshServers") == 0) {
             UI_StartServerRefresh(true);
             UI_BuildServerDisplayList(true);
@@ -3043,7 +3052,8 @@ static void UI_RunMenuScript(valueType **args) {
             }
 
             // refresh if older than 3 days or if list is empty
-            last = atoi(UI_Cvar_VariableString(va("ui_lastServerRefresh_%i_time",
+            last = atoi(UI_Cvar_VariableString(va(nullptr,
+                                                  "ui_lastServerRefresh_%i_time",
                                                   ui_netSource.integer)));
 
             if(trap_LAN_GetServerCount(ui_netSource.integer) < 1 ||
@@ -3147,12 +3157,14 @@ static void UI_RunMenuScript(valueType **args) {
 
             if(!buffer[0]) {
             } else if(uiInfo.chatTargetClientNum != -1) {
-                trap_Cmd_ExecuteText(EXEC_APPEND, va("tell %i \"%s\"\n",
+                trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr, "tell %i \"%s\"\n",
                                                      uiInfo.chatTargetClientNum, buffer));
             } else if(uiInfo.chatTeam) {
-                trap_Cmd_ExecuteText(EXEC_APPEND, va("say_team \"%s\"\n", buffer));
+                trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr, "say_team \"%s\"\n",
+                                                     buffer));
             } else if(uiInfo.chatAdmins) {
-                trap_Cmd_ExecuteText(EXEC_APPEND, va("say_admins \"%s\"\n", buffer));
+                trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr, "say_admins \"%s\"\n",
+                                                     buffer));
             } else if(uiInfo.chatClan) {
                 valueType clantagDecolored[32];
                 trap_Cvar_VariableStringBuffer("cl_clantag", clantagDecolored,
@@ -3160,17 +3172,18 @@ static void UI_RunMenuScript(valueType **args) {
                 Q_CleanStr(clantagDecolored);
 
                 if(strlen(clantagDecolored) > 2 && strlen(clantagDecolored) < 11) {
-                    trap_Cmd_ExecuteText(EXEC_APPEND, va("m \"%s\" \"%s\"\n", clantagDecolored,
+                    trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr, "m \"%s\" \"%s\"\n",
+                                                         clantagDecolored,
                                                          buffer));
                 } else {
                     Com_Printf("^3Error: Your clantag has to be between 3 and 10 chars long. Current value is:^7 %s^7\n",
                                clantagDecolored);
                 }
             } else if(uiInfo.chatPrompt) {
-                trap_Cmd_ExecuteText(EXEC_APPEND, va("vstr \"%s\"\n",
+                trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr, "vstr \"%s\"\n",
                                                      uiInfo.chatPromptCallback));
             } else {
-                trap_Cmd_ExecuteText(EXEC_APPEND, va("say \"%s\"\n", buffer));
+                trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr, "say \"%s\"\n", buffer));
             }
 
 #else
@@ -3182,11 +3195,13 @@ static void UI_RunMenuScript(valueType **args) {
                     ;
                 else if(ui_chatCommands.integer && (buffer[0] == '/' ||
                                                     buffer[0] == '\\')) {
-                    trap_Cmd_ExecuteText(EXEC_APPEND, va("%s\n", buffer + 1));
+                    trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr, "%s\n", buffer + 1));
                 } else if(uiInfo.chatTeam) {
-                    trap_Cmd_ExecuteText(EXEC_APPEND, va("say_team \"%s\"\n", buffer));
+                    trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr, "say_team \"%s\"\n",
+                                                         buffer));
                 } else if(uiInfo.chatAdmins) {
-                    trap_Cmd_ExecuteText(EXEC_APPEND, va("say_admins \"%s\"\n", buffer));
+                    trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr, "say_admins \"%s\"\n",
+                                                         buffer));
                 } else if(uiInfo.chatClan) {
                     valueType clantagDecolored[32];
                     trap_Cvar_VariableStringBuffer("cl_clantag", clantagDecolored,
@@ -3194,11 +3209,12 @@ static void UI_RunMenuScript(valueType **args) {
                     Q_CleanStr(clantagDecolored);
 
                     if(strlen(clantagDecolored) > 2 && strlen(clantagDecolored) < 11) {
-                        trap_Cmd_ExecuteText(EXEC_APPEND, va("m \"%s\" \"%s\"\n", clantagDecolored,
+                        trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr, "m \"%s\" \"%s\"\n",
+                                                             clantagDecolored,
                                                              buffer));
                     }
                 } else {
-                    trap_Cmd_ExecuteText(EXEC_APPEND, va("say \"%s\"\n", buffer));
+                    trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr, "say \"%s\"\n", buffer));
                 }
             } else if(Q_stricmp(name, "SayKeydown") == 0) {
                 if(ui_chatCommands.integer) {
@@ -3221,13 +3237,13 @@ static void UI_RunMenuScript(valueType **args) {
                 trap_CIN_StopCinematic(uiInfo.previewMovie);
             }
 
-            trap_Cmd_ExecuteText(EXEC_APPEND, va("cinematic %s.roq 2\n",
+            trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr, "cinematic %s.roq 2\n",
                                                  uiInfo.movieList[uiInfo.movieIndex]));
         } else if(Q_stricmp(name, "RunMod") == 0) {
             trap_Cvar_Set("fs_game", uiInfo.modList[uiInfo.modIndex].modName);
             trap_Cmd_ExecuteText(EXEC_APPEND, "vid_restart;");
         } else if(Q_stricmp(name, "RunDemo") == 0) {
-            trap_Cmd_ExecuteText(EXEC_APPEND, va("demo %s\n",
+            trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr, "demo %s\n",
                                                  uiInfo.demoList[uiInfo.demoIndex]));
         } else if(Q_stricmp(name, "Tremulous") == 0) {
             trap_Cvar_Set("fs_game", "");
@@ -3278,12 +3294,12 @@ static void UI_RunMenuScript(valueType **args) {
                 trap_LAN_GetServerAddressString(ui_netSource.integer,
                                                 uiInfo.serverStatus.displayServers[uiInfo.serverStatus.currentServer],
                                                 buff, 1024);
-                trap_Cmd_ExecuteText(EXEC_APPEND, va("connect %s\n", buff));
+                trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr, "connect %s\n", buff));
             }
         } else if(Q_stricmp(name, "FoundPlayerJoinServer") == 0) {
             if(uiInfo.currentFoundPlayerServer >= 0 &&
                     uiInfo.currentFoundPlayerServer < uiInfo.numFoundPlayerServers) {
-                trap_Cmd_ExecuteText(EXEC_APPEND, va("connect %s\n",
+                trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr, "connect %s\n",
                                                      uiInfo.foundPlayerServerAddresses[uiInfo.currentFoundPlayerServer]));
             }
         } else if(Q_stricmp(name, "Quit") == 0) {
@@ -3316,40 +3332,42 @@ static void UI_RunMenuScript(valueType **args) {
         } else if(Q_stricmp(name, "voteMap") == 0) {
             if(ui_selectedMap.integer >= 0 &&
                     ui_selectedMap.integer < uiInfo.mapCount) {
-                trap_Cmd_ExecuteText(EXEC_APPEND, va("callvote map %s\n",
+                trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr, "callvote map %s\n",
                                                      uiInfo.mapList[ui_selectedMap.integer].mapLoadName));
             }
         } else if(Q_stricmp(name, "voteKick") == 0) {
             if(uiInfo.playerIndex >= 0 && uiInfo.playerIndex < uiInfo.playerCount) {
-                trap_Cmd_ExecuteText(EXEC_APPEND, va("callvote kick %d\n",
+                trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr, "callvote kick %d\n",
                                                      uiInfo.clientNums[uiInfo.playerIndex]));
             }
         } else if(Q_stricmp(name, "voteMute") == 0) {
             if(uiInfo.playerIndex >= 0 && uiInfo.playerIndex < uiInfo.playerCount) {
-                trap_Cmd_ExecuteText(EXEC_APPEND, va("callvote mute %d\n",
+                trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr, "callvote mute %d\n",
                                                      uiInfo.clientNums[uiInfo.playerIndex]));
             }
         } else if(Q_stricmp(name, "voteUnMute") == 0) {
             if(uiInfo.playerIndex >= 0 && uiInfo.playerIndex < uiInfo.playerCount) {
-                trap_Cmd_ExecuteText(EXEC_APPEND, va("callvote unmute %d\n",
+                trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr, "callvote unmute %d\n",
                                                      uiInfo.clientNums[uiInfo.playerIndex]));
             }
         } else if(Q_stricmp(name, "voteTeamKick") == 0) {
             if(uiInfo.teamPlayerIndex >= 0 &&
                     uiInfo.teamPlayerIndex < uiInfo.myTeamCount) {
-                trap_Cmd_ExecuteText(EXEC_APPEND, va("callteamvote kick %d\n",
+                trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr, "callteamvote kick %d\n",
                                                      uiInfo.teamClientNums[uiInfo.teamPlayerIndex]));
             }
         } else if(Q_stricmp(name, "voteTeamDenyBuild") == 0) {
             if(uiInfo.teamPlayerIndex >= 0 &&
                     uiInfo.teamPlayerIndex < uiInfo.myTeamCount) {
-                trap_Cmd_ExecuteText(EXEC_APPEND, va("callteamvote denybuild %d\n",
+                trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr,
+                                                     "callteamvote denybuild %d\n",
                                                      uiInfo.teamClientNums[uiInfo.teamPlayerIndex]));
             }
         } else if(Q_stricmp(name, "voteTeamAllowBuild") == 0) {
             if(uiInfo.teamPlayerIndex >= 0 &&
                     uiInfo.teamPlayerIndex < uiInfo.myTeamCount) {
-                trap_Cmd_ExecuteText(EXEC_APPEND, va("callteamvote allowbuild %d\n",
+                trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr,
+                                                     "callteamvote allowbuild %d\n",
                                                      uiInfo.teamClientNums[uiInfo.teamPlayerIndex]));
             }
         } else if(Q_stricmp(name, "addFavorite") == 0) {
@@ -3434,12 +3452,12 @@ static void UI_RunMenuScript(valueType **args) {
                                           uiInfo.clientNums[uiInfo.ignoreIndex])) {
                     bggame->ClientListRemove(&uiInfo.ignoreList[uiInfo.myPlayerIndex],
                                              uiInfo.clientNums[uiInfo.ignoreIndex]);
-                    trap_Cmd_ExecuteText(EXEC_APPEND, va("unignore %i\n",
+                    trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr, "unignore %i\n",
                                                          uiInfo.clientNums[uiInfo.ignoreIndex]));
                 } else {
                     bggame->ClientListAdd(&uiInfo.ignoreList[uiInfo.myPlayerIndex],
                                           uiInfo.clientNums[uiInfo.ignoreIndex]);
-                    trap_Cmd_ExecuteText(EXEC_APPEND, va("ignore %i\n",
+                    trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr, "ignore %i\n",
                                                          uiInfo.clientNums[uiInfo.ignoreIndex]));
                 }
             }
@@ -3449,7 +3467,7 @@ static void UI_RunMenuScript(valueType **args) {
                                            uiInfo.clientNums[uiInfo.ignoreIndex])) {
                     bggame->ClientListAdd(&uiInfo.ignoreList[uiInfo.myPlayerIndex],
                                           uiInfo.clientNums[uiInfo.ignoreIndex]);
-                    trap_Cmd_ExecuteText(EXEC_APPEND, va("ignore %i\n",
+                    trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr, "ignore %i\n",
                                                          uiInfo.clientNums[uiInfo.ignoreIndex]));
                 }
             }
@@ -3459,7 +3477,7 @@ static void UI_RunMenuScript(valueType **args) {
                                           uiInfo.clientNums[uiInfo.ignoreIndex])) {
                     bggame->ClientListRemove(&uiInfo.ignoreList[uiInfo.myPlayerIndex],
                                              uiInfo.clientNums[uiInfo.ignoreIndex]);
-                    trap_Cmd_ExecuteText(EXEC_APPEND, va("unignore %i\n",
+                    trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr, "unignore %i\n",
                                                          uiInfo.clientNums[uiInfo.ignoreIndex]));
                 }
             }
@@ -3477,9 +3495,9 @@ static void UI_RunMenuScript(valueType **args) {
             Q_CleanStr(buff);
             Q_CleanDirName(buff);
 
-            if(trap_FS_FOpenFile(va("profiles/%s/profile.dat", buff), &f,
+            if(trap_FS_FOpenFile(va(nullptr, "profiles/%s/profile.dat", buff), &f,
                                  FS_WRITE) >= 0) {
-                trap_FS_Write(va("\"%s\"", ui_profile.string),
+                trap_FS_Write(va(nullptr, "\"%s\"", ui_profile.string),
                               strlen(ui_profile.string) + 2, f);
                 trap_FS_FCloseFile(f);
             }
@@ -3501,7 +3519,7 @@ static void UI_RunMenuScript(valueType **args) {
             trap_Cvar_Set("cl_defaultProfile", cl_defaultProfile.string);
 
             if(trap_FS_FOpenFile("profiles/defaultprofile.dat", &f, FS_WRITE) >= 0) {
-                trap_FS_Write(va("\"%s\"", cl_defaultProfile.string),
+                trap_FS_Write(va(nullptr, "\"%s\"", cl_defaultProfile.string),
                               strlen(cl_defaultProfile.string) + 2, f);
                 trap_FS_FCloseFile(f);
             }
@@ -3521,13 +3539,13 @@ static void UI_RunMenuScript(valueType **args) {
                     trap_Cvar_Set("cl_defaultProfile", cl_profile.string);
 
                     if(trap_FS_FOpenFile("profiles/defaultprofile.dat", &f, FS_WRITE) >= 0) {
-                        trap_FS_Write(va("\"%s\"", cl_profile.string),
+                        trap_FS_Write(va(nullptr, "\"%s\"", cl_profile.string),
                                       strlen(cl_profile.string) + 2, f);
                         trap_FS_FCloseFile(f);
                     }
                 }
 
-                trap_FS_Delete(va("profiles/%s", buff));
+                trap_FS_Delete(va(nullptr, "profiles/%s", buff));
             }
         } else if(Q_stricmp(name, "renameProfileInit") == 0) {
             trap_Cvar_Set("ui_profile_renameto", ui_profile.string);
@@ -3548,18 +3566,19 @@ static void UI_RunMenuScript(valueType **args) {
             Q_CleanStr(uiprofile);
             Q_CleanDirName(uiprofile);
 
-            if(trap_FS_FOpenFile(va("profiles/%s/profile.dat", buff), &f,
+            if(trap_FS_FOpenFile(va(nullptr, "profiles/%s/profile.dat", buff), &f,
                                  FS_WRITE) >= 0) {
-                trap_FS_Write(va("\"%s\"", ui_renameprofileto),
+                trap_FS_Write(va(nullptr, "\"%s\"", ui_renameprofileto),
                               strlen(ui_renameprofileto) + 2, f);
                 trap_FS_FCloseFile(f);
             }
 
             // FIXME: make this copying handle all files in the profiles directory
             if(Q_stricmp(uiprofile, buff)) {
-                if(trap_FS_FOpenFile(va("profiles/%s/%s", buff, CONFIG_NAME), &f,
+                if(trap_FS_FOpenFile(va(nullptr, "profiles/%s/%s", buff, CONFIG_NAME), &f,
                                      FS_WRITE) >= 0) {
-                    if((len = trap_FS_FOpenFile(va("profiles/%s/%s", uiprofile, CONFIG_NAME),
+                    if((len = trap_FS_FOpenFile(va(nullptr, "profiles/%s/%s", uiprofile,
+                                                   CONFIG_NAME),
                                                 &f2, FS_READ)) >= 0) {
                         int i;
 
@@ -3576,9 +3595,9 @@ static void UI_RunMenuScript(valueType **args) {
                     trap_FS_FCloseFile(f);
                 }
 
-                if(trap_FS_FOpenFile(va("profiles/%s/servercache.dat", buff), &f,
+                if(trap_FS_FOpenFile(va(nullptr, "profiles/%s/servercache.dat", buff), &f,
                                      FS_WRITE) >= 0) {
-                    if((len = trap_FS_FOpenFile(va("profiles/%s/servercache.dat",
+                    if((len = trap_FS_FOpenFile(va(nullptr, "profiles/%s/servercache.dat",
                                                    cl_profile.string), &f2, FS_READ)) >= 0) {
                         sint i;
 
@@ -3600,7 +3619,7 @@ static void UI_RunMenuScript(valueType **args) {
                     trap_Cvar_Set("cl_defaultProfile", buff);
 
                     if(trap_FS_FOpenFile("profiles/defaultprofile.dat", &f, FS_WRITE) >= 0) {
-                        trap_FS_Write(va("\"%s\"", buff), strlen(buff) + 2, f);
+                        trap_FS_Write(va(nullptr, "\"%s\"", buff), strlen(buff) + 2, f);
                         trap_FS_FCloseFile(f);
                     }
                 }
@@ -3611,7 +3630,7 @@ static void UI_RunMenuScript(valueType **args) {
                 }
 
                 // delete the old profile
-                trap_FS_Delete(va("profiles/%s", uiprofile));
+                trap_FS_Delete(va(nullptr, "profiles/%s", uiprofile));
             }
 
             trap_Cvar_Set("ui_profile", ui_renameprofileto);
@@ -3620,10 +3639,11 @@ static void UI_RunMenuScript(valueType **args) {
             fileHandle_t f;
 
             // delete profile.pid from current profile
-            if(trap_FS_FOpenFile(va("profiles/%s/profile.pid", cl_profile.string), &f,
+            if(trap_FS_FOpenFile(va(nullptr, "profiles/%s/profile.pid",
+                                    cl_profile.string), &f,
                                  FS_READ) >= 0) {
                 trap_FS_FCloseFile(f);
-                trap_FS_Delete(va("profiles/%s/profile.pid", cl_profile.string));
+                trap_FS_Delete(va(nullptr, "profiles/%s/profile.pid", cl_profile.string));
             }
         } else if(Q_stricmp(name, "applyProfile") == 0) {
             Q_strncpyz(cl_profile.string, ui_profile.string,
@@ -3641,7 +3661,7 @@ static void UI_RunMenuScript(valueType **args) {
             trap_Cvar_Set("cl_defaultProfile", cl_defaultProfile.string);
 
             if(trap_FS_FOpenFile("profiles/defaultprofile.dat", &f, FS_WRITE) >= 0) {
-                trap_FS_Write(va("\"%s\"", cl_defaultProfile.string),
+                trap_FS_Write(va(nullptr, "\"%s\"", cl_defaultProfile.string),
                               strlen(cl_defaultProfile.string) + 2, f);
                 trap_FS_FCloseFile(f);
             }
@@ -3661,13 +3681,13 @@ static void UI_RunMenuScript(valueType **args) {
                     trap_Cvar_Set("cl_defaultProfile", cl_profile.string);
 
                     if(trap_FS_FOpenFile("profiles/defaultprofile.dat", &f, FS_WRITE) >= 0) {
-                        trap_FS_Write(va("\"%s\"", cl_profile.string),
+                        trap_FS_Write(va(nullptr, "\"%s\"", cl_profile.string),
                                       strlen(cl_profile.string) + 2, f);
                         trap_FS_FCloseFile(f);
                     }
                 }
 
-                trap_FS_Delete(va("profiles/%s", buff));
+                trap_FS_Delete(va(nullptr, "profiles/%s", buff));
             }
         } else if(Q_stricmp(name, "renameProfileInit") == 0) {
             trap_Cvar_Set("ui_profile_renameto", ui_profile.string);
@@ -3688,18 +3708,19 @@ static void UI_RunMenuScript(valueType **args) {
             Q_CleanStr(uiprofile);
             Q_CleanDirName(uiprofile);
 
-            if(trap_FS_FOpenFile(va("profiles/%s/profile.dat", buff), &f,
+            if(trap_FS_FOpenFile(va(nullptr, "profiles/%s/profile.dat", buff), &f,
                                  FS_WRITE) >= 0) {
-                trap_FS_Write(va("\"%s\"", ui_renameprofileto),
+                trap_FS_Write(va(nullptr, "\"%s\"", ui_renameprofileto),
                               strlen(ui_renameprofileto) + 2, f);
                 trap_FS_FCloseFile(f);
             }
 
             // FIXME: make this copying handle all files in the profiles directory
             if(Q_stricmp(uiprofile, buff)) {
-                if(trap_FS_FOpenFile(va("profiles/%s/%s", buff, CONFIG_NAME), &f,
+                if(trap_FS_FOpenFile(va(nullptr, "profiles/%s/%s", buff, CONFIG_NAME), &f,
                                      FS_WRITE) >= 0) {
-                    if((len = trap_FS_FOpenFile(va("profiles/%s/%s", uiprofile, CONFIG_NAME),
+                    if((len = trap_FS_FOpenFile(va(nullptr, "profiles/%s/%s", uiprofile,
+                                                   CONFIG_NAME),
                                                 &f2, FS_READ)) >= 0) {
                         sint i;
 
@@ -3716,9 +3737,9 @@ static void UI_RunMenuScript(valueType **args) {
                     trap_FS_FCloseFile(f);
                 }
 
-                if(trap_FS_FOpenFile(va("profiles/%s/servercache.dat", buff), &f,
+                if(trap_FS_FOpenFile(va(nullptr, "profiles/%s/servercache.dat", buff), &f,
                                      FS_WRITE) >= 0) {
-                    if((len = trap_FS_FOpenFile(va("profiles/%s/servercache.dat",
+                    if((len = trap_FS_FOpenFile(va(nullptr, "profiles/%s/servercache.dat",
                                                    cl_profile.string), &f2, FS_READ)) >= 0) {
                         sint i;
 
@@ -3740,7 +3761,7 @@ static void UI_RunMenuScript(valueType **args) {
                     trap_Cvar_Set("cl_defaultProfile", buff);
 
                     if(trap_FS_FOpenFile("profiles/defaultprofile.dat", &f, FS_WRITE) >= 0) {
-                        trap_FS_Write(va("\"%s\"", buff), strlen(buff) + 2, f);
+                        trap_FS_Write(va(nullptr, "\"%s\"", buff), strlen(buff) + 2, f);
                         trap_FS_FCloseFile(f);
                     }
                 }
@@ -3751,7 +3772,7 @@ static void UI_RunMenuScript(valueType **args) {
                 }
 
                 // delete the old profile
-                trap_FS_Delete(va("profiles/%s", uiprofile));
+                trap_FS_Delete(va(nullptr, "profiles/%s", uiprofile));
             }
 
             trap_Cvar_Set("ui_profile", ui_renameprofileto);
@@ -4094,9 +4115,9 @@ static void UI_FeederSelection(float32 feederID, sint index) {
         UI_SelectedMap(index, &actual);
 
         ui_selectedMap.integer = actual;
-        trap_Cvar_Set("ui_selectedMap", va("%d", actual));
+        trap_Cvar_Set("ui_selectedMap", va(nullptr, "%d", actual));
         uiInfo.mapList[ui_selectedMap.integer].cinematic =
-            trap_CIN_PlayCinematic(va("%s.roq",
+            trap_CIN_PlayCinematic(va(nullptr, "%s.roq",
                                       uiInfo.mapList[ui_selectedMap.integer].mapLoadName),
                                    0, 0, 0, 0, (CIN_loop | CIN_silent));
     } else if(feederID == FEEDER_SERVERS) {
@@ -4106,8 +4127,9 @@ static void UI_FeederSelection(float32 feederID, sint index) {
                                uiInfo.serverStatus.displayServers[index],
                                info, MAX_STRING_CHARS);
         uiInfo.serverStatus.currentServerPreview =
-            trap_R_RegisterShaderNoMip(va("levelshots/%s", Info_ValueForKey(info,
-                                          "mapname")));
+            trap_R_RegisterShaderNoMip(va(nullptr, "levelshots/%s",
+                                          Info_ValueForKey(info,
+                                                  "mapname")));
 
         if(uiInfo.serverStatus.currentServerCinematic >= 0) {
             trap_CIN_StopCinematic(uiInfo.serverStatus.currentServerCinematic);
@@ -4118,7 +4140,7 @@ static void UI_FeederSelection(float32 feederID, sint index) {
 
         if(mapName && *mapName) {
             uiInfo.serverStatus.currentServerCinematic =
-                trap_CIN_PlayCinematic(va("%s.roq", mapName), 0, 0, 0, 0,
+                trap_CIN_PlayCinematic(va(nullptr, "%s.roq", mapName), 0, 0, 0, 0,
                                        (CIN_loop | CIN_silent));
         }
     } else if(feederID == FEEDER_SERVERSTATUS) {
@@ -4172,10 +4194,11 @@ static void UI_FeederSelection(float32 feederID, sint index) {
         uiInfo.humanBuildIndex = index;
     } else if(feederID == FEEDER_RESOLUTIONS) {
         if(uiInfo.oldResolutions) {
-            trap_Cvar_Set("r_mode", va("%d", index));
+            trap_Cvar_Set("r_mode", va(nullptr, "%d", index));
         } else {
-            trap_Cvar_Set("r_width", va("%d", uiInfo.resolutions[ index ].w));
-            trap_Cvar_Set("r_height", va("%d", uiInfo.resolutions[ index ].h));
+            trap_Cvar_Set("r_width", va(nullptr, "%d", uiInfo.resolutions[ index ].w));
+            trap_Cvar_Set("r_height", va(nullptr, "%d",
+                                         uiInfo.resolutions[ index ].h));
         }
     } else if(feederID == FEEDER_PROFILES) {
         uiInfo.profileIndex = index;
@@ -4547,7 +4570,7 @@ void idUserInterfaceManagerLocal::SetActiveMenu(uiMenuCommand_t menu) {
                             //auto-redirect
                             case 1:
                                 trap_Cvar_Set("com_errorMessage", "");
-                                trap_Cmd_ExecuteText(EXEC_APPEND, va("connect %s\n", buf));
+                                trap_Cmd_ExecuteText(EXEC_APPEND, va(nullptr, "connect %s\n", buf));
                                 break;
 
                             //prompt (default)
@@ -4564,7 +4587,7 @@ void idUserInterfaceManagerLocal::SetActiveMenu(uiMenuCommand_t menu) {
 
                             if(missing_files[0]) {
                                 trap_Cvar_Set("com_errorMessage",
-                                              va("%s\n\n%s\n%s",
+                                              va(nullptr, "%s\n\n%s\n%s",
                                                  UI_Cvar_VariableString("com_errorMessage"),
                                                  trap_TranslateString(MISSING_FILES_MSG),
                                                  missing_files));
@@ -4748,7 +4771,7 @@ static void UI_DisplayDownloadInfo(pointer downloadName,
                      0);
 
     if(downloadSize > 0) {
-        s = va("%s (%d%%)", downloadName,
+        s = va(nullptr, "%s (%d%%)", downloadName,
                (sint)((float32)downloadCount * 100.0f / downloadSize));
     } else {
         s = downloadName;
@@ -4763,7 +4786,7 @@ static void UI_DisplayDownloadInfo(pointer downloadName,
         Text_PaintCenter(leftWidth, yStart + 216, scale, colorWhite, "estimating",
                          0);
         Text_PaintCenter(leftWidth, yStart + 160, scale, colorWhite,
-                         va("(%s of %s copied)", dlSizeBuf, totalSizeBuf), 0);
+                         va(nullptr, "(%s of %s copied)", dlSizeBuf, totalSizeBuf), 0);
     } else {
         if((uiInfo.uiDC.realTime - downloadTime) / 1000) {
             xferRate = downloadCount / ((uiInfo.uiDC.realTime - downloadTime) / 1000);
@@ -4784,22 +4807,23 @@ static void UI_DisplayDownloadInfo(pointer downloadName,
 
             Text_PaintCenter(leftWidth, yStart + 216, scale, colorWhite, dlTimeBuf, 0);
             Text_PaintCenter(leftWidth, yStart + 160, scale, colorWhite,
-                             va("(%s of %s copied)", dlSizeBuf, totalSizeBuf), 0);
+                             va(nullptr, "(%s of %s copied)", dlSizeBuf, totalSizeBuf), 0);
         } else {
             Text_PaintCenter(leftWidth, yStart + 216, scale, colorWhite, "estimating",
                              0);
 
             if(downloadSize) {
                 Text_PaintCenter(leftWidth, yStart + 160, scale, colorWhite,
-                                 va("(%s of %s copied)", dlSizeBuf, totalSizeBuf), 0);
+                                 va(nullptr, "(%s of %s copied)", dlSizeBuf, totalSizeBuf), 0);
             } else {
                 Text_PaintCenter(leftWidth, yStart + 160, scale, colorWhite,
-                                 va("(%s copied)", dlSizeBuf), 0);
+                                 va(nullptr, "(%s copied)", dlSizeBuf), 0);
             }
         }
 
         if(xferRate) {
-            Text_PaintCenter(leftWidth, yStart + 272, scale, colorWhite, va("%s/Sec",
+            Text_PaintCenter(leftWidth, yStart + 272, scale, colorWhite, va(nullptr,
+                             "%s/Sec",
                              xferRateBuf), 0);
         }
     }
@@ -4854,10 +4878,10 @@ void idUserInterfaceManagerLocal::DrawConnectScreen(bool overlay) {
 
     if(!Q_stricmp(cstate.servername, "localhost")) {
         Text_PaintCenter(centerPoint, yStart + 48, scale, colorWhite,
-                         va("%s - Version: %s", PRODUCT_NAME, PRODUCT_VERSION),
+                         va(nullptr, "%s - Version: %s", PRODUCT_NAME, PRODUCT_VERSION),
                          ITEM_TEXTSTYLE_SHADOWEDMORE);
     } else {
-        strcpy(text, va(trap_TranslateString("Connecting to %s"),
+        strcpy(text, va(nullptr, trap_TranslateString("Connecting to %s"),
                         cstate.servername));
         Text_PaintCenter(centerPoint, yStart + 48, scale, colorWhite, text,
                          ITEM_TEXTSTYLE_SHADOWEDMORE);
@@ -4916,12 +4940,12 @@ void idUserInterfaceManagerLocal::DrawConnectScreen(bool overlay) {
 
     switch(cstate.connState) {
         case CA_CONNECTING:
-            s = va(trap_TranslateString("Awaiting connection...%i"),
+            s = va(nullptr, trap_TranslateString("Awaiting connection...%i"),
                    cstate.connectPacketCount);
             break;
 
         case CA_CHALLENGING:
-            s = va(trap_TranslateString("Awaiting challenge...%i"),
+            s = va(nullptr, trap_TranslateString("Awaiting challenge...%i"),
                    cstate.connectPacketCount);
             break;
 

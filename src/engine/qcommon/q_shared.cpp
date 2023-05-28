@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 // Copyright(C) 1999 - 2010 id Software LLC, a ZeniMax Media company.
-// Copyright(C) 2011 - 2022 Dusan Jocic <dusanjocic@msn.com>
+// Copyright(C) 2011 - 2023 Dusan Jocic <dusanjocic@msn.com>
 //
 // This file is part of the OpenWolf GPL Source Code.
 // OpenWolf Source Code is free software: you can redistribute it and/or modify
@@ -2070,7 +2070,7 @@ sint Q_CountChar(pointer string, valueType tocount) {
 }
 
 void Q_StripIndentMarker(valueType *string) {
-    int i, j;
+    sint i, j;
 
     for(i = j = 0; string[i]; i++) {
         if(string[i] != INDENT_MARKER) {
@@ -2084,42 +2084,56 @@ void Q_StripIndentMarker(valueType *string) {
 /*
 ============
 va
-
-does a varargs printf into a temp buffer, so I don't need to have
-varargs versions of all text functions.
-
-Ridah, modified this into a circular list, to further prevent stepping on
-previous strings
 ============
 */
-valueType *va(pointer format, ...) {
+valueType *va(valueType *str, pointer format, ...) {
     va_list argptr;
-#define MAX_VA_STRING   32000
-    static valueType temp_buffer[MAX_VA_STRING];
-    static valueType
-    string[MAX_VA_STRING];      // in case va is called by nested functions
-    static sint index = 0;
-    valueType *buf;
-    sint len;
+    sint size = (sizeof(valueType) * ::strlen(format) + sizeof(valueType));
+    sint ret_size = 0;
 
-    va_start(argptr, format);
-    Q_vsprintf_s(temp_buffer, sizeof(temp_buffer), format, argptr);
-    va_end(argptr);
-
-    if((len = strlen(temp_buffer)) >= MAX_VA_STRING) {
-        common->Error(ERR_DROP, "Attempted to overrun string in call to va()\n");
+    if(!str) {
+        str = static_cast<valueType *>(::malloc(size));
+    } else {
+        str = static_cast<valueType *>(::realloc(str, size));
     }
 
-    if(len + index >= MAX_VA_STRING - 1) {
-        index = 0;
+    if(!str) {
+        return nullptr;
     }
 
-    buf = &string[index];
-    ::memcpy(buf, temp_buffer, len + 1);
+    ::memset(str, 0, size);
 
-    index += len + 1;
+    while(1) {
+        va_start(argptr, format);
+        ret_size = ::vsnprintf(str, size, format, argptr);
+        va_end(argptr);
 
-    return buf;
+        if(!str) {
+            return nullptr;
+        }
+
+        if(ret_size >= size) {
+            //truncated
+            size *= 2;
+        } else {
+            //format done
+            break;
+        }
+
+        str = static_cast<valueType *>(::realloc(str, size));
+    }
+
+    //drop unused memory
+    str = static_cast<valueType *>(::realloc(str,
+                                   sizeof(valueType) * ::strlen(str) + sizeof(valueType)));
+
+    if(!str) {
+        return nullptr;
+    }
+
+    //be sure last character is a terminater
+    *(str + (sizeof(valueType) * strlen(str))) = 0;
+    return str;
 }
 
 /*

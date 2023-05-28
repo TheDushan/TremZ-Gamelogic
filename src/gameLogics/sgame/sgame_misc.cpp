@@ -447,7 +447,8 @@ idSGameMisc::Sound_Think
 ===================
 */
 void idSGameMisc::Sound_Think(gentity_t *ent) {
-    trap_SendServerCommand(-1, va("playsound %s %f %f %f\n", ent->sound,
+    trap_SendServerCommand(-1, va(nullptr, "playsound %s %f %f %f\n",
+                                  ent->sound,
                                   ent->s.origin[0], ent->s.origin[1], ent->s.origin[2]));
     ent->nextthink = level.time + 5000;
 }

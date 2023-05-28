@@ -373,7 +373,7 @@ void idCGameMain::SetUIVars(void) {
         }
     }
 
-    trap_Cvar_Set("ui_carriage", va("%d %d %d",
+    trap_Cvar_Set("ui_carriage", va(nullptr, "%d %d %d",
                                     cg.snap->ps.stats[ STAT_WEAPON ], upgrades,
                                     cg.snap->ps.persistant[ PERS_CREDIT ]));
 
@@ -383,11 +383,11 @@ void idCGameMain::SetUIVars(void) {
             break;
 
         case TEAM_ALIENS:
-            trap_Cvar_Set("ui_stage", va("%d", cgs.alienStage));
+            trap_Cvar_Set("ui_stage", va(nullptr, "%d", cgs.alienStage));
             break;
 
         case TEAM_HUMANS:
-            trap_Cvar_Set("ui_stage", va("%d", cgs.humanStage));
+            trap_Cvar_Set("ui_stage", va(nullptr, "%d", cgs.humanStage));
             break;
     }
 }
@@ -408,9 +408,9 @@ void idCGameMain::SetPVars(void) {
 
     ps = &cg.snap->ps;
 
-    trap_Cvar_Set("p_hp", va("%d", ps->stats[ STAT_HEALTH ]));
-    trap_Cvar_Set("p_maxhp", va("%d", ps->stats[ STAT_MAX_HEALTH ]));
-    trap_Cvar_Set("p_team", va("%d", ps->stats[ STAT_TEAM ]));
+    trap_Cvar_Set("p_hp", va(nullptr, "%d", ps->stats[ STAT_HEALTH ]));
+    trap_Cvar_Set("p_maxhp", va(nullptr, "%d", ps->stats[ STAT_MAX_HEALTH ]));
+    trap_Cvar_Set("p_team", va(nullptr, "%d", ps->stats[ STAT_TEAM ]));
 
     switch(ps->stats[ STAT_TEAM ]) {
         case TEAM_NONE:
@@ -420,33 +420,35 @@ void idCGameMain::SetPVars(void) {
 
         case TEAM_ALIENS:
             trap_Cvar_Set("p_teamname", "^1Alien");
-            trap_Cvar_Set("p_stage", va("%d", cgs.alienStage));
+            trap_Cvar_Set("p_stage", va(nullptr, "%d", cgs.alienStage));
             break;
 
         case TEAM_HUMANS:
             trap_Cvar_Set("p_teamname", "^4Human");
-            trap_Cvar_Set("p_stage", va("%d", cgs.humanStage));
+            trap_Cvar_Set("p_stage", va(nullptr, "%d", cgs.humanStage));
             break;
     }
 
-    trap_Cvar_Set("p_class", va("%d", ps->stats[ STAT_CLASS ]));
+    trap_Cvar_Set("p_class", va(nullptr, "%d", ps->stats[ STAT_CLASS ]));
     trap_Cvar_Set("p_classname",
                   bggame->ClassConfig((class_t)ps->stats[ STAT_CLASS ])->humanName);
-    trap_Cvar_Set("p_weapon", va("%d", ps->stats[ STAT_WEAPON ]));
+    trap_Cvar_Set("p_weapon", va(nullptr, "%d", ps->stats[ STAT_WEAPON ]));
     trap_Cvar_Set("p_weaponname",
                   bggame->Weapon((weapon_t)ps->stats[ STAT_WEAPON ])->humanName);
-    trap_Cvar_Set("p_ammo", va("%d", ps->ammo));
-    trap_Cvar_Set("p_clips", va("%d", ps->clips));
-    trap_Cvar_Set("p_credits", va("%d", ps->persistant[ PERS_CREDIT ]));
-    trap_Cvar_Set("p_score", va("%d", ps->persistant[ PERS_SCORE ]));
-    trap_Cvar_Set("p_attacker", va("%d", cgameLocal.LastAttacker()));
+    trap_Cvar_Set("p_ammo", va(nullptr, "%d", ps->ammo));
+    trap_Cvar_Set("p_clips", va(nullptr, "%d", ps->clips));
+    trap_Cvar_Set("p_credits", va(nullptr, "%d",
+                                  ps->persistant[ PERS_CREDIT ]));
+    trap_Cvar_Set("p_score", va(nullptr, "%d", ps->persistant[ PERS_SCORE ]));
+    trap_Cvar_Set("p_attacker", va(nullptr, "%d", cgameLocal.LastAttacker()));
 
     if(cgameLocal.LastAttacker() != -1) {
         trap_Cvar_Set("p_attackername",
                       cgs.clientinfo[cgameLocal.LastAttacker()].name);
     }
 
-    trap_Cvar_Set("p_crosshair", va("%d", cgameLocal.CrosshairPlayer()));
+    trap_Cvar_Set("p_crosshair", va(nullptr, "%d",
+                                    cgameLocal.CrosshairPlayer()));
 
     if(cgameLocal.CrosshairPlayer() != -1) {
         trap_Cvar_Set("p_crosshairrname",
@@ -773,7 +775,7 @@ void idCGameMain::RegisterSounds(void) {
 
     for(i = 0; i < 4; i++) {
         cgs.media.humanBuildableDamage[i] = trap_S_RegisterSound(
-                                                va("sound/buildables/human/damage%d.ogg", i));
+                                                va(nullptr, "sound/buildables/human/damage%d.ogg", i));
     }
 
     cgs.media.hardBounceSound1 =
@@ -1064,7 +1066,7 @@ void idCGameMain::BuildSpectatorString(void) {
     for(i = 0; i < MAX_CLIENTS; i++) {
         if(cgs.clientinfo[i].infoValid && cgs.clientinfo[i].team == TEAM_NONE) {
             Q_strcat(cg.spectatorList, sizeof(cg.spectatorList),
-                     va("%s     " S_COLOR_WHITE, cgs.clientinfo[i].name));
+                     va(nullptr, "%s     " S_COLOR_WHITE, cgs.clientinfo[i].name));
         }
     }
 
@@ -1193,13 +1195,14 @@ valueType *idCGameMain::GetMenuBuffer(pointer filename) {
     len = trap_FS_FOpenFile(filename, &f, FS_READ);
 
     if(!f) {
-        trap_Print(va(S_COLOR_RED "menu file not found: %s, using default\n",
+        trap_Print(va(nullptr, S_COLOR_RED
+                      "menu file not found: %s, using default\n",
                       filename));
         return nullptr;
     }
 
     if(len >= MAX_MENUFILE) {
-        trap_Print(va(S_COLOR_RED
+        trap_Print(va(nullptr, S_COLOR_RED
                       "menu file too large: %s is %i, max allowed is %i", filename, len,
                       MAX_MENUFILE));
         trap_FS_FCloseFile(f);
@@ -1494,18 +1497,19 @@ void idCGameMain::LoadMenus(pointer menuFile) {
     len = trap_FS_FOpenFile(menuFile, &f, FS_READ);
 
     if(!f) {
-        trap_Error(va(S_COLOR_YELLOW "menu file not found: %s, using default\n",
+        trap_Error(va(nullptr, S_COLOR_YELLOW
+                      "menu file not found: %s, using default\n",
                       menuFile));
         len = trap_FS_FOpenFile("gui/hud.txt", &f, FS_READ);
 
         if(!f) {
-            trap_Error(va(S_COLOR_RED
+            trap_Error(va(nullptr, S_COLOR_RED
                           "default menu file not found: ui/hud.txt, unable to continue!\n"));
         }
     }
 
     if(len >= MAX_MENUDEFFILE) {
-        trap_Error(va(S_COLOR_RED
+        trap_Error(va(nullptr, S_COLOR_RED
                       "menu file too large: %s is %i, max allowed is %i", menuFile, len,
                       MAX_MENUDEFFILE));
         trap_FS_FCloseFile(f);
@@ -1756,11 +1760,11 @@ pointer idCGameMain::FeederItemText(float32 feederID, sint index,
                 break;
 
             case 4:
-                return va("%d", sp->score);
+                return va(nullptr, "%d", sp->score);
                 break;
 
             case 5:
-                return va("%4d", sp->time);
+                return va(nullptr, "%4d", sp->time);
                 break;
 
             case 6:
@@ -1768,7 +1772,7 @@ pointer idCGameMain::FeederItemText(float32 feederID, sint index,
                     return "";
                 }
 
-                return va("%4d", sp->ping);
+                return va(nullptr, "%4d", sp->ping);
                 break;
         }
     }
@@ -2008,7 +2012,7 @@ void idCGameMain::AssetCache(void) {
 
     for(i = 0; i < cgDC.Assets.emoticonCount; i++) {
         cgDC.Assets.emoticonShaders[ i ] = trap_R_RegisterShaderNoMip(
-                                               va("emoticons/%s_%dx1.tga", cgDC.Assets.emoticons[ i ],
+                                               va(nullptr, "emoticons/%s_%dx1.tga", cgDC.Assets.emoticons[ i ],
                                                        cgDC.Assets.emoticonWidths[ i ]));
     }
 }

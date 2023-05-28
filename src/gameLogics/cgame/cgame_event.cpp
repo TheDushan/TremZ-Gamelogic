@@ -412,7 +412,7 @@ void idCGameEvent::Obituary(entityState_t *ent) {
                    attackerName, message2);
 
             if(teamKill && attacker == cg.clientNum) {
-                idCGameDraw::CenterPrint(va("You killed " S_COLOR_RED "TEAMMATE "
+                idCGameDraw::CenterPrint(va(nullptr, "You killed " S_COLOR_RED "TEAMMATE "
                                             S_COLOR_WHITE "%s", targetName), SCREEN_HEIGHT * 0.30, BIGCHAR_WIDTH);
             }
 
@@ -978,7 +978,7 @@ void idCGameEvent::EntityEvent(centity_t *cent, vec3_t position) {
         case EV_DEATH2:
         case EV_DEATH3:
             trap_S_StartSound(nullptr, es->number, CHAN_VOICE,
-                              idCGamePlayers::CustomSound(es->number, va("*death%i.ogg",
+                              idCGamePlayers::CustomSound(es->number, va(nullptr, "*death%i.ogg",
                                       _event - EV_DEATH1 + 1)));
             break;
 
