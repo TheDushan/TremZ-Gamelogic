@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////
-// Copyright(C) 2019 - 2023 Dusan Jocic <dusanjocic@msn.com>
+// Copyright(C) 2019 - 2025 Dusan Jocic <dusanjocic@msn.com>
 //
 // This file is part of OpenWolf.
 //
@@ -30,7 +30,7 @@
 #ifndef __CLIENTMAIN_API_HPP__
 #define __CLIENTMAIN_API_HPP__
 
-#if defined (GUI) || defined (CGAMEDLL) || defined (GAMEDLL) || defined (RENDERSYSTEM)
+#if defined (GUI) || defined (CGAMEDLL) || defined (RENDERSYSTEM)
 typedef struct msg_t msg_t;
 #endif
 
